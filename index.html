@@ -458,10 +458,10 @@
     <input type="file" id="pcFile" accept="image/*" style="display:none">
     <div class="pc-actions">
       <button class="pc-upload" id="pcUpload">📷 ใส่รูปของคุณ</button>
-      <button class="pc-save" id="pcSave">💾 บันทึก</button>
+      <button class="pc-save" id="pcSave">📲 บันทึก / แชร์</button>
     </div>
     <button class="pc-close" id="pcClose">ปิด</button>
-    <div class="pc-tip">อัปโหลดรูปถ่ายของคุณ แล้วแอปจะใส่กรอบธีมจีนให้ · กดบันทึกเพื่อเซฟลงเครื่องแล้วแชร์ลง IG ได้เลย</div>
+    <div class="pc-tip">อัปโหลดรูปถ่ายของคุณ แล้วกด "บันทึก / แชร์" → บนมือถือจะเปิดเมนูให้เลือก "บันทึกรูปภาพ" ลงอัลบั้ม หรือส่งเข้า IG / ไลน์ ได้เลย</div>
   </div>
 </div>
 <script>
@@ -1717,79 +1717,47 @@ function drawPostcard(i){
   const c=META[catOf(p)];
   const cv=$('pcCanvas'),ctx=cv.getContext('2d');
   const W=cv.width,H=cv.height;
-  const RED='#B5352C',GOLD='#C9822B',CREAM='#F7F3EC',INK='#2b2b2b';
 
-  // พื้นหลังกระดาษครีม
-  ctx.fillStyle=CREAM;ctx.fillRect(0,0,W,H);
-
-  // ---- โซนรูปภาพ ----
-  const px=64,py=150,pw=W-128,ph=540;
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,0.18)';ctx.shadowBlur=22;ctx.shadowOffsetY=8;
-  roundRect(ctx,px,py,pw,ph,16);ctx.fillStyle='#fff';ctx.fill();
-  ctx.restore();
-  ctx.save();roundRect(ctx,px+7,py+7,pw-14,ph-14,11);ctx.clip();
+  // ---- รูปเต็มเฟรม (ไม่มีกรอบ) ----
   if(pcUserImg){
-    const iw=pcUserImg.width,ih=pcUserImg.height,tw=pw-14,th=ph-14;
-    const scale=Math.max(tw/iw,th/ih);
+    const iw=pcUserImg.width,ih=pcUserImg.height;
+    const scale=Math.max(W/iw,H/ih);
     const dw=iw*scale,dh=ih*scale;
-    ctx.drawImage(pcUserImg,px+7+(tw-dw)/2,py+7+(th-dh)/2,dw,dh);
+    ctx.drawImage(pcUserImg,(W-dw)/2,(H-dh)/2,dw,dh);
   }else{
-    const g=ctx.createLinearGradient(px,py,px+pw,py+ph);
+    const g=ctx.createLinearGradient(0,0,W,H);
     g.addColorStop(0,c.g[0]);g.addColorStop(1,c.g[1]);
-    ctx.fillStyle=g;ctx.fillRect(px,py,pw,ph);
-    ctx.fillStyle='rgba(255,255,255,0.9)';ctx.textAlign='center';
-    ctx.font='100px serif';ctx.fillText(c.ico,W/2,py+ph/2-10);
-    ctx.font='500 28px Anuphan,sans-serif';ctx.fillText('กดปุ่ม "ใส่รูปของคุณ"',W/2,py+ph/2+60);
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,255,255,0.85)';ctx.textAlign='center';
+    ctx.font='110px serif';ctx.fillText(c.ico,W/2,H/2-30);
+    ctx.font='500 30px Anuphan,sans-serif';ctx.fillText('กดปุ่ม "ใส่รูปของคุณ"',W/2,H/2+50);
   }
-  ctx.restore();
-  ctx.strokeStyle=GOLD;ctx.lineWidth=2.5;roundRect(ctx,px+7,py+7,pw-14,ph-14,11);ctx.stroke();
 
-  // ---- ตกแต่งจีนแบบมินิมอล: โคมไฟ 2 ดวงมุมบนซ้าย + ดอกไม้มุมบนขวา ----
-  drawLantern(ctx,98,96,0.82,RED);
-  drawLantern(ctx,180,86,0.64,GOLD);
-  drawFlower(ctx,W-100,96,17,GOLD);
-  drawFlower(ctx,W-150,140,11,RED);
-
-  // ---- แถบข้อมูลด้านล่าง (จัดระยะสะอาด ไม่ทับกัน) ----
-  ctx.textAlign='center';
-  let y=py+ph+70;
-
-  // ชื่อจีน (ถ้ามี)
+  // ---- ลายน้ำชื่อสถานที่ กลางรูป (เทาจาง มินิมอล) ----
+  ctx.textAlign='center';ctx.textBaseline='middle';
   const zh=extractChinese(p);
-  if(zh){
-    let size=zh.length<=4?58:zh.length<=7?44:34;
-    ctx.font='700 '+size+'px "PingFang SC","Microsoft YaHei",serif';
-    ctx.fillStyle=RED;
-    ctx.fillText(zh,W/2,y);
-    y+=54;
-  }
+  const label=zh||p.th;
+  const cx=W/2, cy=H/2;
+  let size=label.length<=4?140:label.length<=7?100:label.length<=11?74:56;
+  const isZh=!!zh;
+  ctx.font='700 '+size+'px '+(isZh?'"PingFang SC","Microsoft YaHei",serif':'Chonburi,serif');
+  // ลายน้ำเทาจาง: เงาขาวบาง ๆ ให้อ่านออกบนพื้นเข้ม + ตัวเทาโปร่ง
+  ctx.fillStyle='rgba(255,255,255,0.18)';
+  ctx.fillText(label,cx+1.5,cy+1.5);
+  ctx.fillStyle='rgba(90,90,90,0.30)';
+  ctx.fillText(label,cx,cy);
+  ctx.textBaseline='alphabetic';
 
-  // ชื่อไทย (จำกัด 1 บรรทัด ย่อถ้ายาว)
-  ctx.fillStyle=INK;ctx.font='600 36px Anuphan,sans-serif';
-  let name=p.name||p.th;
-  while(ctx.measureText(name).width>W-120 && name.length>6){name=name.slice(0,-1)}
-  if(name!==(p.name||p.th))name=name.trimEnd()+'…';
-  ctx.fillText(name,W/2,y);
-  y+=52;
-
-  // เส้นคั่นทองบาง ๆ + ดอกไม้เล็กตรงกลาง
-  ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(W/2-90,y);ctx.lineTo(W/2-16,y);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(W/2+16,y);ctx.lineTo(W/2+90,y);ctx.stroke();
-  drawFlower(ctx,W/2,y,7,GOLD);
-  y+=46;
-
-  // วันที่ + เยือนแล้ว
+  // ---- วันที่ มุมขวาล่าง (เล็ก สะอาด) ----
   const now=new Date();
-  const d=now.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'});
-  ctx.fillStyle=RED;ctx.font='500 26px Anuphan,sans-serif';
-  ctx.fillText('✓ เยือนแล้ว · '+d,W/2,y);
-  y+=40;
-
-  // ลายเซ็นแอป
-  ctx.fillStyle=GOLD;ctx.font='500 23px Anuphan,sans-serif';
-  ctx.fillText('เชียงไฮ้ ดูลานี้ · 上海',W/2,y);
+  const d=now.toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'});
+  ctx.save();
+  ctx.textAlign='right';
+  ctx.shadowColor='rgba(0,0,0,0.3)';ctx.shadowBlur=8;
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  ctx.font='500 28px Anuphan,sans-serif';
+  ctx.fillText(d,W-40,H-44);
+  ctx.restore();
 }
 
 function roundRect(ctx,x,y,w,h,r){
@@ -1835,12 +1803,32 @@ function savePostcard(){
   const cv=$('pcCanvas');
   const p=PLACES[pcCurrentIndex];
   const name=(p&&(p.en||p.th)||'shanghai').replace(/[^\w\u0E00-\u0E7F]+/g,'_').slice(0,30);
-  cv.toBlob(blob=>{
+  const filename='postcard_'+name+'.png';
+  const btn=$('pcSave');const orig=btn.textContent;
+
+  cv.toBlob(async blob=>{
+    if(!blob){return}
+    const file=new File([blob],filename,{type:'image/png'});
+    // 1) ลองใช้ Web Share API (มือถือ) — เปิดแผ่นแชร์ที่มี 'บันทึกรูปภาพ' / ส่งเข้า IG ได้เลย
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:'โปสต์การ์ดเซี่ยงไฮ้'});
+        return;
+      }catch(err){
+        // ผู้ใช้กดยกเลิกแผ่นแชร์ = ไม่ต้องทำอะไรต่อ
+        if(err&&err.name==='AbortError')return;
+        // อย่างอื่น = ตกไป fallback ดาวน์โหลด
+      }
+    }
+    // 2) fallback: ดาวน์โหลดไฟล์ (เดสก์ท็อป หรือเบราว์เซอร์ที่ไม่รองรับ share)
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
-    a.href=url;a.download='postcard_'+name+'.png';
+    a.href=url;a.download=filename;
     document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
+    // บอกผู้ใช้ว่าไฟล์อยู่ไหน (บางมือถือเซฟลง Downloads)
+    btn.textContent='✓ บันทึกแล้ว';
+    setTimeout(()=>{btn.textContent=orig},2000);
   },'image/png');
 }
 $('postcardBtn').addEventListener('click',()=>{if(currentDetailIndex>=0)openPostcard(currentDetailIndex)});
