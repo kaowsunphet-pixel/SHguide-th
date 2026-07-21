@@ -110,6 +110,22 @@
   }
   .filter-btn.active{background:var(--pine);color:#fff;border-color:var(--pine)}
 
+  /* แถบกรองด้วยแท็ก */
+  .tag-filter{
+    display:flex;gap:8px;overflow-x:auto;margin:0 -18px 18px;padding:0 18px 4px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .tag-filter::-webkit-scrollbar{display:none}
+  .tag-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--paper);color:var(--pine-soft);border:1px solid var(--line);
+    padding:6px 13px;border-radius:20px;font-family:inherit;font-size:12.5px;font-weight:500;
+    cursor:pointer;white-space:nowrap;transition:all .18s;
+  }
+  .tag-chip:active{transform:scale(.96)}
+  .tag-chip.on{background:rgba(201,130,43,.14);color:var(--osmanthus);border-color:var(--osmanthus)}
+  .tag-chip .tc-x{font-size:11px;opacity:.7}
+
   /* ---------- CAROUSEL (การ์ดโปร่ง ทรงโมเดิร์น) ---------- */
   .cards-grid{
     display:flex;gap:14px;
@@ -376,6 +392,7 @@
         <span class="count" id="resultCount"></span>
       </div>
       <div class="filter-container" id="tabs"></div>
+      <div class="tag-filter" id="tagFilter"></div>
       <div class="cards-grid" id="cats"></div>
       <div class="dots" id="dots"></div>
       <div class="swipe-hint" id="swipeHint">← ปัดเพื่อดูเพิ่มเติม →</div>
@@ -1563,6 +1580,21 @@ function deriveFlags(p){
   return f.slice(0,4);
 }
 
+/* แท็กเสริมสำหรับใช้กรอง (ไม่แสดงบนการ์ด เพื่อไม่ให้รก) */
+function extraTags(p){
+  if(p.wide)return [];
+  const all=(p.octoberTips||[]).join(' ')+' '+(p.summary||'')+' '+(p.verdict||'')+' '+(p.highlights||[]).join(' ')+' '+(p.name||'')+' '+(p.th||'');
+  const t=[];
+  if(/ครอบครัว|เด็ก|พาผู้ใหญ่|แฟมิลี่/.test(all))t.push('เหมาะครอบครัว');
+  if(/ริมน้ำ|ริมแม่น้ำ|ริมคลอง|บันด์|วอเตอร์ฟรอนต์/.test(all))t.push('ริมน้ำ');
+  if(/วัด|เจดีย์|พิพิธภัณฑ์|ประวัติศาสตร์|โบราณ|วัฒนธรรม/.test(all))t.push('วัด/วัฒนธรรม');
+  if(/สวน|ธรรมชาติ|ทะเลสาบ|พฤกษ|ต้นไม้/.test(all))t.push('ธรรมชาติ/สวน');
+  if(/ในร่ม|ห้าง|พิพิธภัณฑ์|กันฝน|วันฝนตก/.test(all))t.push('เที่ยวได้ตอนฝนตก');
+  if(/ต่อราคา|ต่อรอง|ตลาด/.test(all))t.push('ต่อราคาได้');
+  return t;
+}
+function allTagsOf(p){return deriveFlags(p).map(f=>f.t).concat(extraTags(p))}
+
 function makeCard(p,i){
   const c=META[catOf(p)];
   const card=document.createElement('div');
@@ -1595,14 +1627,49 @@ function makeCard(p,i){
 
 function renderGrid(){
   const grid=$('cats');grid.innerHTML='';
-  const items=PLACES.map((p,i)=>({p,i}))
+  let items=PLACES.map((p,i)=>({p,i}))
     .filter(x=>activeTab==='all'||catOf(x.p)===activeTab);
+  // กรองด้วยแท็ก (ต้องมีครบทุกแท็กที่เลือก)
+  if(activeTags.length){
+    items=items.filter(x=>{
+      if(x.p.wide)return false;
+      const flags=allTagsOf(x.p);
+      return activeTags.every(t=>flags.includes(t));
+    });
+  }
   items.sort((a,b)=>(a.p.wide?-1:0)-(b.p.wide?-1:0));
+  if(!items.length){
+    grid.innerHTML='<div style="padding:30px 4px;color:var(--pine-soft);font-size:14.5px;line-height:1.7">ไม่พบสถานที่ที่ตรงกับแท็กที่เลือกครับ ลองเอาแท็กบางอันออก หรือเปลี่ยนหมวดดูนะครับ</div>';
+    $('resultCount').textContent='0 แห่ง';
+    $('dots').innerHTML='';$('dots').style.display='none';
+    $('swipeHint').style.display='none';
+    return;
+  }
   items.forEach(({p,i})=>grid.appendChild(makeCard(p,i)));
   $('resultCount').textContent=items.length+' แห่ง';
   grid.scrollLeft=0;
   buildDots(items.length);
   $('swipeHint').style.display=items.length>1?'':'none';
+}
+
+/* กรองด้วยแท็ก */
+const ALL_TAGS=['เข้าฟรี','ควรจองล่วงหน้า','เปิดดึก','เด่นเดือนตุลาคม','คนไทยชอบ','เลี่ยงช่วง Golden Week','เผื่อเวลาทั้งวัน','เหมาะครอบครัว','ริมน้ำ','วัด/วัฒนธรรม','ธรรมชาติ/สวน','เที่ยวได้ตอนฝนตก','ต่อราคาได้'];
+const TAG_ICON={'เข้าฟรี':'🆓','ควรจองล่วงหน้า':'📅','เปิดดึก':'🌙','เด่นเดือนตุลาคม':'🍂','คนไทยชอบ':'🇹🇭','เลี่ยงช่วง Golden Week':'⚠️','เผื่อเวลาทั้งวัน':'⏳','เหมาะครอบครัว':'👨‍👩‍👧','ริมน้ำ':'🌊','วัด/วัฒนธรรม':'🏯','ธรรมชาติ/สวน':'🌳','เที่ยวได้ตอนฝนตก':'☔','ต่อราคาได้':'💰'};
+let activeTags=[];
+function renderTagFilter(){
+  const wrap=$('tagFilter');wrap.innerHTML='';
+  ALL_TAGS.forEach(tag=>{
+    const on=activeTags.includes(tag);
+    const b=document.createElement('button');
+    b.className='tag-chip'+(on?' on':'');
+    b.innerHTML=(TAG_ICON[tag]||'')+' '+tag+(on?' <span class="tc-x">✕</span>':'');
+    b.addEventListener('click',()=>{
+      if(on)activeTags=activeTags.filter(t=>t!==tag);
+      else activeTags.push(tag);
+      renderTagFilter();renderGrid();
+    });
+    wrap.appendChild(b);
+  });
 }
 
 /* จุดบอกตำแหน่ง + ซิงก์กับการปัด */
@@ -2192,7 +2259,7 @@ function bindSearch(el){if(el){el.addEventListener('keydown',e=>{if(e.key==='Ent
 bindSearch($('q'));bindSearch($('searchInput'));
 document.querySelectorAll('.search-btn,#go').forEach(b=>b.addEventListener('click',doSearch));
 $('back').addEventListener('click',goHome);
-renderTabs();renderGrid();
+renderTabs();renderTagFilter();renderGrid();
 
 </script>
 </body>
