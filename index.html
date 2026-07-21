@@ -143,6 +143,21 @@
     position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:2;
     display:none;
   }
+  /* ป้ายคุณสมบัติ: มุมซ้ายบน ใต้ป้ายหมวด เรียงลงเป็นคอลัมน์ */
+  .card-flags{
+    position:absolute;top:54px;left:18px;z-index:2;
+    display:flex;flex-direction:column;gap:5px;align-items:flex-start;
+    max-width:70%;
+  }
+  .flag{
+    font-size:11px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,.32);backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.22);
+    padding:3px 9px;border-radius:20px;white-space:nowrap;
+  }
+  .flag.free{background:rgba(62,142,90,.6);border-color:rgba(120,200,150,.5)}
+  .flag.book{background:rgba(181,53,44,.58);border-color:rgba(230,130,120,.45)}
+  .flag.late{background:rgba(90,70,140,.58);border-color:rgba(160,140,210,.45)}
   /* ชื่อสถานที่มุมซ้ายล่าง */
   .card-info{
     position:absolute;left:0;right:0;bottom:0;z-index:2;
@@ -165,7 +180,6 @@
     display:flex;align-items:center;justify-content:center;
     color:#fff;font-size:17px;
   }
-
   /* จุดบอกตำแหน่ง */
   .dots{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:18px 0 4px;max-width:100%}
   .dots .d{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .25s;flex:0 0 auto}
@@ -177,10 +191,16 @@
   .no-match a{color:var(--osmanthus);font-weight:600}
 
   /* ---------- หน้ารายละเอียด ---------- */
-  .result{display:none;padding:20px 18px 0}
+  .result{display:none;padding:0 18px 0}
   .result.on{display:block}
-  .back{border:none;background:none;color:var(--pine-soft);font-family:inherit;font-size:14px;cursor:pointer;padding:8px 0;margin-bottom:6px}
-  .back::before{content:"← "}
+  .back{
+    position:sticky;top:0;z-index:30;
+    display:flex;align-items:center;gap:8px;width:calc(100% + 36px);margin:0 -18px 14px;
+    border:none;background:rgba(237,241,236,.92);backdrop-filter:blur(10px);
+    color:var(--pine);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;
+    padding:15px 18px;border-bottom:1px solid var(--line);
+  }
+  .back::before{content:"←";font-size:18px}
   .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(30,58,52,.05)}
   .place-name{font-family:'Chonburi',serif;font-size:24px;line-height:1.25}
   .verdict{display:inline-block;margin-top:10px;background:rgba(201,130,43,.12);color:var(--osmanthus);border-radius:999px;padding:5px 14px;font-size:13.5px;font-weight:600}
@@ -202,6 +222,19 @@
   .map-card iframe{display:block;width:100%;height:300px;border:0}
   .map-head{padding:16px 18px 12px}
   .map-note{padding:0 18px 14px;font-size:12.5px;color:var(--pine-soft);line-height:1.6}
+  /* สถานที่ใกล้เคียง */
+  .nearby-chips{display:flex;flex-direction:column;gap:8px}
+  .nearby-chip{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    background:var(--mist);border:1px solid var(--line);border-radius:12px;
+    padding:11px 13px;font-family:inherit;cursor:pointer;
+  }
+  .nearby-chip:active{border-color:var(--osmanthus)}
+  .nearby-chip .nc-ico{font-size:18px;flex:0 0 auto}
+  .nearby-chip .nc-body{flex:1;min-width:0}
+  .nearby-chip .nc-name{font-size:14.5px;font-weight:600;color:var(--pine);line-height:1.3}
+  .nearby-chip .nc-why{font-size:12px;color:var(--pine-soft);margin-top:2px}
+  .nearby-chip .nc-go{color:var(--osmanthus);font-size:15px;flex:0 0 auto}
 
   /* ---------- โหลด/error/live ---------- */
   .loading{display:none;text-align:center;color:var(--pine-soft);padding:26px 18px}
@@ -328,7 +361,7 @@
 
   <!-- RESULT -->
   <div class="result" id="result">
-    <button class="back" id="back">กลับไปดูรายการทั้งหมด</button>
+    <button class="back" id="back">กลับไปหน้ารายการ</button>
     <div class="card">
       <div class="place-name" id="rName"></div>
       <div class="verdict" id="rVerdict"></div>
@@ -353,6 +386,10 @@
         <div class="fact"><div class="k">การเดินทาง</div><div class="v" id="fTransit">—</div></div>
         <div class="fact"><div class="k">เวลาที่ควรเผื่อ</div><div class="v" id="fTime">—</div></div>
       </div>
+    </div>
+    <div class="card" id="nearbyCard" style="display:none">
+      <div class="tag"><span class="dot"></span><h2>สถานที่ใกล้เคียง</h2></div>
+      <div class="nearby-chips" id="nearbyChips"></div>
     </div>
     <div class="card map-card" id="mapCard">
       <div class="map-head"><div class="tag" style="margin:0"><span class="dot"></span><h2>แผนที่</h2></div></div>
@@ -1216,20 +1253,40 @@ function photoURL(p){
   return 'https://tse2.mm.bing.net/th?q='+encodeURIComponent(q)+'&w=640&h=800&c=7&rs=1&p=0';
 }
 
+/* สร้างป้ายคุณสมบัติอัตโนมัติจากข้อมูลที่มีอยู่ (เชิงแนะนำ ให้ผู้ใช้เห็นแล้วเลือกเอง) */
+function deriveFlags(p){
+  if(p.wide)return [];
+  const f=[];
+  const price=(p.price||'');
+  const hours=(p.hours||'');
+  const time=(p.timeNeeded||'');
+  const tips=(p.octoberTips||[]).join(' ')+' '+(p.summary||'')+' '+(p.verdict||'');
+  if(/ฟรี/.test(price))f.push({t:'เข้าฟรี',c:'free'});
+  if(/จอง/.test(tips))f.push({t:'ควรจองล่วงหน้า',c:'book'});
+  if(/ดึก|24 ชม|24:00|เที่ยงคืน/.test(hours))f.push({t:'เปิดดึก',c:'late'});
+  if(/ปูขน|ฤดูใบไม้ร่วง|หอมหมื่นลี้|ใบ.{0,4}เปลี่ยนสี|ใบ.{0,4}เหลือง|แปะก๊วย/.test(tips))f.push({t:'เด่นเดือนตุลาคม',c:''});
+  if(/คนไทย/.test(tips))f.push({t:'คนไทยชอบ',c:''});
+  if(/Golden Week|โกลเด/.test(tips)&&/เลี่ยง|แน่นมาก|คนแน่น/.test(tips))f.push({t:'เลี่ยงช่วง Golden Week',c:''});
+  if(/เต็มวัน|ครึ่งค่อนวัน|1 วัน/.test(time))f.push({t:'เผื่อเวลาทั้งวัน',c:''});
+  return f.slice(0,4);
+}
+
 function makeCard(p,i){
   const c=META[catOf(p)];
   const card=document.createElement('div');
   card.className='place-card';
   card.style.background='linear-gradient(135deg,'+c.g[0]+','+c.g[1]+')';
+  const flags=deriveFlags(p);
+  const flagHTML=flags.length?'<div class="card-flags">'+flags.map(x=>'<span class="flag '+x.c+'">'+x.t+'</span>').join('')+'</div>':'';
   card.innerHTML=
     '<span class="card-emoji">'+c.ico+'</span>'+
     '<span class="card-badge">'+c.badge+'</span>'+
+    flagHTML+
     '<div class="card-info">'+
       '<h3 class="card-title"></h3>'+
       '<div class="card-sub"></div>'+
     '</div>'+
     '<div class="card-go-arrow">→</div>';
-  // ใส่รูปเต็มการ์ด: โหลดสำเร็จ = โชว์รูป, พลาด = คงพื้นไล่เฉดเดิมไว้
   const img=document.createElement('img');
   img.className='card-photo';
   img.loading='lazy';
@@ -1312,6 +1369,48 @@ function scrollToCard(k){
   if(card)grid.scrollTo({left:card.offsetLeft-(grid.clientWidth-card.offsetWidth)/2,behavior:'smooth'});
 }
 
+/* หาสถานที่ใกล้เคียงจากสถานีรถไฟฟ้า/สายที่ตรงกัน (เชิงข้อมูล ให้ผู้ใช้จับคู่เอง) */
+function transitTokens(p){
+  const t=(p.transit||'');
+  const stations=(t.match(/สถานี\s*([A-Za-z'’\u0E00-\u0E7F&. ]+?)(?=\s*(?:เดิน|ทางออก|—|-|\/|,|\(|$))/g)||[])
+    .map(s=>s.replace(/สถานี\s*/,'').trim().toLowerCase()).filter(s=>s.length>2);
+  const lines=(t.match(/สาย\s*[\d/]+/g)||[]).map(s=>s.replace(/\s/g,''));
+  return {stations,lines};
+}
+function findNearby(idx){
+  const p=PLACES[idx];
+  if(p.wide||!p.transit)return [];
+  const a=transitTokens(p);
+  const scored=[];
+  PLACES.forEach((q,j)=>{
+    if(j===idx||q.wide||!q.transit)return;
+    const b=transitTokens(q);
+    const sameStation=a.stations.some(s=>b.stations.some(s2=>s.includes(s2)||s2.includes(s)));
+    const sameLine=a.lines.some(l=>b.lines.includes(l));
+    if(sameStation)scored.push({j,score:2,why:'สถานีรถไฟฟ้าเดียวกัน'});
+    else if(sameLine)scored.push({j,score:1,why:'อยู่บนสายรถไฟฟ้าเดียวกัน'});
+  });
+  scored.sort((x,y)=>y.score-x.score);
+  return scored.slice(0,4);
+}
+function renderNearby(idx){
+  const near=findNearby(idx);
+  const card=$('nearbyCard'),wrap=$('nearbyChips');
+  if(!near.length){card.style.display='none';return}
+  card.style.display='';wrap.innerHTML='';
+  near.forEach(({j,why})=>{
+    const q=PLACES[j],c=META[catOf(q)];
+    const b=document.createElement('button');
+    b.className='nearby-chip';
+    b.innerHTML='<span class="nc-ico"></span><span class="nc-body"><span class="nc-name"></span><span class="nc-why"></span></span><span class="nc-go">→</span>';
+    b.querySelector('.nc-ico').textContent=c.ico;
+    b.querySelector('.nc-name').textContent=q.name||q.th;
+    b.querySelector('.nc-why').textContent=c.label+' · '+why;
+    b.addEventListener('click',()=>showPlace(j));
+    wrap.appendChild(b);
+  });
+}
+
 function showPlace(i){
   const p=PLACES[i];
   $('rName').textContent=p.name;
@@ -1322,6 +1421,7 @@ function showPlace(i){
   $('factsCard').style.display=p.noFacts?'none':'';
   $('fHours').textContent=p.hours;$('fPrice').textContent=p.price;
   $('fTransit').textContent=p.transit;$('fTime').textContent=p.timeNeeded;
+  renderNearby(i);
   if(p.mapQuery){
     $('mapCard').style.display='';
     $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(p.mapQuery)+'&z=15&output=embed';
@@ -1423,6 +1523,7 @@ async function liveSearch(name,key){
     $('factsCard').style.display='';
     $('fHours').textContent=info.hours||'—';$('fPrice').textContent=info.price||'—';$('fTransit').textContent=info.transit||'—';$('fTime').textContent=info.timeNeeded||'—';
     $('mapCard').style.display='';
+    $('nearbyCard').style.display='none';
     $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(info.mapQuery||name+' Shanghai')+'&z=15&output=embed';
     $('result').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
   }catch(e){
