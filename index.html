@@ -217,6 +217,65 @@
   details.live input{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--mist);color:var(--pine)}
   details.live .hint{margin-top:8px;font-size:12.5px}
   .sources{font-size:12.5px;color:var(--pine-soft);text-align:center;margin:22px 18px 0;line-height:1.7}
+
+  /* ---------- วลีจีน: ปุ่มลอย ---------- */
+  .phrase-fab{
+    position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:50;
+    background:var(--pine);color:#fff;border:none;border-radius:999px;
+    padding:14px 20px;font-family:inherit;font-size:15px;font-weight:600;
+    display:flex;align-items:center;gap:8px;cursor:pointer;
+    box-shadow:0 8px 24px rgba(30,58,52,.35);
+  }
+  .phrase-fab:active{transform:scale(.96)}
+
+  /* ---------- แผงรวมวลี ---------- */
+  .phrase-panel{
+    display:none;position:fixed;inset:0;z-index:60;
+    background:var(--mist);overflow-y:auto;
+    padding:0 16px calc(30px + env(safe-area-inset-bottom));
+  }
+  .phrase-panel.on{display:block}
+  .pp-head{
+    position:sticky;top:0;background:var(--mist);z-index:2;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 0 12px;
+  }
+  .pp-head h2{font-family:'Chonburi',serif;font-size:22px}
+  .pp-close{
+    border:1px solid var(--line);background:var(--paper);color:var(--pine);
+    border-radius:999px;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  }
+  .pp-tip{font-size:13px;color:var(--pine-soft);line-height:1.6;margin-bottom:16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .ph-group{margin-bottom:20px}
+  .ph-group h3{
+    font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pine-soft);
+    font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px;
+  }
+  .ph-list{display:flex;flex-direction:column;gap:8px}
+  .ph-item{
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-family:inherit;text-align:left;width:100%;
+  }
+  .ph-item:active{border-color:var(--osmanthus)}
+  .ph-th{font-size:15px;font-weight:600;color:var(--pine)}
+  .ph-zh-small{font-size:14px;color:var(--pine-soft);flex:0 0 auto}
+
+  /* ---------- การ์ดโชว์เต็มจอ ---------- */
+  .show-card{
+    display:none;position:fixed;inset:0;z-index:70;
+    background:#fff;
+    flex-direction:column;align-items:center;justify-content:center;
+    padding:30px 22px;text-align:center;cursor:pointer;
+  }
+  .show-card.on{display:flex}
+  .sc-zh{
+    font-size:clamp(56px,17vw,150px);line-height:1.25;color:#111;font-weight:700;
+    font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+  }
+  .sc-py{font-size:clamp(15px,4vw,24px);color:#888;margin-top:14px;letter-spacing:.5px}
+  .sc-th{font-size:clamp(16px,4.5vw,26px);color:var(--pine);font-weight:600;margin-top:10px}
+  .sc-hint{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));font-size:13px;color:#aaa}
 </style>
 </head>
 <body>
@@ -225,7 +284,7 @@
   <!-- HERO -->
   <div class="hero-section">
     <div class="hero-content">
-      <span class="hero-badge">✦ เที่ยวครบ จบในที่เดียว · 74 แห่ง</span>
+      <span class="hero-badge">✦ เที่ยวครบ จบในที่เดียว · 76 แห่ง</span>
       <h1 class="hero-title"><span class="hero-chop">上海</span> เชียงไฮ้ ดูลานี้</h1>
       <p class="hero-subtitle">ที่เที่ยว คาเฟ่ ร้านอาหาร ช้อปปิง บาร์ พร้อมทิปเดือนตุลาคม รวบรวมจากอินเทอร์เน็ตมาให้แล้ว</p>
       <div class="search-container">
@@ -308,6 +367,24 @@
   </div>
   <div class="error" id="error"></div>
 
+</div>
+
+<button class="phrase-fab" id="phraseFab">🗣️ วลีจีน</button>
+
+<div class="phrase-panel" id="phrasePanel">
+  <div class="pp-head">
+    <h2>🗣️ วลีจีนฉุกเฉิน</h2>
+    <button class="pp-close" id="ppClose">ปิด ✕</button>
+  </div>
+  <div class="pp-tip">แตะวลีไหนก็ได้ → ตัวจีนจะขึ้นเต็มจอ ยื่นมือถือให้อีกฝ่ายดูได้เลย 📱<br>เบอร์ฉุกเฉินจีน: ตำรวจ <b>110</b> · รถพยาบาล <b>120</b> · ดับเพลิง <b>119</b></div>
+  <div id="phraseGroups"></div>
+</div>
+
+<div class="show-card" id="showCard">
+  <div class="sc-zh" id="scZh"></div>
+  <div class="sc-py" id="scPy"></div>
+  <div class="sc-th" id="scTh"></div>
+  <div class="sc-hint">แตะที่ไหนก็ได้เพื่อปิด</div>
 </div>
 <script>
 const OCT_TIPS_GENERAL={
@@ -915,6 +992,26 @@ OCT_TIPS_GENERAL,
   hours:"~เช้า-ดึก แล้วแต่ร้าน",price:"~10-25 หยวน (~46-115 บาท)",transit:"ร้านห้องแถวทั่วเมือง",timeNeeded:"~30 นาที",
   mapQuery:"wonton restaurant old town Shanghai"
 },
+{
+  cat:"food",th:"เชฟเฟย หมูผัดพริกหยวก",en:"Fei Da Chu 费大厨",keys:["chef fei","เชฟเฟย","feidachu","เฟยต้าฉู","หมูผัดพริก"],
+  name:"เชฟเฟย (Fei Da Chu 费大厨) — หมูผัดพริกหยวกขวัญใจคนไทย",
+  verdict:"ร้านจีนที่มาแรงสุดในหมู่คนไทยตอนนี้ — คิวแน่นทุกสาขาแต่คุ้มรอ",
+  summary:"เชนอาหารหูหนานที่ชูเมนูเดียวเป็นพระเอกจนดังทั้งประเทศ: หมูผัดพริกหยวก (辣椒炒肉) หมูนุ่มผัดไฟแรงหอมกลิ่นกระทะ เค็มนำเผ็ดตาม กินกับข้าวสวยร้อน ๆ แบบหยุดไม่ได้ รีวิวคนไทยยกให้เป็นร้านห้ามพลาดของเซี่ยงไฮ้ยุคนี้ รสจัดจ้านถูกลิ้นคนไทยมาก ระหว่างรอคิวมีไอศกรีม/ขนมให้กินเล่น และบางสาขาเติมข้าวได้ไม่อั้นยกมาทั้งหม้อ",
+  highlights:["หมูผัดพริกหยวกจานเซ็นเซชัน สั่งทุกโต๊ะ 100%","เมนูหูหนานอื่นก็เด็ด โดยเฉพาะผัดตับและผัดผักไฟแรง","ระบบคิวไว มีขนมให้ระหว่างรอ บริการใส่ใจ"],
+  octoberTips:["สาขา Mosaic Mall ชั้น 5 ถนนนานกิงตะวันออกสะดวกสุดสำหรับนักท่องเที่ยว เสียบเข้าโปรแกรมบันด์-นานกิงได้เลย","คิวมื้อเย็นวันหยุดยาวมาก มากินมื้อเที่ยงเร็วหรือบ่ายเบรกจะรอสั้นกว่าเยอะ","ใครไม่เก่งเผ็ดบอก 'ปู๋ล่า' (ไม่เผ็ด) ได้ แต่เมนูซิกเนเจอร์ยังมีเผ็ดอ่อน ๆ ตามสไตล์หูหนาน"],
+  hours:"~11:00-21:30 ตามห้าง",price:"~80-120 หยวน/คน (~370-550 บาท)",transit:"สาขาแนะนำ: Mosaic Mall ชั้น 5 — MRT สาย 2/10 East Nanjing Road ทางออก 2 / มีที่ Raffles City และ Global Harbor ด้วย",timeNeeded:"~1-1.5 ชม. (รวมคิว)",
+  mapQuery:"Fei Da Chu Mosaic Mall Nanjing East Road Shanghai"
+},
+{
+  cat:"food",th:"Long Time Ago เนื้อแกะไม้หมุน",en:"很久以前羊肉串",keys:["long time ago","ลองไทม์","เนื้อแกะ","ไม้หมุน","henjiu"],
+  name:"Long Time Ago (很久以前羊肉串) — ปิ้งย่างเนื้อแกะเตาไม้หมุน",
+  verdict:"ประสบการณ์ปิ้งย่างที่คนไทยรีวิวว่า 'มาเซี่ยงไฮ้กี่รอบก็ต้องกลับมา'",
+  summary:"ร้านปิ้งย่างเสียบไม้ที่จุดขายคือเตาถ่านฝังกลางโต๊ะพร้อมแกนหมุนไม้อัตโนมัติ ไม่ต้องพลิกเอง สุกทั่วเสมอกัน ซิกเนเจอร์คือเนื้อแกะจากทุ่งหญ้าหูหลุนเป้ยเอ่อร์มองโกเลียใน นุ่มไม่มีกลิ่นสาบ จิ้มผงหมาล่าสูตรร้านที่คนไทยติดใจถึงขั้นขอซื้อกลับ มีน้ำเปล่า/น้ำอัดลม/น้ำแข็งเติมฟรี และแผ่นเจลเย็นแปะหน้าผากกันร้อนจากเตา เป็นดีเทลที่คนรีวิวพูดถึงกันสนุกสนาน",
+  highlights:["เนื้อแกะเสียบไม้เกรดทุ่งหญ้ามองโกเลียใน + ผงหมาล่าจิ้มในตำนาน","เตาไม้หมุนอัตโนมัติ นั่งดูเนื้อหมุนเพลิน ๆ ไม่ต้องทำอะไรเอง","น้ำดื่ม/น้ำแข็งฟรี บริการพลิกไม้แบ่งให้ทั่วโต๊ะ ใส่ใจมาก"],
+  octoberTips:["ต้องจองคิวผ่านมินิโปรแกรมใน Alipay ล่วงหน้า (ค้นชื่อจีน 很久以前羊肉串) — สาขาถนนนานกิงเคยมีคิวถึง 500 คิวจนปิดรับ อย่าเดินไปเสี่ยงหน้าร้านเฉย ๆ","อากาศเย็นตุลาคม + เตาถ่านร้อน ๆ + เนื้อย่าง = คอมโบมื้อค่ำที่ฟินสุดของทริป","เปิดยันเที่ยงคืน เหมาะเป็นมื้อดึกหลังดูไฟบันด์ สาขาใกล้ West Nanjing Road ไปสะดวก"],
+  hours:"~11:00-14:00 / 17:00-24:00",price:"~100-150 หยวน/คน (~460-690 บาท)",transit:"มีหลายสาขา สาขาแนะนำใกล้ MRT สาย 2/12/13 West Nanjing Road",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"很久以前羊肉串 Long Time Ago BBQ West Nanjing Road Shanghai"
+},
 
 /* ---------- ช้อปปิงจริง ---------- */
 {
@@ -1335,6 +1432,83 @@ async function liveSearch(name,key){
     const er=$('error');er.textContent='ค้นสดไม่สำเร็จ ('+msg+')'+advice;er.classList.add('on');
   }finally{$('loading').classList.remove('on')}
 }
+
+/* ================= วลีจีนฉุกเฉิน + การ์ดชี้สั่ง ================= */
+const PHRASES=[
+{g:'🥢 ในร้านอาหาร',items:[
+  {th:'ไม่เผ็ด',zh:'不要辣',py:'bú yào là'},
+  {th:'เผ็ดน้อย',zh:'微辣',py:'wēi là'},
+  {th:'เอาอันนี้',zh:'我要这个',py:'wǒ yào zhège'},
+  {th:'ไม่ใส่ผักชี',zh:'不要香菜',py:'bú yào xiāngcài'},
+  {th:'ขอน้ำเปล่า 1 ขวด',zh:'要一瓶矿泉水',py:'yào yì píng kuàngquánshuǐ'},
+  {th:'เก็บเงิน / เช็กบิล',zh:'买单',py:'mǎidān'},
+  {th:'ขอกล่องใส่กลับบ้าน',zh:'打包',py:'dǎbāo'},
+  {th:'อร่อยมาก!',zh:'很好吃！',py:'hěn hǎochī'},
+  {th:'ฉันแพ้ถั่วลิสง',zh:'我对花生过敏',py:'wǒ duì huāshēng guòmǐn'},
+  {th:'ขอเมนูหน่อย',zh:'请给我菜单',py:'qǐng gěi wǒ càidān'}
+]},
+{g:'🛍️ ตอนช้อปปิง',items:[
+  {th:'เท่าไหร่?',zh:'多少钱？',py:'duōshǎo qián'},
+  {th:'ลดได้ไหม?',zh:'可以便宜一点吗？',py:'kěyǐ piányi yìdiǎn ma'},
+  {th:'แพงไป',zh:'太贵了',py:'tài guì le'},
+  {th:'ขอดูอันนี้หน่อย',zh:'我可以看看这个吗？',py:'wǒ kěyǐ kànkan zhège ma'},
+  {th:'มีไซซ์ใหญ่กว่านี้ไหม?',zh:'有大一点的吗？',py:'yǒu dà yìdiǎn de ma'},
+  {th:'มีไซซ์เล็กกว่านี้ไหม?',zh:'有小一点的吗？',py:'yǒu xiǎo yìdiǎn de ma'},
+  {th:'ไม่เอา ขอบคุณ',zh:'不要，谢谢',py:'bú yào, xièxie'}
+]},
+{g:'🚇 เดินทาง',items:[
+  {th:'ห้องน้ำอยู่ไหน?',zh:'洗手间在哪里？',py:'xǐshǒujiān zài nǎlǐ'},
+  {th:'สถานีรถไฟฟ้าอยู่ไหน?',zh:'地铁站在哪里？',py:'dìtiě zhàn zài nǎlǐ'},
+  {th:'ฉันจะไปที่นี่ (ชี้แผนที่)',zh:'我要去这里',py:'wǒ yào qù zhèlǐ'},
+  {th:'จอดตรงนี้',zh:'在这里停',py:'zài zhèlǐ tíng'},
+  {th:'ไกลไหม?',zh:'远吗？',py:'yuǎn ma'}
+]},
+{g:'💬 ทั่วไป',items:[
+  {th:'สวัสดี',zh:'你好',py:'nǐ hǎo'},
+  {th:'ขอบคุณ',zh:'谢谢',py:'xièxie'},
+  {th:'ขอโทษ / ขอทางหน่อย',zh:'不好意思',py:'bù hǎoyìsi'},
+  {th:'ฟังไม่เข้าใจ',zh:'我听不懂',py:'wǒ tīng bu dǒng'},
+  {th:'พูดภาษาอังกฤษได้ไหม?',zh:'你会说英语吗？',py:'nǐ huì shuō yīngyǔ ma'},
+  {th:'ช่วยถ่ายรูปให้หน่อยได้ไหม?',zh:'可以帮我拍照吗？',py:'kěyǐ bāng wǒ pāizhào ma'}
+]},
+{g:'🆘 ฉุกเฉิน',items:[
+  {th:'ช่วยด้วย!',zh:'救命！',py:'jiùmìng'},
+  {th:'ช่วยโทรแจ้งตำรวจให้หน่อย',zh:'请帮我报警',py:'qǐng bāng wǒ bàojǐng'},
+  {th:'ฉันต้องไปโรงพยาบาล',zh:'我要去医院',py:'wǒ yào qù yīyuàn'},
+  {th:'ฉันหลงทาง',zh:'我迷路了',py:'wǒ mílù le'},
+  {th:'โทรศัพท์ฉันหาย',zh:'我的手机丢了',py:'wǒ de shǒujī diū le'},
+  {th:'ฉันเป็นคนไทย',zh:'我是泰国人',py:'wǒ shì tàiguó rén'}
+]}
+];
+
+function renderPhrases(){
+  const wrap=$('phraseGroups');wrap.innerHTML='';
+  PHRASES.forEach(gr=>{
+    const g=document.createElement('div');g.className='ph-group';
+    const h=document.createElement('h3');h.textContent=gr.g;
+    const list=document.createElement('div');list.className='ph-list';
+    gr.items.forEach(it=>{
+      const b=document.createElement('button');
+      b.className='ph-item';
+      b.innerHTML='<span class="ph-th"></span><span class="ph-zh-small"></span>';
+      b.querySelector('.ph-th').textContent=it.th;
+      b.querySelector('.ph-zh-small').textContent=it.zh;
+      b.addEventListener('click',()=>showPhraseCard(it));
+      list.appendChild(b);
+    });
+    g.append(h,list);wrap.appendChild(g);
+  });
+}
+function showPhraseCard(it){
+  $('scZh').textContent=it.zh;
+  $('scPy').textContent=it.py;
+  $('scTh').textContent='"'+it.th+'"';
+  $('showCard').classList.add('on');
+}
+$('phraseFab').addEventListener('click',()=>{$('phrasePanel').classList.add('on')});
+$('ppClose').addEventListener('click',()=>{$('phrasePanel').classList.remove('on')});
+$('showCard').addEventListener('click',()=>{$('showCard').classList.remove('on')});
+renderPhrases();
 
 /* ===== events ===== */
 function bindSearch(el){if(el){el.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})}}
