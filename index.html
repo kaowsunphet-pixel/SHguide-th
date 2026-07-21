@@ -309,6 +309,33 @@
   .sc-py{font-size:clamp(15px,4vw,24px);color:#888;margin-top:14px;letter-spacing:.5px}
   .sc-th{font-size:clamp(16px,4.5vw,26px);color:var(--pine);font-weight:600;margin-top:10px}
   .sc-hint{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));font-size:13px;color:#aaa}
+
+  /* ---------- โปสต์การ์ดเช็กอิน ---------- */
+  .postcard-btn{
+    margin-top:14px;width:100%;border:none;cursor:pointer;
+    background:linear-gradient(120deg,var(--osmanthus),var(--seal));
+    color:#fff;font-family:inherit;font-size:15px;font-weight:600;
+    padding:13px;border-radius:12px;
+    box-shadow:0 4px 14px rgba(201,130,43,.3);
+  }
+  .postcard-btn:active{transform:scale(.98)}
+  .pc-modal{
+    display:none;position:fixed;inset:0;z-index:80;
+    background:rgba(10,16,22,.82);backdrop-filter:blur(6px);
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .pc-modal.on{display:flex}
+  .pc-inner{width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  #pcCanvas{width:100%;height:auto;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .pc-actions{display:flex;gap:10px;width:100%}
+  .pc-upload,.pc-save,.pc-close{
+    border:none;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
+    padding:13px;border-radius:12px;
+  }
+  .pc-upload{flex:1;background:linear-gradient(120deg,var(--osmanthus),var(--seal));color:#fff}
+  .pc-save{flex:1;background:var(--pine);color:#fff}
+  .pc-close{width:100%;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .pc-tip{font-size:12px;color:rgba(255,255,255,.7);text-align:center;line-height:1.5}
 </style>
 </head>
 <body>
@@ -365,6 +392,7 @@
     <div class="card">
       <div class="place-name" id="rName"></div>
       <div class="verdict" id="rVerdict"></div>
+      <button class="postcard-btn" id="postcardBtn">🎴 สร้างโปสต์การ์ดเช็กอิน</button>
     </div>
     <div class="card">
       <div class="tag"><span class="dot"></span><h2>รีวิวโดยสรุป</h2></div>
@@ -422,6 +450,19 @@
   <div class="sc-py" id="scPy"></div>
   <div class="sc-th" id="scTh"></div>
   <div class="sc-hint">แตะที่ไหนก็ได้เพื่อปิด</div>
+</div>
+
+<div class="pc-modal" id="pcModal">
+  <div class="pc-inner">
+    <canvas id="pcCanvas" width="800" height="1000"></canvas>
+    <input type="file" id="pcFile" accept="image/*" style="display:none">
+    <div class="pc-actions">
+      <button class="pc-upload" id="pcUpload">📷 ใส่รูปของคุณ</button>
+      <button class="pc-save" id="pcSave">💾 บันทึก</button>
+    </div>
+    <button class="pc-close" id="pcClose">ปิด</button>
+    <div class="pc-tip">อัปโหลดรูปถ่ายของคุณ แล้วแอปจะใส่กรอบธีมจีนให้ · กดบันทึกเพื่อเซฟลงเครื่องแล้วแชร์ลง IG ได้เลย</div>
+  </div>
 </div>
 <script>
 const OCT_TIPS_GENERAL={
@@ -1411,7 +1452,9 @@ function renderNearby(idx){
   });
 }
 
+let currentDetailIndex=-1;
 function showPlace(i){
+  currentDetailIndex=i;
   const p=PLACES[i];
   $('rName').textContent=p.name;
   $('rVerdict').textContent=p.verdict;
@@ -1610,6 +1653,202 @@ $('phraseFab').addEventListener('click',()=>{$('phrasePanel').classList.add('on'
 $('ppClose').addEventListener('click',()=>{$('phrasePanel').classList.remove('on')});
 $('showCard').addEventListener('click',()=>{$('showCard').classList.remove('on')});
 renderPhrases();
+
+/* ================= โปสต์การ์ดเช็กอิน (รูปผู้ใช้ + กรอบธีมจีน) ================= */
+let pcCurrentIndex=-1;
+let pcUserImg=null; // รูปที่ผู้ใช้อัปโหลด
+
+function extractChinese(p){
+  const enZh=((p.en||'').match(/[\u4e00-\u9fff]+/g)||[]).join('');
+  const mqZh=((p.mapQuery||'').match(/[\u4e00-\u9fff]+/g)||[]).join('');
+  return enZh||mqZh||null;
+}
+
+// ---- ชิ้นส่วนตกแต่งจีน วาดด้วย canvas ----
+function drawLantern(ctx,x,y,scale,color){
+  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+  // เชือกแขวน
+  ctx.strokeStyle=color;ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(0,-70);ctx.lineTo(0,-40);ctx.stroke();
+  // ตัวโคม
+  ctx.fillStyle=color;
+  ctx.beginPath();ctx.ellipse(0,0,34,40,0,0,7);ctx.fill();
+  // ฝาบน-ล่าง
+  ctx.fillRect(-16,-46,32,8);ctx.fillRect(-16,38,32,8);
+  // เส้นริ้วในโคม
+  ctx.strokeStyle='rgba(255,255,255,0.55)';ctx.lineWidth=2;
+  [-16,0,16].forEach(dx=>{ctx.beginPath();ctx.ellipse(dx*0.55,0,Math.abs(dx)?9:13,38,0,0,7);ctx.stroke()});
+  // พู่ห้อย
+  ctx.strokeStyle=color;ctx.lineWidth=3;
+  [-8,0,8].forEach(dx=>{ctx.beginPath();ctx.moveTo(dx,46);ctx.lineTo(dx,72);ctx.stroke()});
+  ctx.beginPath();ctx.arc(0,50,7,0,7);ctx.fill();
+  ctx.restore();
+}
+function drawFlower(ctx,x,y,r,color){
+  ctx.save();ctx.translate(x,y);ctx.fillStyle=color;
+  for(let i=0;i<5;i++){
+    ctx.beginPath();ctx.arc(0,-r,r*0.62,0,7);ctx.fill();
+    ctx.rotate(Math.PI*2/5);
+  }
+  ctx.fillStyle='rgba(255,255,255,0.85)';ctx.beginPath();ctx.arc(0,0,r*0.42,0,7);ctx.fill();
+  ctx.restore();
+}
+function drawClouds(ctx,x,y,scale,color){
+  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+  ctx.strokeStyle=color;ctx.lineWidth=5;
+  for(let k=0;k<3;k++){
+    ctx.beginPath();
+    ctx.arc(k*40,0,18,Math.PI*0.15,Math.PI*1.85);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawRays(ctx,x,y,R,color){
+  ctx.save();ctx.translate(x,y);ctx.strokeStyle=color;ctx.lineWidth=2.5;
+  for(let i=0;i<40;i++){
+    ctx.rotate(Math.PI*2/40);
+    ctx.beginPath();ctx.moveTo(0,R*0.35);ctx.lineTo(0,R);ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawPostcard(i){
+  const p=PLACES[i];
+  const c=META[catOf(p)];
+  const cv=$('pcCanvas'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const RED='#B5352C',GOLD='#C9822B',CREAM='#F7F3EC',INK='#2b2b2b';
+
+  // พื้นหลังกระดาษครีม
+  ctx.fillStyle=CREAM;ctx.fillRect(0,0,W,H);
+
+  // ---- โซนรูปภาพ ----
+  const px=64,py=150,pw=W-128,ph=540;
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.18)';ctx.shadowBlur=22;ctx.shadowOffsetY=8;
+  roundRect(ctx,px,py,pw,ph,16);ctx.fillStyle='#fff';ctx.fill();
+  ctx.restore();
+  ctx.save();roundRect(ctx,px+7,py+7,pw-14,ph-14,11);ctx.clip();
+  if(pcUserImg){
+    const iw=pcUserImg.width,ih=pcUserImg.height,tw=pw-14,th=ph-14;
+    const scale=Math.max(tw/iw,th/ih);
+    const dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(pcUserImg,px+7+(tw-dw)/2,py+7+(th-dh)/2,dw,dh);
+  }else{
+    const g=ctx.createLinearGradient(px,py,px+pw,py+ph);
+    g.addColorStop(0,c.g[0]);g.addColorStop(1,c.g[1]);
+    ctx.fillStyle=g;ctx.fillRect(px,py,pw,ph);
+    ctx.fillStyle='rgba(255,255,255,0.9)';ctx.textAlign='center';
+    ctx.font='100px serif';ctx.fillText(c.ico,W/2,py+ph/2-10);
+    ctx.font='500 28px Anuphan,sans-serif';ctx.fillText('กดปุ่ม "ใส่รูปของคุณ"',W/2,py+ph/2+60);
+  }
+  ctx.restore();
+  ctx.strokeStyle=GOLD;ctx.lineWidth=2.5;roundRect(ctx,px+7,py+7,pw-14,ph-14,11);ctx.stroke();
+
+  // ---- ตกแต่งจีนแบบมินิมอล: โคมไฟ 2 ดวงมุมบนซ้าย + ดอกไม้มุมบนขวา ----
+  drawLantern(ctx,98,96,0.82,RED);
+  drawLantern(ctx,180,86,0.64,GOLD);
+  drawFlower(ctx,W-100,96,17,GOLD);
+  drawFlower(ctx,W-150,140,11,RED);
+
+  // ---- แถบข้อมูลด้านล่าง (จัดระยะสะอาด ไม่ทับกัน) ----
+  ctx.textAlign='center';
+  let y=py+ph+70;
+
+  // ชื่อจีน (ถ้ามี)
+  const zh=extractChinese(p);
+  if(zh){
+    let size=zh.length<=4?58:zh.length<=7?44:34;
+    ctx.font='700 '+size+'px "PingFang SC","Microsoft YaHei",serif';
+    ctx.fillStyle=RED;
+    ctx.fillText(zh,W/2,y);
+    y+=54;
+  }
+
+  // ชื่อไทย (จำกัด 1 บรรทัด ย่อถ้ายาว)
+  ctx.fillStyle=INK;ctx.font='600 36px Anuphan,sans-serif';
+  let name=p.name||p.th;
+  while(ctx.measureText(name).width>W-120 && name.length>6){name=name.slice(0,-1)}
+  if(name!==(p.name||p.th))name=name.trimEnd()+'…';
+  ctx.fillText(name,W/2,y);
+  y+=52;
+
+  // เส้นคั่นทองบาง ๆ + ดอกไม้เล็กตรงกลาง
+  ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(W/2-90,y);ctx.lineTo(W/2-16,y);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W/2+16,y);ctx.lineTo(W/2+90,y);ctx.stroke();
+  drawFlower(ctx,W/2,y,7,GOLD);
+  y+=46;
+
+  // วันที่ + เยือนแล้ว
+  const now=new Date();
+  const d=now.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'});
+  ctx.fillStyle=RED;ctx.font='500 26px Anuphan,sans-serif';
+  ctx.fillText('✓ เยือนแล้ว · '+d,W/2,y);
+  y+=40;
+
+  // ลายเซ็นแอป
+  ctx.fillStyle=GOLD;ctx.font='500 23px Anuphan,sans-serif';
+  ctx.fillText('เชียงไฮ้ ดูลานี้ · 上海',W/2,y);
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+
+function wrapText(ctx,text,x,y,maxW,lh){
+  const words=text.split(' ');let line='',lines=[];
+  words.forEach(w=>{
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=w}
+    else line=test;
+  });
+  if(line)lines.push(line);
+  lines=lines.slice(0,2);
+  const startY=y-(lines.length-1)*lh/2;
+  lines.forEach((l,k)=>ctx.fillText(l,x,startY+k*lh));
+}
+
+function openPostcard(i){
+  pcCurrentIndex=i;
+  pcUserImg=null; // เริ่มใหม่ทุกครั้ง
+  $('pcModal').classList.add('on');
+  drawPostcard(i);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>drawPostcard(i));
+  setTimeout(()=>drawPostcard(i),300);
+}
+function handleUpload(e){
+  const file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{pcUserImg=img;drawPostcard(pcCurrentIndex)};
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function savePostcard(){
+  const cv=$('pcCanvas');
+  const p=PLACES[pcCurrentIndex];
+  const name=(p&&(p.en||p.th)||'shanghai').replace(/[^\w\u0E00-\u0E7F]+/g,'_').slice(0,30);
+  cv.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='postcard_'+name+'.png';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  },'image/png');
+}
+$('postcardBtn').addEventListener('click',()=>{if(currentDetailIndex>=0)openPostcard(currentDetailIndex)});
+$('pcUpload').addEventListener('click',()=>$('pcFile').click());
+$('pcFile').addEventListener('change',handleUpload);
+$('pcSave').addEventListener('click',savePostcard);
+$('pcClose').addEventListener('click',()=>$('pcModal').classList.remove('on'));
+$('pcModal').addEventListener('click',e=>{if(e.target===$('pcModal'))$('pcModal').classList.remove('on')});
 
 /* ===== events ===== */
 function bindSearch(el){if(el){el.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})}}
