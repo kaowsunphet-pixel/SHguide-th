@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>เชียงไฮ้ ดูลานี้ — คู่มือเที่ยวเซี่ยงไฮ้ ตุลาคม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mist:#EDF1EC;--paper:#FBFCFA;--pine:#1E3A34;--pine-soft:#4C6B62;
+    --osmanthus:#C9822B;--seal:#B5352C;--line:#D6DDD4;--radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:'Anuphan',sans-serif;background:var(--mist);color:var(--pine);min-height:100dvh}
+  .wrap{max-width:960px;margin:0 auto;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+
+  /* ---------- HERO ---------- */
+  .hero-section{
+    position:relative;width:100%;min-height:420px;
+    background:
+      radial-gradient(120% 80% at 80% 0%, rgba(201,130,43,.45), transparent 55%),
+      radial-gradient(90% 70% at 10% 10%, rgba(181,53,44,.35), transparent 50%),
+      linear-gradient(160deg,#4a3b5c 0%,#2b3a4e 45%,#1E3A34 100%);
+    display:flex;align-items:flex-end;
+    border-radius:0 0 28px 28px;overflow:hidden;
+  }
+  /* เส้นขอบฟ้าตึกระฟ้าแบบเงา วาดด้วย CSS ล้วน ไม่พึ่งภาพนอก */
+  .hero-section::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:180px;pointer-events:none;
+    background:
+      linear-gradient(transparent,rgba(10,16,26,.55)),
+      repeating-linear-gradient(90deg,
+        rgba(12,18,28,.9) 0 14px, rgba(20,28,40,.9) 14px 24px,
+        rgba(12,18,28,.9) 24px 30px, transparent 30px 58px);
+    -webkit-mask-image:linear-gradient(transparent,#000 60%);
+    mask-image:linear-gradient(transparent,#000 60%);
+    clip-path:polygon(0 62%,5% 55%,5% 40%,9% 40%,9% 60%,15% 58%,18% 30%,21% 30%,22% 56%,30% 52%,32% 20%,35% 20%,36% 50%,44% 48%,46% 62%,54% 45%,56% 12%,60% 12%,61% 46%,70% 50%,73% 33%,76% 33%,77% 52%,86% 48%,88% 58%,95% 52%,96% 42%,100% 46%,100% 100%,0 100%);
+  }
+  .hero-content{position:relative;z-index:1;padding:36px 22px 30px;width:100%}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
+    color:#fff;border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:14px;
+  }
+  .hero-title{
+    font-family:'Chonburi',serif;color:#fff;
+    font-size:clamp(30px,8vw,44px);line-height:1.12;
+    text-shadow:0 2px 12px rgba(0,0,0,.35);margin-bottom:10px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .hero-chop{
+    display:inline-flex;align-items:center;justify-content:center;
+    border:2.5px solid #fff;border-radius:8px;color:#fff;
+    font-family:serif;font-size:20px;font-weight:700;line-height:1;
+    padding:4px 3px;writing-mode:vertical-rl;letter-spacing:2px;
+  }
+  .hero-subtitle{color:#eef2ee;font-size:15px;font-weight:300;line-height:1.6;margin-bottom:22px;max-width:520px}
+
+  /* ---------- ช่องค้นหาแคปซูล ---------- */
+  .search-container{
+    background:#fff;padding:7px 7px 7px 8px;border-radius:50px;
+    display:flex;align-items:center;gap:8px;
+    box-shadow:0 12px 30px rgba(0,0,0,.22);max-width:560px;
+  }
+  .search-input-group{display:flex;align-items:center;flex:1;padding-left:12px;min-width:0}
+  .search-icon{width:20px;height:20px;color:#9AAB9F;margin-right:8px;flex:0 0 auto}
+  .search-input-group input{
+    flex:1;border:none;outline:none;background:transparent;
+    font-family:inherit;font-size:15.5px;color:var(--pine);min-width:0;padding:10px 0;
+  }
+  .search-input-group input::placeholder{color:#9AAB9F}
+  .search-btn{
+    background:var(--pine);color:#fff;border:none;
+    padding:12px 24px;border-radius:40px;font-family:inherit;
+    font-size:15px;font-weight:600;cursor:pointer;flex:0 0 auto;transition:background .2s;
+  }
+  .search-btn:active{background:#12261F}
+  .search-btn:focus-visible,.filter-btn:focus-visible,.place-card:focus-visible{outline:2px solid var(--osmanthus);outline-offset:2px}
+
+  /* ---------- MAIN ---------- */
+  .main-container{padding:22px 18px 0}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+  .section-head h2{font-family:'Chonburi',serif;font-size:20px}
+  .section-head .count{font-size:13px;color:var(--pine-soft)}
+
+  /* ---------- FILTER CHIPS ---------- */
+  .filter-container{
+    display:flex;gap:9px;margin-bottom:22px;overflow-x:auto;padding-bottom:6px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .filter-container::-webkit-scrollbar{display:none}
+  .filter-btn{
+    background:var(--paper);color:var(--pine-soft);border:1px solid var(--line);
+    padding:9px 18px;border-radius:30px;font-family:inherit;font-size:14px;font-weight:500;
+    cursor:pointer;white-space:nowrap;flex:0 0 auto;transition:all .2s;
+  }
+  .filter-btn.active{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+  /* ---------- CAROUSEL (การ์ดโปร่ง ทรงโมเดิร์น) ---------- */
+  .cards-grid{
+    display:flex;gap:14px;
+    overflow-x:auto;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    scroll-behavior:smooth;
+    padding:2px 0 4px;margin:0 -18px;padding-left:18px;padding-right:18px;
+  }
+  .cards-grid::-webkit-scrollbar{display:none}
+  .place-card{
+    flex:0 0 78%;max-width:400px;scroll-snap-align:center;
+    position:relative;cursor:pointer;border-radius:22px;overflow:hidden;
+    aspect-ratio:4/5;
+    background:linear-gradient(135deg,#3a4a63,#1E3A34);
+    transition:transform .3s cubic-bezier(.22,1,.36,1);
+    will-change:transform;
+  }
+  @media (min-width:620px){.place-card{flex-basis:46%}}
+  .place-card:active{transform:scale(.98)}
+  /* รูปภาพเต็มการ์ด (ถ้าโหลดไม่ได้จะถูกซ่อน เหลือพื้นไล่เฉดเดิม) */
+  .card-photo{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;z-index:0;
+  }
+  /* เงาไล่จากด้านล่างให้ตัวอักษรอ่านออก */
+  .place-card::after{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(to top,rgba(8,14,22,.78) 0%,rgba(8,14,22,.32) 38%,transparent 62%);
+  }
+  .card-emoji{
+    position:absolute;top:20px;right:22px;font-size:52px;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,.35));opacity:.9;z-index:2;
+  }
+  .place-card.has-photo .card-emoji{display:none}
+  .card-badge{
+    position:absolute;top:18px;left:18px;z-index:2;
+    background:rgba(255,255,255,.16);color:#fff;padding:6px 13px;border-radius:20px;
+    font-size:12px;font-weight:600;backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.22);
+  }
+  .card-rating{
+    position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:2;
+    display:none;
+  }
+  /* ชื่อสถานที่มุมซ้ายล่าง */
+  .card-info{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:20px 22px;
+  }
+  .card-title{
+    color:#fff;font-family:'Chonburi',serif;font-size:23px;line-height:1.25;
+    text-shadow:0 2px 12px rgba(0,0,0,.4);margin:0;
+  }
+  .card-sub{
+    color:rgba(255,255,255,.8);font-size:13px;margin-top:5px;
+    display:flex;align-items:center;gap:6px;
+    text-shadow:0 1px 6px rgba(0,0,0,.4);
+  }
+  .card-go-arrow{
+    position:absolute;right:20px;bottom:22px;z-index:2;
+    width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.28);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:17px;
+  }
+
+  /* จุดบอกตำแหน่ง */
+  .dots{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:18px 0 4px;max-width:100%}
+  .dots .d{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .25s;flex:0 0 auto}
+  .dots .d.active{background:var(--osmanthus);width:22px;border-radius:4px}
+  .swipe-hint{text-align:center;font-size:12px;color:var(--pine-soft);margin-top:2px}
+
+  .no-match{display:none;margin-top:16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;font-size:14.5px;line-height:1.8}
+  .no-match.on{display:block}
+  .no-match a{color:var(--osmanthus);font-weight:600}
+
+  /* ---------- หน้ารายละเอียด ---------- */
+  .result{display:none;padding:20px 18px 0}
+  .result.on{display:block}
+  .back{border:none;background:none;color:var(--pine-soft);font-family:inherit;font-size:14px;cursor:pointer;padding:8px 0;margin-bottom:6px}
+  .back::before{content:"← "}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(30,58,52,.05)}
+  .place-name{font-family:'Chonburi',serif;font-size:24px;line-height:1.25}
+  .verdict{display:inline-block;margin-top:10px;background:rgba(201,130,43,.12);color:var(--osmanthus);border-radius:999px;padding:5px 14px;font-size:13.5px;font-weight:600}
+  .tag{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .tag .dot{width:8px;height:8px;border-radius:2px;background:var(--osmanthus);transform:rotate(45deg);flex:0 0 auto}
+  .tag h2{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pine-soft);font-weight:600}
+  .card p{font-size:15.5px;line-height:1.75}
+  .card ul{list-style:none;margin-top:2px}
+  .card li{font-size:15px;line-height:1.7;padding:9px 0 9px 26px;position:relative;border-bottom:1px dashed var(--line)}
+  .card li:last-child{border-bottom:none}
+  .card li::before{content:"◆";position:absolute;left:2px;top:9px;font-size:11px;color:var(--osmanthus)}
+  .oct li::before{content:"❁";color:var(--seal);font-size:13px}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fact{background:var(--mist);border-radius:10px;padding:12px}
+  .fact .k{font-size:12px;color:var(--pine-soft);margin-bottom:4px}
+  .fact .v{font-size:14px;font-weight:600;line-height:1.5}
+  @media (max-width:380px){.facts{grid-template-columns:1fr}}
+  .map-card{padding:0;overflow:hidden}
+  .map-card iframe{display:block;width:100%;height:300px;border:0}
+  .map-head{padding:16px 18px 12px}
+  .map-note{padding:0 18px 14px;font-size:12.5px;color:var(--pine-soft);line-height:1.6}
+
+  /* ---------- โหลด/error/live ---------- */
+  .loading{display:none;text-align:center;color:var(--pine-soft);padding:26px 18px}
+  .loading.on{display:block}
+  .lantern{width:34px;height:34px;margin:0 auto 12px;border-radius:50%;border:3px solid var(--osmanthus);border-top-color:transparent;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.lantern{animation:none;border-top-color:var(--osmanthus)}}
+  .error{display:none;margin:16px 18px 0;background:#FBEFEA;border:1px solid #E8C6BC;color:#8A3226;border-radius:var(--radius);padding:16px;font-size:14.5px;line-height:1.6}
+  .error.on{display:block}
+  details.live{margin:20px 18px 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  details.live summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--pine-soft)}
+  details.live .inner{margin-top:12px;font-size:13.5px;line-height:1.7;color:var(--pine-soft)}
+  details.live input{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--mist);color:var(--pine)}
+  details.live .hint{margin-top:8px;font-size:12.5px}
+  .sources{font-size:12.5px;color:var(--pine-soft);text-align:center;margin:22px 18px 0;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <span class="hero-badge">✦ เที่ยวครบ จบในที่เดียว · 74 แห่ง</span>
+      <h1 class="hero-title"><span class="hero-chop">上海</span> เชียงไฮ้ ดูลานี้</h1>
+      <p class="hero-subtitle">ที่เที่ยว คาเฟ่ ร้านอาหาร ช้อปปิง บาร์ พร้อมทิปเดือนตุลาคม รวบรวมจากอินเทอร์เน็ตมาให้แล้ว</p>
+      <div class="search-container">
+        <div class="search-input-group">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+          <input type="text" id="searchInput" placeholder="ค้นหาสถานที่ เช่น บันด์, disney, ปูขน…" autocomplete="off" enterkeyhint="search">
+        </div>
+        <button class="search-btn">ค้นหา</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home">
+    <main class="main-container">
+      <div class="section-head">
+        <h2>สำรวจเซี่ยงไฮ้</h2>
+        <span class="count" id="resultCount"></span>
+      </div>
+      <div class="filter-container" id="tabs"></div>
+      <div class="cards-grid" id="cats"></div>
+      <div class="dots" id="dots"></div>
+      <div class="swipe-hint" id="swipeHint">← ปัดเพื่อดูเพิ่มเติม →</div>
+      <div class="no-match" id="noMatch"></div>
+    </main>
+
+    <details class="live" id="liveBox">
+      <summary>โหมดค้นสดสถานที่อื่น ๆ (ขั้นสูง ต้องมี API key)</summary>
+      <div class="inner">
+        ถ้าอยากค้นสถานที่นอกเหนือจากในแอปแบบข้อมูลสดจากเน็ต ใส่ Anthropic API key ของคุณเอง (จาก console.anthropic.com มีค่าใช้จ่ายตามการใช้งาน) คีย์อยู่ในหน้านี้ชั่วคราวเท่านั้น ไม่ถูกบันทึกที่ไหน
+        <input id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
+        <div class="hint">เมื่อใส่คีย์แล้ว การค้นหาที่ไม่ตรงกับในเครื่องจะไปค้นสดจากอินเทอร์เน็ตให้อัตโนมัติ</div>
+      </div>
+    </details>
+    <p class="sources">ข้อมูลรวบรวม ก.ค. 2026 จากเว็บรีวิวท่องเที่ยวหลายแหล่ง ราคา/เวลาอาจเปลี่ยนได้ ตรวจสอบอีกครั้งก่อนไปจริง<br>อัตราแลกเปลี่ยนโดยประมาณ 1 หยวน ≈ 4.6 บาท</p>
+  </div>
+
+  <!-- ช่องซ่อนสำหรับ logic เดิม (ค้นหา) -->
+  <input id="q" type="hidden">
+  <button id="go" style="display:none"></button>
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+    <button class="back" id="back">กลับไปดูรายการทั้งหมด</button>
+    <div class="card">
+      <div class="place-name" id="rName"></div>
+      <div class="verdict" id="rVerdict"></div>
+    </div>
+    <div class="card">
+      <div class="tag"><span class="dot"></span><h2>รีวิวโดยสรุป</h2></div>
+      <p id="rSummary"></p>
+    </div>
+    <div class="card">
+      <div class="tag"><span class="dot"></span><h2>ไฮไลต์</h2></div>
+      <ul id="rHighlights"></ul>
+    </div>
+    <div class="card">
+      <div class="tag"><span class="dot" style="background:var(--seal)"></span><h2>ทิปเดือนตุลาคม</h2></div>
+      <ul class="oct" id="rTips"></ul>
+    </div>
+    <div class="card" id="factsCard">
+      <div class="tag"><span class="dot"></span><h2>ข้อมูลใช้จริง</h2></div>
+      <div class="facts">
+        <div class="fact"><div class="k">เวลาเปิด</div><div class="v" id="fHours">—</div></div>
+        <div class="fact"><div class="k">ค่าเข้า</div><div class="v" id="fPrice">—</div></div>
+        <div class="fact"><div class="k">การเดินทาง</div><div class="v" id="fTransit">—</div></div>
+        <div class="fact"><div class="k">เวลาที่ควรเผื่อ</div><div class="v" id="fTime">—</div></div>
+      </div>
+    </div>
+    <div class="card map-card" id="mapCard">
+      <div class="map-head"><div class="tag" style="margin:0"><span class="dot"></span><h2>แผนที่</h2></div></div>
+      <iframe id="rMap" title="แผนที่สถานที่" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="map-note">หมายเหตุ: เมื่ออยู่ในจีน แผนที่ Google อาจไม่แสดง แนะนำติดตั้งแอป Amap (高德地图) หรือเปิด VPN/โรมมิ่งไทยไว้ครับ</div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="lantern"></div>
+    <div id="loadStep">กำลังค้นข้อมูลสดจากอินเทอร์เน็ต…</div>
+  </div>
+  <div class="error" id="error"></div>
+
+</div>
+<script>
+const OCT_TIPS_GENERAL={
+  th:"ภาพรวมเที่ยวตุลาคม",en:"October Overview — อ่านก่อนวางแผน!",wide:true,
+  name:"เที่ยวเซี่ยงไฮ้เดือนตุลาคม ต้องรู้อะไรบ้าง",
+  verdict:"ช่วงอากาศดีที่สุดของปี แต่ต้องวางแผนหลบ Golden Week ให้เป็น",
+  summary:"ตุลาคมคือหนึ่งในเดือนที่อากาศดีที่สุดของเซี่ยงไฮ้ โดยเฉพาะกลางเดือนถึงปลายเดือนที่กลางวันราว 20-22°C กลางคืนเย็นสบายและความชื้นต่ำ แต่จุดที่ต้องระวังสุด ๆ คือ Golden Week วันหยุดชาติจีน 1-7 ต.ค. 2569 ที่คนจีนทั้งประเทศออกเที่ยวพร้อมกัน ทุกที่แน่นมาก ราคาโรงแรมและตั๋วพุ่ง ถ้าเลือกวันได้ ให้ไปหลังวันที่ 8 ต.ค. จะสบายกว่ากันคนละโลก",
+  highlights:[
+    "คนไทยเข้าจีนได้โดยไม่ต้องขอวีซ่า (พำนักไม่เกิน 30 วัน) — เช็กเงื่อนไขล่าสุดก่อนเดินทางอีกครั้ง",
+    "ต้นตุลาคมยังร้อนได้ (ปีที่แล้วเคยแตะ 36°C ช่วง Golden Week) ปลายเดือนเย็นสบาย เตรียมเสื้อแบบเลเยอร์",
+    "แอปที่ควรมี: Alipay หรือ WeChat Pay (ผูกบัตรไทยได้), Didi เรียกรถ, Amap แผนที่, แอปแปลภาษา"
+  ],
+  octoberTips:[
+    "ถ้าคาบเกี่ยว 1-7 ต.ค. ให้จองโรงแรมล่วงหน้า 30+ วัน และจองตั๋วเข้าสถานที่ดัง ๆ ล่วงหน้าทุกที่ อย่าหวังซื้อหน้างาน",
+    "ช่วง Golden Week ให้เที่ยวเช้าตรู่หรือค่ำ ๆ และเลือกที่รอง ๆ เช่น North Bund แทนจุดแออัด",
+    "รถไฟฟ้าเซี่ยงไฮ้ครอบคลุมมาก ซื้อบัตรเที่ยวหรือสแกนจ่ายผ่านแอปได้ ถูกกว่าแท็กซี่เยอะ"
+  ],
+  hours:"—",price:"—",transit:"—",timeNeeded:"—",mapQuery:null,noFacts:true
+};
+const PLACES=[
+OCT_TIPS_GENERAL,
+{
+  th:"เดอะบันด์",en:"The Bund 外滩",keys:["bund","บันด์","ไว่ทัน","waitan"],
+  name:"เดอะบันด์ (The Bund)",
+  verdict:"ห้ามพลาดเด็ดขาด — ภาพจำของเซี่ยงไฮ้อยู่ที่นี่",
+  summary:"ริมแม่น้ำหวงผู่ฝั่งที่เรียงรายด้วยตึกยุคโคโลเนียลกว่า 50 หลัง มองข้ามไปเจอตึกระฟ้าฝั่งผู่ตงเป็นคอนทราสต์เก่า-ใหม่ที่นักท่องเที่ยวทั่วโลกยกให้เป็นวิวซิกเนเจอร์ของเมือง รีวิวส่วนใหญ่แนะนำให้มาทั้งกลางวันและกลางคืนเพราะบรรยากาศต่างกันสิ้นเชิง ข้อควรรู้คือช่วงค่ำวันหยุดคนแน่นมากจริง ๆ",
+  highlights:["วิวตึกระฟ้าผู่ตง (Shanghai Tower, จินเม่า, Oriental Pearl) เปิดไฟยามค่ำ","เดินเลียบทางริมน้ำยาว ~1.5 กม. ฟรีตลอด","ตึกเก่าสไตล์อาร์ตเดโคฝั่งถนน Zhongshan East ถ่ายรูปสวยมาก"],
+  octoberTips:["ไฟตึกฝั่งผู่ตงเปิดถึงราว 22:00 น. ไปถึงก่อนพระอาทิตย์ตกจะได้ทั้งวิวเย็นและวิวไฟ","ช่วง Golden Week คนแน่นระดับเดินไหล่ชนไหล่ ลองย้ายไป North Bund (Sinar Mas Plaza) วิวเดียวกันแต่คนน้อยกว่า","ปลายตุลาคมลมริมน้ำเริ่มเย็น พกเสื้อคลุมบาง ๆ ไปด้วย"],
+  hours:"เปิดตลอด (ไฟตึกถึง ~22:00)",price:"ฟรี",transit:"MRT สาย 2/10 สถานี East Nanjing Road เดินต่อ ~8 นาที",timeNeeded:"1.5-2 ชม.",
+  mapQuery:"The Bund Shanghai"
+},
+{
+  th:"สวนอวี้หยวน",en:"Yu Garden 豫园",keys:["yu","อวี้","หยวน","yuyuan","อี้หยวน"],
+  name:"สวนอวี้หยวน (Yu Garden)",
+  verdict:"น่าไปมาก โดยเฉพาะสายถ่ายรูปและชอบสถาปัตยกรรมจีนโบราณ",
+  summary:"สวนจีนโบราณสมัยราชวงศ์หมิงที่ได้ชื่อว่าอนุรักษ์ไว้สมบูรณ์ที่สุดในเซี่ยงไฮ้ โดดเด่นด้วยงานแกะสลักอิฐ หิน และไม้ที่ละเอียดยิบ รอบนอกเป็นตลาดอวี้หยวน (Yuyuan Bazaar) อาคารทรงจีนหลังคางอนที่เต็มไปด้วยของกินของฝาก รีวิวเตือนตรงกันว่าตัวตลาดคนเยอะตลอด แต่ข้างในสวนสงบกว่ามาก",
+  highlights:["สะพานเก้าโค้ง + โรงน้ำชาหูซินถิง จุดถ่ายรูปไอคอนิก","เสี่ยวหลงเปาเจ้าดังหนานเสียง (Nanxiang) ต้นตำรับอยู่ตรงนี้","งานแกะสลักและจัดสวนสไตล์เจียงหนานของแท้"],
+  octoberTips:["เข้าสวนรอบเช้าสุด (เปิด ~9:00) คนน้อยกว่าบ่ายชัดเจน","เด็กต่ำกว่า 6 ขวบ/สูงไม่เกิน 130 ซม. เข้าฟรี","Golden Week ตลาดรอบนอกแน่นมาก ถ้าเลี่ยงได้ให้ไปวันธรรมดาหลัง 8 ต.ค."],
+  hours:"~9:00-16:30 (สวนปิดจันทร์ในบางช่วง เช็กก่อนไป)",price:"~30-40 หยวน (~140-185 บาท)",transit:"MRT สาย 10 สถานี Yuyuan Garden",timeNeeded:"2-3 ชม. รวมเดินตลาด",
+  mapQuery:"Yu Garden Shanghai"
+},
+{
+  th:"เทียนจื่อฝาง",en:"Tianzifang 田子坊",keys:["tianzi","เทียน","จื่อฝาง","tzf"],
+  name:"เทียนจื่อฝาง (Tianzifang)",
+  verdict:"ควรไปถ้าชอบตรอกซอยอาร์ต ๆ คาเฟ่ และของแฮนด์เมด",
+  summary:"เขาวงกตตรอกแคบในย่านเฟรนช์คอนเซสชั่น ที่บ้านชิกู่เหมินเก่าถูกแปลงเป็นแกลเลอรี ร้านงานคราฟต์ คาเฟ่ และบาร์เล็ก ๆ นับร้อยร้าน เสน่ห์คือความวุ่นวายน่ารักและมุมถ่ายรูปที่โผล่มาทุกหัวมุม รีวิวบางส่วนบอกว่าเริ่มมีความเป็นเชิงพาณิชย์สูงและร้านซ้ำ ๆ กันบ้าง แต่บรรยากาศโดยรวมยังคุ้มแวะ",
+  highlights:["ตรอกแคบสายไฟระโยงระยาง ถ่ายรูปสไตล์เซี่ยงไฮ้เก่าได้ฟีลสุด","ร้านงานคราฟต์และของฝากไม่เหมือนตลาดทั่วไป","คาเฟ่/บาร์ดาดฟ้าเล็ก ๆ ซ่อนตัวอยู่หลายร้าน"],
+  octoberTips:["อากาศเย็นสบายของตุลาคมเหมาะกับการเดินตรอกที่นี่มาก แนะนำช่วงบ่ายแก่ ๆ ต่อยาวถึงค่ำ","วันหยุดคนแน่นจนเดินติด ถ้าไป Golden Week ให้ไปก่อน 11 โมง","เดินต่อไปย่าน Sinan Road / Fuxing Park ใกล้ ๆ ได้ บรรยากาศร่มรื่นใต้ต้นเพลน"],
+  hours:"ร้านส่วนใหญ่ ~10:00-22:00",price:"ฟรี (เสียเฉพาะช้อป/กิน)",transit:"MRT สาย 9 สถานี Dapuqiao ทางออก 1",timeNeeded:"1.5-2 ชม.",
+  mapQuery:"Tianzifang Shanghai"
+},
+{
+  th:"ถนนอู่คัง",en:"Wukang Road 武康路",keys:["wukang","อู่คัง","อูคัง","ferguson"],
+  name:"ถนนอู่คัง (Wukang Road) ย่านเฟรนช์คอนเซสชั่น",
+  verdict:"น่าไปมากช่วงตุลาคม — ใบไม้ต้นเพลนเริ่มเปลี่ยนสีพอดี",
+  summary:"ถนนสายสั้น ๆ ที่กลายเป็นย่านฮิปสุดของเซี่ยงไฮ้ เรียงรายด้วยวิลล่ายุโรปยุค 1920s ใต้ร่มเงาต้นเพลนฝรั่งเศส จุดไฮไลต์คือตึก Wukang Mansion ทรงเรือหัวแหลมที่ใคร ๆ ก็มาถ่ายรูป รอบ ๆ เต็มไปด้วยคาเฟ่ ร้านเบเกอรี และบูติกเล็ก ๆ เหมาะกับการเดินเรื่อย ๆ ครึ่งวันแบบไม่มีแพลน",
+  highlights:["Wukang Mansion ตึกทรงเรือ แลนด์มาร์กถ่ายรูปอันดับต้นของเมือง","คาเฟ่และเบเกอรีดัง ๆ กระจุกตัวหนาแน่นสุดในเซี่ยงไฮ้","สถาปัตยกรรมวิลล่ายุโรปเก่า + เรื่องราวบ้านบุคคลสำคัญตลอดสาย"],
+  octoberTips:["ปลายตุลาคมใบต้นเพลนเริ่มเหลือง ถ่ายรูปสวยขึ้นอีกระดับ","เช้าวันธรรมดาเงียบสงบสุด สายวันหยุดจะเริ่มมีคนต่อคิวถ่ายรูปหน้า Wukang Mansion","แต่งตัวเลเยอร์ได้เต็มที่ อากาศเย็นกำลังเดินสบาย"],
+  hours:"เดินได้ตลอด (คาเฟ่ ~8:00-20:00)",price:"ฟรี",transit:"MRT สาย 10/11 สถานี Jiaotong University หรือสาย 10 Shanghai Library",timeNeeded:"2-3 ชม.",
+  mapQuery:"Wukang Road Shanghai"
+},
+{
+  th:"ตึกเซี่ยงไฮ้ทาวเวอร์",en:"Shanghai Tower 上海中心",keys:["tower","ทาวเวอร์","เซี่ยงไฮ้ทาวเวอร์","118"],
+  name:"จุดชมวิวเซี่ยงไฮ้ทาวเวอร์ ชั้น 118 (Shanghai Tower)",
+  verdict:"คุ้มถ้าฟ้าเปิด — จุดชมวิวที่สูงเป็นอันดับต้น ๆ ของโลก",
+  summary:"ตึกสูงอันดับหนึ่งของจีน (632 ม.) กับจุดชมวิวชั้น 118-119 ที่ความสูงราว 546-552 เมตร มองเห็นแม่น้ำหวงผู่คดเคี้ยวและเส้นขอบฟ้าทั้งเมืองแบบ 360 องศา ลิฟต์ขึ้นเร็วติดอันดับโลก รีวิวส่วนใหญ่ประทับใจวิว แต่บางเสียงติว่าช่วงพีคคนแน่นและพื้นที่ถ่ายรูปจำกัด เคล็ดลับสำคัญที่สุดคือเช็กสภาพฟ้าก่อนซื้อตั๋ว",
+  highlights:["วิวพาโนรามาสูงสุดของเมือง เห็นทั้งบันด์และผู่ตงพร้อมกัน","ลิฟต์ความเร็วสูงระดับโลก ขึ้นถึงใน ~55 วินาที","ช่วงเย็นได้ดูเมืองเปลี่ยนจากกลางวันเป็นทะเลไฟ"],
+  octoberTips:["อากาศตุลาคมค่อนข้างใสเหมาะชมวิว แต่เช็กพยากรณ์หมอก/ฝนก่อนซื้อตั๋วเสมอ","ขึ้นช่วง ~16:30-17:00 จะได้ทั้งวิวกลางวัน พระอาทิตย์ตก และวิวไฟในรอบเดียว","จองตั๋วออนไลน์ล่วงหน้า โดยเฉพาะช่วง Golden Week ที่คิวหน้างานยาวมาก"],
+  hours:"~8:30-21:30",price:"~180 หยวน (~830 บาท)",transit:"MRT สาย 2 สถานี Lujiazui ทางออก 6 / นั่งเรือเฟอร์รีจากบันด์ 2 หยวนแล้วเดิน ~10 นาที",timeNeeded:"1.5-2 ชม.",
+  mapQuery:"Shanghai Tower"
+},
+{
+  th:"เซี่ยงไฮ้ดิสนีย์แลนด์",en:"Shanghai Disneyland",keys:["disney","ดิสนีย์","disneyland","ดีสนี"],
+  name:"เซี่ยงไฮ้ดิสนีย์แลนด์ (Shanghai Disneyland)",
+  verdict:"คุ้มมากถ้าเลี่ยงวันหยุดจีนได้ — มีโซน Zootopia ที่เดียวในโลก",
+  summary:"ดิสนีย์แลนด์ที่ใหม่และทันสมัยที่สุดแห่งหนึ่ง จุดขายคือปราสาทใหญ่ที่สุดในบรรดาดิสนีย์ทุกแห่ง เครื่องเล่น TRON Lightcycle และโซน Zootopia ที่มีแค่ที่นี่ ราคาตั๋วยังถูกกว่าดิสนีย์ญี่ปุ่น/อเมริกา ระบบตั๋วเข้มงวด ต้องลงทะเบียนชื่อจริงผูกพาสปอร์ต และตั๋วขายล่วงหน้าแบบ 30 วันหมุนเวียน รีวิวเตือนหนักแน่นเรื่องตั๋วปลอมจากคนขายนอกระบบ",
+  highlights:["โซน Zootopia + เครื่องเล่น Hot Pursuit มีที่เดียวในโลก","TRON Lightcycle Power Run โคสเตอร์ตัวท็อปของค่าย","ปราสาท Enchanted Storybook ใหญ่สุดในดิสนีย์ทุกสาขา + โชว์ไฟปิดสวน"],
+  octoberTips:["เลี่ยง 1-7 ต.ค. เด็ดขาด ตั๋วขึ้นระดับพีคสุด (799+ หยวน) และคิวเครื่องเล่นยาวมหาศาล ไปวันธรรมดากลาง-ปลายเดือนดีสุด","ซื้อตั๋วจากแอป/เว็บทางการ หรือ Trip.com / Klook เท่านั้น ต้องใช้เลขพาสปอร์ตตอนจอง","มี Early Park Entry (~149 หยวน) เข้าก่อนเปิด 1 ชม. ช่วยเก็บเครื่องเล่นดังตอนคิวสั้นได้คุ้ม"],
+  hours:"~8:30-21:30 (ต่างกันตามวัน เช็กแอปทางการ)",price:"~475-799 หยวน (~2,200-3,700 บาท) ตามวัน",transit:"MRT สาย 11 สถานี Disney Resort (ปลายสาย)",timeNeeded:"เต็มวัน (2 วันถ้าอยากเก็บครบ)",
+  mapQuery:"Shanghai Disneyland"
+},
+{
+  th:"จูเจียเจี่ยว",en:"Zhujiajiao 朱家角",keys:["zhujia","จูเจีย","เมืองน้ำ","water town","จูเจี่ย"],
+  name:"เมืองน้ำโบราณจูเจียเจี่ยว (Zhujiajiao)",
+  verdict:"น่าไปถ้ามีเวลาครึ่งวัน-หนึ่งวัน อยากได้ฟีล 'เวนิสตะวันออก' โดยไม่ต้องออกไกล",
+  summary:"เมืองน้ำอายุกว่า 1,700 ปีชานเมืองเซี่ยงไฮ้ ที่ยังคงคลอง สะพานหินโค้ง และบ้านไม้ริมน้ำแบบดั้งเดิมไว้ครบ เข้าตัวเมืองฟรี เดินเล่นตามตรอกร้านของกินพื้นถิ่นได้ทั้งวัน ไฮไลต์ที่รีวิวพูดถึงบ่อยคือการนั่งเรือแจวลอดสะพานฟางเชิง จุดเด่นคือไปง่ายมากเพราะมีรถไฟฟ้าถึง",
+  highlights:["สะพานฟางเชิง (Fangsheng) สะพานหินโค้ง 5 ช่วงอายุ 400+ ปี","นั่งเรือแจวชมเมืองจากมุมในคลอง","ของกินท้องถิ่น เช่น ข้าวห่อใบบัว ขาหมูจูเจียเจี่ยว"],
+  octoberTips:["อากาศเย็นตุลาคมทำให้เดินเมืองน้ำสบายกว่าหน้าร้อนมาก แสงบ่ายแก่ ๆ ถ่ายรูปริมคลองสวยสุด","Golden Week เมืองน้ำทุกแห่งแน่นหนัก ถ้าจำเป็นต้องไปช่วงนั้น ให้ถึงก่อน 9 โมง","เผื่อเวลาเดินทาง ~1 ชม.จากใจกลางเมือง ไปเช้ากลับเย็นกำลังดี"],
+  hours:"ตัวเมืองเปิดตลอด ร้าน ~9:00-17:00",price:"เข้าเมืองฟรี (เรือ/บ้านโบราณเก็บแยก)",transit:"MRT สาย 17 สถานี Zhujiajiao แล้วเดิน ~15 นาที",timeNeeded:"ครึ่งวัน-1 วัน",
+  mapQuery:"Zhujiajiao Ancient Town"
+},
+{
+  th:"ถนนนานกิง",en:"Nanjing Road 南京路",keys:["nanjing","นานกิง","หนานจิง"],
+  name:"ถนนนานกิง (Nanjing Road)",
+  verdict:"แวะได้ง่ายเพราะติดบันด์ — สายช้อปและชอบไฟเมืองจะชอบ",
+  summary:"ถนนคนเดินช้อปปิงที่พลุกพล่านที่สุดสายหนึ่งของโลก ยาวต่อเนื่องจากจัตุรัสประชาชนไปจนเกือบถึงบันด์ สองข้างทางคือห้างเก่าแก่ยุคต้นศตวรรษที่ 20 ปนกับแฟลกชิปสโตร์สมัยใหม่และป้ายไฟนีออนเต็มถนน รีวิวมองว่าของที่ขายไม่ได้ถูกเป็นพิเศษ เสน่ห์จริง ๆ คือบรรยากาศและการเดินเชื่อมไปบันด์ตอนค่ำ",
+  highlights:["ป้ายไฟนีออนยามค่ำคืน ฟีลเซี่ยงไฮ้จ๋าสุด ๆ","ห้างและร้านขนมเก่าแก่ระดับร้อยปี ลองขนมจีนดั้งเดิมได้","เดินทะลุถึงบันด์ได้เลย จัดเป็นเส้นเดินเย็นเส้นเดียวจบ"],
+  octoberTips:["จัดโปรแกรมเดินนานกิงตอนโพล้เพล้ต่อด้วยไฟบันด์ตอนค่ำ คือคอมโบยอดนิยม","Golden Week ที่นี่คือจุดคนแน่นระดับประเทศ ระวังกระเป๋าและนัดจุดรวมพลถ้าไปเป็นกลุ่ม","มีรถรางเล็กวิ่งตลอดสายถ้าเดินไม่ไหว"],
+  hours:"ถนนเปิดตลอด ร้าน ~10:00-22:00",price:"ฟรี",transit:"MRT สาย 2/10 สถานี East Nanjing Road",timeNeeded:"1-2 ชม.",
+  mapQuery:"Nanjing Road Pedestrian Street Shanghai"
+},
+{
+  th:"พิพิธภัณฑ์เซี่ยงไฮ้",en:"Shanghai Museum",keys:["museum","พิพิธภัณฑ์","มิวเซียม"],
+  name:"พิพิธภัณฑ์เซี่ยงไฮ้ (Shanghai Museum)",
+  verdict:"คุ้มสุด ๆ เพราะฟรี — ของจัดแสดงระดับชาติ",
+  summary:"หนึ่งในพิพิธภัณฑ์ที่ดีที่สุดของจีน โด่งดังเรื่องคอลเลกชันเครื่องสัมฤทธิ์โบราณ เซรามิก ภาพเขียนพู่กันจีน และตราประทับ ปัจจุบันมีทั้งอาคารเดิมที่จัตุรัสประชาชนและอาคารตะวันออก (East Wing) แห่งใหม่ในผู่ตงที่ใหญ่และทันสมัยกว่า เข้าชมฟรีแต่ควรจองรอบออนไลน์ล่วงหน้าโดยเฉพาะช่วงวันหยุด",
+  highlights:["คอลเลกชันเครื่องสัมฤทธิ์จีนโบราณระดับท็อปของโลก","อาคาร East Wing ใหม่ ใหญ่ โปร่ง งานจัดแสดงอินเตอร์แอกทีฟ","เป็นแผนสำรองชั้นดีถ้าเจอวันฝนตก"],
+  octoberTips:["ช่วง Golden Week รอบเข้าชมเต็มเร็ว จองผ่านช่องทางออนไลน์ล่วงหน้า 2-3 วันขึ้นไป","ใช้เป็นโปรแกรมหลบแดดช่วงบ่ายแล้วค่อยออกไปบันด์ตอนเย็นได้พอดี","พกพาสปอร์ตไปด้วย ใช้แลกบัตรเข้า"],
+  hours:"~9:00-17:00 (ปิดจันทร์)",price:"ฟรี (จองรอบล่วงหน้า)",transit:"อาคารเดิม: MRT สาย 1/2/8 People's Square / East Wing: สาย 2 Shanghai Science & Technology Museum",timeNeeded:"2-3 ชม.",
+  mapQuery:"Shanghai Museum East"
+},
+{
+  th:"วัดจิ้งอัน",en:"Jing'an Temple 静安寺",keys:["jingan","จิ้งอัน","จิงอัน","วัดทอง"],
+  name:"วัดจิ้งอัน (Jing'an Temple)",
+  verdict:"แวะสั้น ๆ ได้อรรถรส — วัดทองกลางป่าตึกระฟ้า",
+  summary:"วัดพุทธเก่าแก่ที่ตั้งตระหง่านกลางย่านธุรกิจหรูของเมือง ภาพหลังคาทองตัดกับตึกกระจกรอบด้านคือมุมถ่ายรูปที่เป็นเอกลักษณ์มาก ภายในมีพระพุทธรูปหยกขาวและงานไม้แกะสลักงดงาม รีวิวส่วนใหญ่บอกว่าใช้เวลาไม่นานแต่คุ้มค่าแวะ เพราะอยู่ติดสถานีรถไฟฟ้าและห้างดัง เดินต่อย่านถนนอันฝูลู่ (Anfu Road) สายคาเฟ่ได้",
+  highlights:["มุมหลังคาทองตัดตึกระฟ้า ถ่ายรูปมุมไหนก็ได้เรื่อง","พระพุทธรูปหยกขาวและหอระฆังไม้การบูร","ทำเลทองกลางเมือง เชื่อมช้อปปิงและย่านคาเฟ่ได้ทันที"],
+  octoberTips:["แสงเช้ากระทบหลังคาทองสวยสุดช่วง ~8:00-10:00","วันพระ/วันหยุดจีนคนไหว้เยอะ เดินชมได้แต่ควรสำรวมและเลี่ยงถ่ายรูปคนไหว้ตรง ๆ","จับคู่กับเดิน Wukang Road ได้ในครึ่งวันเดียว อยู่โซนใกล้กัน"],
+  hours:"~7:30-17:00",price:"~50 หยวน (~230 บาท)",transit:"MRT สาย 2/7/14 สถานี Jing'an Temple ออกมาถึงเลย",timeNeeded:"~1 ชม.",
+  mapQuery:"Jing'an Temple Shanghai"
+},
+{
+  th:"ล่องเรือแม่น้ำหวงผู่",en:"Huangpu River Cruise",keys:["cruise","ล่องเรือ","หวงผู่","huangpu","เรือ"],
+  name:"ล่องเรือชมไฟแม่น้ำหวงผู่ (Huangpu River Night Cruise)",
+  verdict:"น่าลองสักครั้ง — เห็นทั้งบันด์และผู่ตงจากกลางน้ำพร้อมกัน",
+  summary:"เรือชมวิววิ่งวนช่วงโค้งแม่น้ำระหว่างบันด์กับผู่ตง ใช้เวลาราว 45-60 นาที ได้เห็นตึกยุคโคโลเนียลฝั่งหนึ่งและตึกระฟ้าเปิดไฟอีกฝั่งพร้อมกันแบบที่ยืนบนฝั่งไม่มีทางได้ รีวิวแนะนำรอบหลังฟ้ามืดสนิทว่าคุ้มสุด และให้จองรอบล่วงหน้าในช่วงวันหยุดเพราะรอบดี ๆ เต็มเร็ว",
+  highlights:["วิวไฟสองฝั่งแม่น้ำแบบ 360 องศา จุดถ่ายรูปที่หาจากบนฝั่งไม่ได้","รอบค่ำเห็นโชว์ไฟตึกฝั่งผู่ตงเต็มตา","ท่าเรือหลักอยู่ติดบันด์ เดินต่อจากโปรแกรมเย็นได้เลย"],
+  octoberTips:["อากาศบนดาดฟ้าเรือเดือนตุลาคมเย็นและลมแรง เตรียมเสื้อกันลมไปด้วย","รอบ ~19:00-20:00 หลังไฟเปิดเต็มคือรอบที่รีวิวเชียร์สุด","Golden Week ตั๋วรอบค่ำหมดไว จองออนไลน์ล่วงหน้า 1-2 วัน"],
+  hours:"รอบเรือ ~ตั้งแต่บ่ายถึง ~21:30",price:"~120-150 หยวน (~550-700 บาท)",transit:"ท่าเรือ Shiliupu ใกล้บันด์ / MRT สาย 10 Yuyuan Garden เดิน ~10 นาที",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Shiliupu Wharf Huangpu River Cruise Shanghai"
+},
+{
+  th:"ซินเทียนตี้",en:"Xintiandi 新天地",keys:["xintiandi","ซินเทียน","ซินเถียน"],
+  name:"ซินเทียนตี้ (Xintiandi)",
+  verdict:"เหมาะกับมื้อค่ำชิล ๆ ปิดท้ายวัน",
+  summary:"ย่านบ้านหินชิกู่เหมินเก่าที่ถูกบูรณะเป็นคอมเพล็กซ์ร้านอาหาร บาร์ และแบรนด์เนมกลางแจ้งสุดโมเดิร์น บรรยากาศคือความเก่าภายนอกผสมความหรูภายใน เหมาะกับนั่งดินเนอร์หรือจิบเครื่องดื่มริมทางเดิน รีวิวบอกตรงกันว่าราคาอาหารสูงกว่าย่านอื่น แลกกับบรรยากาศและคุณภาพร้านที่คัดมาแล้ว",
+  highlights:["สถาปัตยกรรมชิกู่เหมินบูรณะสวยเนี้ยบ ไฟตอนค่ำบรรยากาศดีมาก","ร้านอาหารนานาชาติ/จีนโมเดิร์นระดับคุณภาพเพียบ","ใกล้สวน Fuxing และย่านถนนสายเงียบ ๆ เดินย่อยต่อได้"],
+  octoberTips:["อากาศเย็นตุลาคมทำให้ที่นั่งเอาต์ดอร์ของย่านนี้น่านั่งสุดในรอบปี","จองร้านดัง ๆ ล่วงหน้าถ้าไปคืนวันศุกร์-เสาร์หรือช่วง Golden Week","จับคู่เที่ยวกับเทียนจื่อฝางได้ อยู่ไม่ไกลกัน คนละอารมณ์กันชัดเจน"],
+  hours:"ร้าน ~10:00-23:00",price:"ฟรี (ค่าอาหารค่อนข้างพรีเมียม)",transit:"MRT สาย 10/13 สถานี Xintiandi",timeNeeded:"1.5-2 ชม.",
+  mapQuery:"Xintiandi Shanghai"
+},
+{
+  th:"หอไข่มุก",en:"Oriental Pearl Tower",keys:["pearl","ไข่มุก","oriental","หอคอย"],
+  name:"หอไข่มุก (Oriental Pearl Tower)",
+  verdict:"แลนด์มาร์กสุดคลาสสิก — เด็ดที่พื้นกระจกใส",
+  summary:"หอคอยทรงลูกแก้วสีชมพูที่เป็นสัญลักษณ์ของผู่ตงมาตั้งแต่ยุค 90 แม้ความสูงจะแพ้ตึกรุ่นใหม่ แต่จุดขายที่ยังไม่มีใครแทนได้คือระเบียงพื้นกระจกใสรอบตัวหอที่มองทะลุลงไปเห็นถนนข้างล่าง เสียวสะใจกว่าจุดชมวิวทั่วไป ชั้นล่างยังมีพิพิธภัณฑ์ประวัติศาสตร์เซี่ยงไฮ้ที่รีวิวชมว่าดีเกินคาด",
+  highlights:["ระเบียงพื้นกระจกใส เดินลอยเหนือเมือง จุดถ่ายรูปยอดฮิต","พิพิธภัณฑ์ประวัติศาสตร์เซี่ยงไฮ้ในฐานหอ จัดแสดงสนุกมาก","มุมถ่ายหอจากสะพานลอยวงกลม Lujiazui สวยทุกช่วงเวลา"],
+  octoberTips:["ถ้าจะขึ้นจุดชมวิวสูง เลือกอย่างใดอย่างหนึ่งระหว่างที่นี่กับเซี่ยงไฮ้ทาวเวอร์ก็พอ ไม่ต้องขึ้นทั้งคู่","Golden Week คิวซื้อตั๋วยาวมาก จองออนไลน์ล่วงหน้าแล้วสแกนเข้าเลย","ตอนค่ำตัวหอเปิดไฟเปลี่ยนสี ถ่ายจากฝั่งบันด์สวยกว่าขึ้นบนหอ"],
+  hours:"~8:30-21:30",price:"~199-259 หยวน (~915-1,190 บาท) ตามโซน",transit:"MRT สาย 2 สถานี Lujiazui ทางออก 1",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Oriental Pearl Tower Shanghai"
+},
+{
+  th:"M50 อาร์ตดิสตริกต์",en:"M50 Creative Park",keys:["m50","อาร์ต","แกลเลอรี","moganshan"],
+  name:"M50 Creative Park — ย่านศิลปะริมคลอง",
+  verdict:"สายอาร์ตต้องมา — แกลเลอรีฟรีนับสิบในโรงงานเก่า",
+  summary:"โรงงานทอผ้าเก่าริมคลองซูโจวที่แปลงเป็นย่านศิลปะร่วมสมัยใหญ่สุดของเซี่ยงไฮ้ รวมแกลเลอรี สตูดิโอศิลปิน และร้านของดีไซเนอร์หลายสิบแห่ง ส่วนใหญ่เข้าชมฟรี กำแพงรอบนอกเป็นสตรีทอาร์ต/กราฟฟิตี้ที่เปลี่ยนหน้าตาเรื่อย ๆ บรรยากาศดิบ ๆ ต่างจากย่านท่องเที่ยวหลักชัดเจน เหมาะกับสายชอบเดินดูงานแบบไม่รีบ",
+  highlights:["แกลเลอรีศิลปะร่วมสมัยจีนเข้าฟรีเกือบทั้งหมด","กำแพงกราฟฟิตี้ถ่ายรูปสตรีทสไตล์ได้ทั้งซอย","ได้เห็นสตูดิโอศิลปินทำงานจริง บางห้องเปิดให้คุยได้"],
+  octoberTips:["อากาศเย็นเดินย่านเปิดโล่งแบบนี้สบายมาก จัดครึ่งวันบ่ายกำลังดี","แกลเลอรีส่วนใหญ่ปิดจันทร์ เช็กวันก่อนไป","เดินเลียบคลองซูโจวต่อได้ ทางเดินริมน้ำปรับปรุงใหม่สวยขึ้นมาก"],
+  hours:"~10:00-18:00 (หลายแกลเลอรีปิดจันทร์)",price:"ฟรีเกือบทั้งหมด",transit:"MRT สาย 13 สถานี Jiangning Road เดิน ~10 นาที",timeNeeded:"~2-3 ชม.",
+  mapQuery:"M50 Creative Park Shanghai"
+},
+{
+  th:"เมืองเก่าชีเป่า",en:"Qibao Old Town",keys:["qibao","ชีเป่า","ฉีเป่า"],
+  name:"เมืองเก่าชีเป่า (Qibao Old Town)",
+  verdict:"เวอร์ชันย่อของเมืองน้ำ — ไปง่ายสุดเพราะอยู่ในเมือง",
+  summary:"เมืองน้ำโบราณขนาดกะทัดรัดที่ซ่อนอยู่ในเขตเมืองเซี่ยงไฮ้เอง นั่งรถไฟฟ้าถึงเลยไม่ต้องออกชานเมืองแบบจูเจียเจี่ยว จุดเด่นคือถนนสายของกินโบราณสองฝั่งคลองที่อัดแน่นด้วยของว่างพื้นถิ่น เหมาะกับคนเวลาน้อยที่อยากได้ฟีลเมืองน้ำสัก 2-3 ชั่วโมง รีวิวเตือนว่าวันหยุดคนแน่นเพราะคนท้องถิ่นก็มาเที่ยวกัน",
+  highlights:["ถึงง่ายสุดในบรรดาเมืองน้ำ นั่งรถไฟฟ้าสาย 9 ลงปุ๊บถึงปั๊บ","ถนนของกินโบราณ ลองของว่างท้องถิ่นได้เป็นสิบอย่างในซอยเดียว","สะพานหินโค้งข้ามคลอง มุมถ่ายรูปยามเย็นแสงสวย"],
+  octoberTips:["ใช้เป็นแผนสำรองถ้าไม่มีเวลาเต็มวันไปจูเจียเจี่ยว ได้บรรยากาศคล้ายกันใน 1/3 ของเวลา","ไปช่วงบ่ายแก่ต่อเนื่องถึงค่ำ ไฟโคมริมคลองเปิดสวย","วันหยุด Golden Week แน่นมาก แนะนำวันธรรมดาเท่านั้น"],
+  hours:"ตัวเมืองเปิดตลอด ร้าน ~9:00-20:00",price:"เข้าฟรี (บ้านโบราณบางหลังเก็บแยกเล็กน้อย)",transit:"MRT สาย 9 สถานี Qibao เดิน ~5 นาที",timeNeeded:"~2-3 ชม.",
+  mapQuery:"Qibao Old Town Shanghai"
+},
+{
+  th:"พิพิธภัณฑ์ธรรมชาติวิทยา",en:"Shanghai Natural History Museum",keys:["natural","ไดโนเสาร์","ธรรมชาติวิทยา"],
+  name:"พิพิธภัณฑ์ธรรมชาติวิทยาเซี่ยงไฮ้",
+  verdict:"มากับเด็ก ๆ หรือชอบไดโนเสาร์ ที่นี่คุ้มมาก",
+  summary:"พิพิธภัณฑ์ธรรมชาติวิทยาตัวใหม่ในสวนสาธารณะจิ้งอัน ตัวอาคารดีไซน์เกลียวหอยสวยจนเป็นจุดถ่ายรูปในตัวเอง ภายในจัดแสดงโครงกระดูกไดโนเสาร์ขนาดยักษ์ สัตว์สตัฟฟ์นับพันชิ้น และโซนอินเตอร์แอกทีฟที่เด็กเล่นได้จริงจัง รีวิวครอบครัวยกให้เป็นพิพิธภัณฑ์ที่เด็กสนุกสุดในเมืองด้วยค่าเข้าเบา ๆ",
+  highlights:["โครงไดโนเสาร์ยักษ์กลางโถง อลังการตั้งแต่ก้าวแรก","โซนอินเตอร์แอกทีฟเยอะ เด็กอยู่ได้ทั้งวัน","ตัวอาคารทรงเปลือกหอย + สวนหินจีนด้านใน ถ่ายรูปสวย"],
+  octoberTips:["แผนกันฝน/แดดชั้นดี สลับกับโปรแกรมเอาต์ดอร์ได้","Golden Week ครอบครัวจีนมากันเยอะมาก จองรอบออนไลน์ก่อน","อยู่ใกล้วัดจิ้งอัน จัดเป็นสายครอบครัวครึ่งวันเดียวกันได้"],
+  hours:"~9:00-17:15 (ปิดจันทร์)",price:"~30 หยวน (~140 บาท)",transit:"MRT สาย 13 สถานี Natural History Museum",timeNeeded:"~2-3 ชม.",
+  mapQuery:"Shanghai Natural History Museum Jing'an"
+},
+{
+  th:"วัดหลงหัว",en:"Longhua Temple",keys:["longhua","หลงหัว","เจดีย์"],
+  name:"วัดหลงหัว (Longhua Temple) — วัดเก่าแก่สุดของเมือง",
+  verdict:"วัดใหญ่ครบองค์ประกอบสุด บรรยากาศขลังกว่าจิ้งอัน",
+  summary:"วัดพุทธที่ใหญ่และเก่าแก่ที่สุดของเซี่ยงไฮ้ พร้อมเจดีย์เจ็ดชั้นพันปีตั้งเด่นหน้าวัด อาคารไล่เรียงหลายตำหนักแบบวัดจีนขนานแท้ นักท่องเที่ยวน้อยกว่าวัดจิ้งอันมากทำให้เดินสงบกว่า มีโรงเจในวัดขายบะหมี่เจชามละไม่กี่หยวนที่คนท้องถิ่นตั้งใจมากิน",
+  highlights:["เจดีย์หลงหัวพันปี สัญลักษณ์เก่าแก่สุดชิ้นหนึ่งของเมือง","ตำหนักไล่ชั้นครบแบบวัดจีนโบราณของจริง","บะหมี่เจในโรงเจวัด ถูกและอร่อยจนเป็นตำนานย่อม ๆ"],
+  octoberTips:["อากาศเย็นเดินวัดกว้าง ๆ แบบนี้สบายมาก ครึ่งเช้ากำลังดี","เลี่ยงวันพระจีนถ้าไม่ชอบคนแน่น ธูปควันเยอะ","ต่อรถไปย่าน West Bund ริมแม่น้ำได้ไม่ไกล จัดสายเดียวกันได้"],
+  hours:"~7:00-16:30",price:"~10 หยวน (~46 บาท)",transit:"MRT สาย 11/12 สถานี Longhua",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Longhua Temple Shanghai"
+},
+{
+  th:"วัดพระหยก",en:"Jade Buddha Temple",keys:["jade","พระหยก","อวี้ฝอ"],
+  name:"วัดพระหยก (Jade Buddha Temple)",
+  verdict:"มาไหว้พระหยกขาวจากพม่าองค์งามระดับสมบัติเมือง",
+  summary:"วัดดังที่สร้างขึ้นเพื่อประดิษฐานพระพุทธรูปหยกขาวสององค์ที่อัญเชิญจากพม่าตั้งแต่ปลายศตวรรษที่ 19 องค์ประธานปางนั่งแกะจากหยกก้อนเดียวประดับอัญมณี งดงามจนเป็นหมุดหมายของสายบุญทั่วเอเชีย วัดอยู่กลางย่านเมืองจริง ๆ ให้ภาพวัดโบราณแทรกตัวในป่าตึกที่ถ่ายรูปได้เก๋ไม่แพ้จิ้งอัน",
+  highlights:["พระหยกขาวปางนั่งแกะจากหยกก้อนเดียว ต้องเสียค่าเข้าห้องเพิ่มเล็กน้อยแต่คุ้ม","สถาปัตยกรรมสีเหลืองทองสไตล์วัดใต้แยงซี","ใกล้ M50 อาร์ตดิสตริกต์ จัดคู่สายศิลป์-สายบุญวันเดียวกันได้"],
+  octoberTips:["เช้าวันธรรมดาเงียบสุด ได้ไหว้แบบไม่เร่ง","แต่งกายสุภาพ กางเกง/กระโปรงคลุมเข่า","จับคู่ M50 + เดินเลียบคลองซูโจว จบครึ่งวันพอดี"],
+  hours:"~8:00-16:30",price:"~20 หยวน (~92 บาท)",transit:"MRT สาย 13 สถานี Jiangning Road",timeNeeded:"~1 ชม.",
+  mapQuery:"Jade Buddha Temple Shanghai"
+},
+{
+  th:"สวนเซนจูรี",en:"Century Park",keys:["century","เซนจูรี","สวนใหญ่"],
+  name:"สวนเซนจูรีพาร์ก (Century Park) ผู่ตง",
+  verdict:"สวนใหญ่สุดในเมือง — ตุลาคมใบไม้เริ่มเปลี่ยนสีสวย",
+  summary:"สวนสาธารณะขนาดยักษ์ใจกลางผู่ตงที่เข้าฟรีแล้วในปัจจุบัน มีทะเลสาบใหญ่ ทุ่งหญ้า และแนวต้นแปะก๊วย/เมเปิลที่ทยอยเปลี่ยนสีช่วงปลายตุลาคมถึงพฤศจิกายน คนเซี่ยงไฮ้มาปิกนิก เช่าจักรยาน และกางเต็นท์กันทั้งครอบครัว เหมาะกับวันที่อยากพักจากตึกและร้านค้า",
+  highlights:["แนวแปะก๊วยเหลืองทองช่วงปลายฤดูใบไม้ร่วง จุดถ่ายรูปประจำปีของคนเมือง","เช่าจักรยาน/เรือถีบเล่นรอบทะเลสาบได้","พื้นที่กว้างจริง เดินครึ่งวันไม่หมด"],
+  octoberTips:["ปลายตุลาคมใบเริ่มเหลือง ถ้าทริปช่วงนั้นคุ้มแวะมาก","ซื้อของกินจากร้านสะดวกซื้อเข้าไปปิกนิกแบบคนท้องถิ่น","อยู่ใกล้พิพิธภัณฑ์เซี่ยงไฮ้ East Wing จัดคู่กันได้"],
+  hours:"~6:00-18:00",price:"ฟรี",transit:"MRT สาย 2 สถานี Century Park",timeNeeded:"~2-3 ชม.",
+  mapQuery:"Century Park Pudong Shanghai"
+},
+{
+  th:"สวนฝูซิง",en:"Fuxing Park",keys:["fuxing","ฝูซิง","สวนฝรั่งเศส"],
+  name:"สวนฝูซิง (Fuxing Park) — สวนฝรั่งเศสกลางเมืองเก่า",
+  verdict:"มาดูชีวิตเช้าของคนเซี่ยงไฮ้ตัวจริง เต้นรำ รำมวย ร้องเพลง",
+  summary:"สวนสไตล์ฝรั่งเศสอายุร้อยปีในย่านเฟรนช์คอนเซสชั่น ที่ทุกเช้าจะเต็มไปด้วยคนสูงวัยมาเต้นบอลรูม รำไทเก๊ก เล่นหมากรุก และร้องเพลงงิ้วกันเป็นวง เป็นฉากชีวิตเมืองที่นักท่องเที่ยวสายสังเกตการณ์ชอบที่สุด สวนร่มรื่นด้วยต้นเพลนใหญ่ เชื่อมเดินต่อซินเทียนตี้และซินันโรดได้ทันที",
+  highlights:["ฉากเต้นรำ/ไทเก๊กยามเช้า มีชีวิตชีวาแบบหาดูที่อื่นยาก","แนวต้นเพลนและแปลงดอกไม้จัดแบบฝรั่งเศส","ทำเลทองกลางเฟรนช์คอนเซสชั่น แทรกในทุกแพลนได้"],
+  octoberTips:["ไปช่วง ~7:30-9:30 กิจกรรมเช้าคึกคักสุด","ใบเพลนเริ่มเปลี่ยนสีปลายเดือน เดินสวนสวยขึ้นอีก","ต่อกาแฟย่านซินันโรด/ซินเทียนตี้ได้เลยหลังเดินสวน"],
+  hours:"~6:00-18:00",price:"ฟรี",transit:"MRT สาย 10/13 Xintiandi หรือสาย 1 South Shaanxi Road",timeNeeded:"~1 ชม.",
+  mapQuery:"Fuxing Park Shanghai"
+},
+{
+  th:"1933 โรงฆ่าสัตว์เก่า",en:"1933 Old Millfun",keys:["1933","millfun","โรงฆ่าสัตว์"],
+  name:"1933 Old Millfun — สถาปัตยกรรมสุดเซอร์เรียล",
+  verdict:"สายถ่ายรูปสถาปัตย์ต้องมา — ไม่มีที่ไหนในโลกเหมือน",
+  summary:"อดีตโรงฆ่าสัตว์ยุคอาณานิคมปี 1933 ที่ตัวอาคารคอนกรีตเป็นเขาวงกตทางลาด สะพานไขว้ และบันไดวนซ้อนกันหลายชั้นจนเหมือนหลุดมาจากภาพวาดของเอ็ชเชอร์ ปัจจุบันเป็นครีเอทีฟสเปซที่เข้าเดินถ่ายรูปได้ฟรี แสงเงาที่ลอดช่องคอนกรีตเปลี่ยนตลอดวันทำให้ถ่ายกี่รอบก็ได้ภาพใหม่",
+  highlights:["ทางลาดและสะพานคอนกรีตไขว้กันสุดเซอร์เรียล ฉากถ่ายรูปในตำนาน","เข้าฟรี เดินได้แทบทุกซอกมุม","อาคารประวัติศาสตร์ที่เล่าเรื่องเซี่ยงไฮ้ยุคอาณานิคมอีกด้าน"],
+  octoberTips:["แสงเฉียงช่วงบ่ายแก่ลอดช่องตึกสวยสุด","อยู่ย่านหงโข่ว คนน้อย เหมาะวันที่อยากหนีจุดแออัด","ใส่รองเท้าเดินสบาย ทางลาดขึ้นลงเยอะ"],
+  hours:"~9:00-21:00 (พื้นที่ส่วนกลาง)",price:"ฟรี",transit:"MRT สาย 4/10 สถานี Hailun Road เดิน ~10 นาที",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"1933 Old Millfun Shanghai"
+},
+{
+  th:"พิพิธภัณฑ์ดาราศาสตร์",en:"Shanghai Astronomy Museum",keys:["astronomy","ดาราศาสตร์","อวกาศ","ท้องฟ้า"],
+  name:"พิพิธภัณฑ์ดาราศาสตร์เซี่ยงไฮ้ — ใหญ่สุดในโลก",
+  verdict:"สายอวกาศห้ามพลาด แต่ต้องเผื่อวันเพราะอยู่ไกล",
+  summary:"พิพิธภัณฑ์ดาราศาสตร์ที่ได้ชื่อว่าใหญ่ที่สุดในโลก ตัวอาคารโค้งไร้เส้นตรงออกแบบตามวงโคจรดาว สวยระดับได้รางวัลสถาปัตยกรรมนานาชาติ ภายในจัดแสดงอิมเมอร์ซีฟทั้งระบบสุริยะ ยานอวกาศจีน และท้องฟ้าจำลอง ข้อแม้เดียวคืออยู่ย่านหลินกั่งชานเมืองไกลมาก ต้องจัดเป็นทริปครึ่งค่อนวัน",
+  highlights:["อาคารโค้งไร้เสาไร้เส้นตรง ถ่ายรูปภายนอกก็คุ้มแล้ว","โซนจัดแสดงอิมเมอร์ซีฟระดับโลก เด็กและผู้ใหญ่สนุกเท่ากัน","เห็นโปรแกรมอวกาศจีนของจริงใกล้ ๆ"],
+  octoberTips:["ตั๋วต้องจองล่วงหน้าออนไลน์ มักเต็มก่อนวันจริงโดยเฉพาะวันหยุด","เดินทาง ~1.5 ชม.จากใจกลางเมือง (สาย 16 ไป Dishui Lake) เผื่อทั้งวันไปกลับ","ปิดวันจันทร์ เช็กก่อนออกเดินทางเสมอ"],
+  hours:"~9:30-16:00 (ปิดจันทร์)",price:"~30 หยวน (~140 บาท)",transit:"MRT สาย 16 สถานี Dishui Lake ต่อรถสั้น ๆ",timeNeeded:"ครึ่งค่อนวันรวมเดินทาง",
+  mapQuery:"Shanghai Astronomy Museum Lingang"
+},
+{
+  th:"ถนนตัวหลุน",en:"Duolun Road ถนนวรรณกรรม",keys:["duolun","ตัวหลุน","วรรณกรรม"],
+  name:"ถนนวัฒนธรรมตัวหลุน (Duolun Road)",
+  verdict:"ถนนสายวรรณกรรมย้อนยุค เงียบสงบ ไร้นักท่องเที่ยวแออัด",
+  summary:"ถนนสายสั้นย่านหงโข่วที่เคยเป็นแหล่งรวมนักเขียนคนสำคัญของจีนยุคต้นศตวรรษที่ 20 รวมถึงหลู่ซวิ่น สองข้างทางคือตึกเก่าหลากสไตล์ ร้านหนังสือมือสอง ร้านของสะสม และรูปปั้นนักเขียนกระจายทั้งสาย บรรยากาศเหมือนเดินย้อนเข้าไปในเซี่ยงไฮ้ยุคเก่าแบบไม่มีการจัดฉาก",
+  highlights:["ตึกเก่าหลากสไตล์และร้านของสะสม/หนังสือเก่า เดินเพลิน","แทบไม่มีนักท่องเที่ยวต่างชาติ ได้ภาพเมืองอีกด้าน","ใกล้ 1933 Old Millfun จัดสายหงโข่วครึ่งวันได้พอดี"],
+  octoberTips:["จับคู่ 1933 + ตัวหลุน = ครึ่งวันสายสถาปัตย์-วรรณกรรมที่คนไม่แน่น","ร้านของเก่าบางร้านต่อราคาได้เล็กน้อย","บ่ายแดดร่มเดินสบายสุดในอากาศตุลาคม"],
+  hours:"ถนนเปิดตลอด ร้าน ~10:00-18:00",price:"ฟรี",transit:"MRT สาย 3 สถานี Dongbaoxing Road",timeNeeded:"~1 ชม.",
+  mapQuery:"Duolun Road Cultural Street Shanghai"
+},
+{
+  th:"เวสต์บันด์ ริมแม่น้ำ",en:"West Bund วอเตอร์ฟรอนต์",keys:["westbund","เวสต์บันด์","ริมน้ำ"],
+  name:"West Bund — ริมแม่น้ำสายชิลของคนเมือง",
+  verdict:"บันด์เวอร์ชันคนท้องถิ่น: สเกตบอร์ด ปิกนิก แกลเลอรี ไร้ทัวร์",
+  summary:"แนวริมแม่น้ำหวงผู่ฝั่งสวี่ฮุยที่ถูกปรับจากเขตอุตสาหกรรมเก่าเป็นสวนสาธารณะ ลานสเกต ทางวิ่ง และแถบพิพิธภัณฑ์ศิลปะสมัยใหม่เรียงกันหลายแห่ง คนเซี่ยงไฮ้รุ่นใหม่มาปิกนิก เดินหมา และนั่งดูพระอาทิตย์ตกกันที่นี่แทนบันด์ที่เต็มไปด้วยนักท่องเที่ยว บรรยากาศคนละแบบกับบันด์หลักโดยสิ้นเชิง",
+  highlights:["วิวแม่น้ำเปิดกว้างแบบนั่งหญ้าได้จริง ไม่ต้องเบียดราวกันคน","แถบพิพิธภัณฑ์/แกลเลอรีศิลปะร่วมสมัยระดับเมืองเรียงติดกัน","ร้านกาแฟ/ฟู้ดทรัคริมทางเดินเป็นระยะ"],
+  octoberTips:["เย็นวันธรรมดาปูเสื่อดูพระอาทิตย์ตกแบบคนท้องถิ่น ฟีลดีมาก","เช่าจักรยานปั่นเลียบแม่น้ำ อากาศตุลาคมคือช่วงปั่นดีสุดของปี","เช็กนิทรรศการของพิพิธภัณฑ์โซนนี้ก่อนไป จะได้จัดรอบเดียวคุ้ม"],
+  hours:"เปิดตลอด (พิพิธภัณฑ์ ~10:00-17:00)",price:"ริมน้ำฟรี (พิพิธภัณฑ์เก็บแยก)",transit:"MRT สาย 11 สถานี Yunjin Road",timeNeeded:"~2-3 ชม.",
+  mapQuery:"West Bund waterfront Xuhui Shanghai"
+},
+
+/* ---------- คาเฟ่ ---------- */
+{
+  cat:"cafe",th:"%Arabica ถนนอู่คัง",en:"%Arabica Wukang Road",keys:["arabica","อาราบิก้า","เปอร์เซ็นต์"],
+  name:"%Arabica (สาขาถนนอู่คัง)",
+  verdict:"คาเฟ่ถ่ายรูปสวยที่สุดจุดหนึ่งของเมือง — วิวตรงตึกเรือ Wukang Mansion",
+  summary:"สาขาเรือธงของแบรนด์กาแฟดังจากเกียวโต ตั้งอยู่ตรงหัวมุมที่มองเห็น Wukang Mansion พอดิบพอดี ร้านกระจกโค้งมินิมอลกลายเป็นจุดเช็กอินยอดฮิตของทั้งคนจีนและนักท่องเที่ยว ลาเต้รสนุ่มตามสไตล์แบรนด์ ข้อควรรู้คือคิวยาวช่วงวันหยุดและที่นั่งน้อยมาก ส่วนใหญ่ซื้อแล้วถือเดินถ่ายรูป",
+  highlights:["ตำแหน่งร้านเห็นตึกเรือ Wukang Mansion เต็ม ๆ","สเปนิชลาเต้เมนูซิกเนเจอร์ของแบรนด์","จุดเริ่มเดินสายคาเฟ่ย่านเฟรนช์คอนเซสชั่นได้เลย"],
+  octoberTips:["ปลายตุลาคมใบเพลนเหลืองรอบตึกเรือ ถ่ายรูปคู่แก้วกาแฟคือคอมโบที่คนแห่ทำ","เช้าวันธรรมดาก่อน 10 โมงคิวสั้นสุด","ถือแก้วเดินเล่นได้สบายเพราะอากาศไม่ร้อนแล้ว"],
+  hours:"~8:00-20:00",price:"กาแฟ ~40-55 หยวน (~185-255 บาท)",transit:"MRT สาย 10/11 สถานี Jiaotong University",timeNeeded:"~30-45 นาที",
+  mapQuery:"%Arabica Wukang Road Shanghai"
+},
+{
+  cat:"cafe",th:"Manner Coffee",en:"แบรนด์ท้องถิ่นเซี่ยงไฮ้",keys:["manner","แมนเนอร์"],
+  name:"Manner Coffee (มีสาขาทั่วเมือง)",
+  verdict:"กาแฟดีราคาน่ารัก — แบรนด์ลูกรักของคนเซี่ยงไฮ้",
+  summary:"เชนกาแฟสเปเชียลตี้ที่ถือกำเนิดในเซี่ยงไฮ้จากร้านตู้เล็ก ๆ จนขยายไปทั่วประเทศ จุดขายคือคุณภาพช็อตเอสเพรสโซจริงจังในราคาถูกกว่าแบรนด์นอกเกือบครึ่ง รีวิวจากทั้งคนท้องถิ่นและนักรีวิวกาแฟยกให้เป็นตัวแทน 'วัฒนธรรมกาแฟจีนยุคใหม่' ที่ควรลองสักครั้ง เจอได้แทบทุกหัวมุมถนนใจกลางเมือง",
+  highlights:["เอสเพรสโซคุณภาพเกินราคา แก้วเริ่มต้นราว 15-25 หยวน","พกแก้วส่วนตัวไปได้ส่วนลดเพิ่ม ตามคอนเซปต์รักษ์โลกของแบรนด์","เป็นตัวเลือกกาแฟเช้าเร็ว ๆ ก่อนออกเที่ยวที่หาง่ายสุด"],
+  octoberTips:["สาขาย่านเฟรนช์คอนเซสชั่นบางสาขามีที่นั่งริมทาง นั่งรับลมตุลาคมเพลิน ๆ","สั่งผ่านหน้าเคาน์เตอร์ได้เลย ชี้เมนูภาษาอังกฤษมีเกือบทุกสาขา","วันหยุดสาขาติดที่เที่ยวดังคิวยาว ให้เลี่ยงไปสาขาซอยรอง"],
+  hours:"~7:30-19:00 แล้วแต่สาขา",price:"~15-30 หยวน (~70-140 บาท)",transit:"มีสาขาใกล้สถานีรถไฟฟ้าหลักแทบทุกสถานี",timeNeeded:"~15-30 นาที",
+  mapQuery:"Manner Coffee Shanghai"
+},
+{
+  cat:"cafe",th:"Cafe del Volcán",en:"โรงคั่วจิ๋วย่านเฟรนช์ฯ",keys:["volcan","วอลแคน","volcano"],
+  name:"Cafe del Volcán",
+  verdict:"ร้านเล็กเสน่ห์แรง สำหรับสายกาแฟจริงจัง",
+  summary:"โรงคั่วขนาดจิ๋วในย่านเฟรนช์คอนเซสชั่นที่เปิดมายาวนานจนเป็นตำนานย่อม ๆ ของวงการกาแฟเซี่ยงไฮ้ คัดเมล็ดจากแหล่งปลูกภูเขาไฟในโคลอมเบียและกัวเตมาลาแล้วคั่วเอง เน้นชูรสธรรมชาติของเมล็ดแบบไม่ปรุงแต่ง ร้านเล็กมากแต่บรรยากาศอบอุ่น เหมาะแวะระหว่างเดินเล่นย่านถนนเก่า",
+  highlights:["เมล็ดจากดินภูเขาไฟลาตินอเมริกา คั่วสดหน้าร้าน","ดริปและฟิลเตอร์คือจุดแข็ง รสสะอาดชัดเจน","ซื้อเมล็ดกลับเป็นของฝากสายกาแฟได้"],
+  octoberTips:["ที่นั่งหน้าร้านริมถนนเงียบ ๆ นั่งสบายสุดในอากาศตุลาคม","เดินจับคู่กับ Wukang Road และวัดจิ้งอันได้ในเส้นทางเดียว","ร้านเล็กมาก ถ้าเต็มให้ซื้อกลับแล้วไปนั่งสวนสาธารณะใกล้ ๆ"],
+  hours:"~8:00-18:00",price:"~35-50 หยวน (~160-230 บาท)",transit:"ย่าน Yongkang/Jiashan Road — MRT สาย 1/9/11 Shanghai Library หรือ Jiashan Road",timeNeeded:"~30-45 นาที",
+  mapQuery:"Cafe del Volcan Shanghai"
+},
+{
+  cat:"cafe",th:"Aunn Cafe & Co.",en:"คาเฟ่ดีไซน์ย่านจิ้งอัน",keys:["aunn","ออน","อันน์"],
+  name:"Aunn Cafe & Co. (ย่านจิ้งอัน)",
+  verdict:"เหมาะกับสายนั่งชิลนาน ๆ ในสเปซดีไซน์สวย",
+  summary:"คาเฟ่กึ่งสเปซดีไซน์ในย่านวัดจิ้งอันที่ไกด์กาแฟหลายสำนักยกให้เป็นจุดหลักของย่าน โดดเด่นทั้งการตกแต่งโปร่งโล่งและกาแฟพื้นฐานที่ทำได้นิ่งสม่ำเสมอ รีวิวแนะนำว่าเป็นร้านที่ 'นั่งยาวได้จริง' ต่างจากร้านดังหลายแห่งที่เน้นซื้อแล้วไป เหมาะจอดพักขาหลังเดินเที่ยวช่วงเช้า",
+  highlights:["สเปซกว้าง แสงสวย นั่งทำงาน/พักนานได้ไม่อึดอัด","เมนูพื้นฐานอย่างฟิลเตอร์และลาเต้ทำได้นิ่งมาก","อยู่ใกล้วัดจิ้งอันและย่านช้อปปิง เดินต่อสะดวก"],
+  octoberTips:["จับคู่: ไหว้พระวัดจิ้งอันตอนเช้า ต่อกาแฟที่นี่ตอนสาย ลงตัวพอดี","ช่วงบ่ายวันหยุดคนเริ่มแน่น ไปก่อนเที่ยงถ้าอยากได้ที่นั่งดี ๆ","มีขนมอบให้รองท้องระหว่างรอมื้อเที่ยง"],
+  hours:"~9:00-19:00",price:"~35-55 หยวน (~160-255 บาท)",transit:"MRT สาย 2/7/14 สถานี Jing'an Temple",timeNeeded:"~1 ชม.",
+  mapQuery:"Aunn Cafe Shanghai"
+},
+{
+  cat:"cafe",th:"Captain George",en:"Flavour Museum — แชมป์โลกดริป",keys:["captain","george","flavour","แชมป์"],
+  name:"Captain George / Flavour Museum",
+  verdict:"ถ้ามีเวลาไปคาเฟ่เดียว รีวิวปี 2026 เชียร์ร้านนี้",
+  summary:"ร้านของบาริสต้าเผิงจินหยางหรือ 'กัปตันจอร์จ' แชมป์ World Brewers Cup 2025 รายการดริปที่ทรงเกียรติที่สุดของวงการ ทีมร้านยังครองแชมป์ระดับประเทศจีนต่อเนื่องหลายปี ร้านแบ่งเป็นโซนนั่งชิล โซนขายเมล็ด และบาร์ดริปด้านใน เมนูดริปหมุนเวียนตามเมล็ดที่คั่วในแต่ละซีซัน",
+  highlights:["ดริปฝีมือระดับแชมป์โลกตัวจริง เริ่มราว 55 หยวน","บาร์ดริปด้านในดูวิธีชงใกล้ ๆ ได้","เมล็ดหมุนเวียนจากเอธิโอเปีย เอลซัลวาดอร์ คอสตาริกา ฯลฯ"],
+  octoberTips:["เมล็ดล็อตฤดูใบไม้ร่วงมักเริ่มเข้าช่วงตุลาคมพอดี ถามพนักงานได้เลยว่าล็อตใหม่มีอะไร","ร้านเป็นที่รู้จักมากขึ้นหลังได้แชมป์ วันหยุดควรเผื่อเวลารอ","ซื้อเมล็ดกลับเป็นของฝากที่เล่าเรื่องได้ดีมาก"],
+  hours:"~10:00-19:00",price:"ดริป ~55 หยวนขึ้นไป (~255+ บาท)",transit:"เช็กพิกัดสาขาล่าสุดในแผนที่ก่อนไป",timeNeeded:"~45 นาที-1 ชม.",
+  mapQuery:"Captain George Flavour Museum coffee Shanghai"
+},
+{
+  cat:"cafe",th:"O.P.S. Cafe",en:"ครีเอทีฟคอฟฟี่ตัวแม่",keys:["ops","o.p.s","โอพีเอส"],
+  name:"O.P.S. Cafe",
+  verdict:"สำหรับสายอยากลองกาแฟที่ 'ไม่เหมือนที่ไหน'",
+  summary:"ร้านจิ๋วที่ขึ้นชื่อเรื่องเมนูกาแฟสร้างสรรค์เปลี่ยนตามฤดูกาล ผสมวัตถุดิบแปลก ๆ อย่างผลไม้ สมุนไพร หรือชาเข้ากับเอสเพรสโซจนเหมือนได้กินค็อกเทลไร้แอลกอฮอล์ เป็นหนึ่งในร้านที่จุดกระแสกาแฟครีเอทีฟของเซี่ยงไฮ้ รีวิวเตือนว่าร้านเล็กและคิวยาวเป็นเรื่องปกติ แต่แฟนกาแฟส่วนใหญ่บอกว่าคุ้มรอ",
+  highlights:["เมนูซีซันนัลเปลี่ยนเรื่อย ๆ ไปกี่ครั้งก็ได้ลองของใหม่","การจัดจาน/แก้วประณีตเหมือนงานไฟน์ไดนิง","ขนาดร้านเล็กจิ๋วแต่พลังงานครีเอทีฟล้น"],
+  octoberTips:["เมนูฤดูใบไม้ร่วงมักใช้วัตถุดิบอย่างลูกพลับหรือหอมหมื่นลี้ (osmanthus) ดอกไม้ประจำตุลาคมของเซี่ยงไฮ้","ไปเปิดร้านช่วงสายวันธรรมดา คิวสั้นกว่าวันหยุดมาก","สั่งเมนูซิกเนเจอร์ประจำซีซัน 1 แก้ว + เอสเพรสโซเบสิก 1 แก้ว จะเห็นฝีมือครบ"],
+  hours:"~10:00-18:00",price:"~50-80 หยวน (~230-370 บาท)",transit:"ย่านเฟรนช์คอนเซสชั่น เช็กพิกัดในแผนที่",timeNeeded:"~45 นาที (เผื่อคิว)",
+  mapQuery:"O.P.S. Cafe Shanghai"
+},
+{
+  cat:"cafe",th:"Seesaw Coffee",en:"ผู้บุกเบิกกาแฟพิเศษของจีน",keys:["seesaw","ซีซอว์"],
+  name:"Seesaw Coffee",
+  verdict:"แบรนด์ที่จุดกระแสกาแฟสเปเชียลตี้ให้ทั้งประเทศ",
+  summary:"เชนกาแฟที่ได้ชื่อว่าเป็นผู้บุกเบิกยุคกาแฟพิเศษของจีน และเป็นเจ้าแรก ๆ ที่ผลักดันเมล็ดยูนนานของจีนขึ้นมาเทียบชั้นแหล่งปลูกดัง ๆ ของโลก สาขาแต่ละที่ตกแต่งไม่ซ้ำกันและมักสวยระดับตั้งใจออกแบบ เมนูครีเอทีฟผสมวัตถุดิบจีนอย่างชาหรือดอกไม้ก็เด่น เหมาะทั้งสายจริงจังและสายถ่ายรูป",
+  highlights:["ลองเมล็ดยูนนานของจีนแท้ ๆ ที่แบรนด์นี้ผลักดันมาตั้งแต่ต้น","แต่ละสาขาดีไซน์ต่างกัน ล่าสาขาสวย ๆ ได้เรื่อย ๆ","เมนูซิกเนเจอร์ครีเอทีฟสไตล์จีนโมเดิร์น"],
+  octoberTips:["เมนูหอมหมื่นลี้ (osmanthus) มักมาช่วงใบไม้ร่วงพอดี ของดีประจำฤดู","สาขาย่านใจกลางเมืองหาง่าย เดินเที่ยวแล้วเจอแวะได้เลย","ซื้อดริปแบกยูนนานกลับเป็นของฝากได้ เบาและเล่าเรื่องได้"],
+  hours:"~8:00-20:00 แล้วแต่สาขา",price:"~30-50 หยวน (~140-230 บาท)",transit:"มีหลายสาขาใจกลางเมือง เช็กสาขาใกล้ในแผนที่",timeNeeded:"~30-45 นาที",
+  mapQuery:"Seesaw Coffee Shanghai"
+},
+{
+  cat:"cafe",th:"Luckin Coffee",en:"กาแฟถูกสุดที่คนจีนกินทุกวัน",keys:["luckin","ลัคอิน","ลักกิ้น"],
+  name:"Luckin Coffee — วัฒนธรรมกาแฟราคาเบา",
+  verdict:"ถูกจนตกใจ — ลองสักแก้วให้รู้ว่าคนจีนยุคนี้กินอะไรกัน",
+  summary:"เชนกาแฟที่มีสาขามากที่สุดในจีนด้วยโมเดลสั่งผ่านแอปแล้วรับที่เคาน์เตอร์ ราคาโปรบ่อยครั้งลงมาแตะหลักสิบหยวนต้น ๆ ต่อแก้ว เมนูดังคือกลุ่มลาเต้หวาน ๆ อย่างมะพร้าวลาเต้ที่ขายดีเป็นปรากฏการณ์ ไม่ใช่กาแฟคราฟต์แต่คือส่วนหนึ่งของชีวิตประจำวันคนจีนที่นักท่องเที่ยวลองได้ในราคาแทบฟรี",
+  highlights:["ราคาโปรถูกกว่าแบรนด์ทั่วไปครึ่งต่อครึ่ง","มะพร้าวลาเต้ เมนูปรากฏการณ์ที่ควรลองสักครั้ง","สาขาเยอะมาก แทบทุกหัวมุมถนน"],
+  octoberTips:["โหลดแอปหรือสั่งผ่านมินิโปรแกรมใน WeChat/Alipay ได้ราคาโปร จ่ายหน้าเคาน์เตอร์แพงกว่า","เหมาะเป็นกาแฟเช้าถือขึ้นรถไฟฟ้าในวันอัดโปรแกรมแน่น","เมนูซีซันนัลฤดูใบไม้ร่วงออกใหม่ทุกปี ลองของแปลกได้ในราคาไม่เจ็บ"],
+  hours:"~7:00-21:00 แล้วแต่สาขา",price:"~10-25 หยวน (~46-115 บาท)",transit:"มีทุกย่าน",timeNeeded:"~10-15 นาที",
+  mapQuery:"Luckin Coffee Nanjing Road Shanghai"
+},
+{
+  cat:"cafe",th:"Lostrip",en:"คาเฟ่โฮมมี่ใกล้เทียนจื่อฝาง",keys:["lostrip","ลอสทริป"],
+  name:"Lostrip Cafe (ใกล้เทียนจื่อฝาง)",
+  verdict:"หลบความวุ่นวายของเทียนจื่อฝางมานั่งพักที่นี่",
+  summary:"คาเฟ่ครอบครัวเล็ก ๆ ในซอยเงียบใกล้เทียนจื่อฝาง ที่ไกด์คาเฟ่ท้องถิ่นแนะนำเป็นจุดหลบคนโดยเฉพาะ โซฟานั่งสบาย เค้กโฮมเมดเข้ากับกาแฟ ลูกค้ามีทั้งวัยรุ่นและคุณลุงคุณป้าแถวบ้านปะปนกัน ให้ฟีลนั่งเล่นบ้านเพื่อนมากกว่าร้านดัง เหมาะพักขาหลังเดินตรอกเทียนจื่อฝางจนเมื่อย",
+  highlights:["บรรยากาศโฮมมี่ นั่งนานได้ไม่มีใครเร่ง","เค้กโฮมเมดชิ้นโตเข้าคู่กาแฟดี","อยู่ใกล้เทียนจื่อฝางแต่เงียบต่างกันคนละโลก"],
+  octoberTips:["จัดคู่: เดินเทียนจื่อฝางช่วงบ่าย → หลบมาพักที่นี่ก่อนไปต่อโปรแกรมเย็น","วันธรรมดาแทบไม่ต้องลุ้นที่นั่ง","ลองถามเค้กประจำวัน มักมีรสตามฤดูกาล"],
+  hours:"~10:00-19:00",price:"~30-50 หยวน (~140-230 บาท)",transit:"MRT สาย 9 สถานี Dapuqiao",timeNeeded:"~45 นาที-1 ชม.",
+  mapQuery:"Lostrip cafe Tianzifang Shanghai"
+},
+{
+  cat:"cafe",th:"Drama Cafe",en:"คาเฟ่ธีมละครข้างโรงอุปรากร",keys:["drama","ดราม่า","theatre","aisle"],
+  name:"Aisle No.300 Drama Cafe (ข้างโรงละครใหญ่เซี่ยงไฮ้)",
+  verdict:"คาเฟ่คอนเซปต์เก๋สำหรับสายอาร์ต แวะง่ายเพราะติดจัตุรัสประชาชน",
+  summary:"คาเฟ่ธีมโรงละครที่ซ่อนอยู่ข้างโรงอุปรากรใหญ่เซี่ยงไฮ้ (Shanghai Grand Theatre) ตกแต่งด้วยกลิ่นอายเวทีและม่านละคร เป็นจุดที่ไกด์คาเฟ่ท้องถิ่นชอบแนะนำให้แวะตอนเที่ยวโซนจัตุรัสประชาชน เพราะได้ทั้งกาแฟและบรรยากาศศิลปะการแสดงในที่เดียว เหมาะคั่นโปรแกรมระหว่างพิพิธภัณฑ์กับเดินนานกิง",
+  highlights:["คอนเซปต์โรงละคร ถ่ายรูปมุมไหนก็มีสตอรี","ทำเลกลางเมืองสุด ๆ ติดจัตุรัสประชาชน","เชื่อมโปรแกรมพิพิธภัณฑ์ → กาแฟ → ถนนนานกิงได้ลื่น ๆ"],
+  octoberTips:["ใช้เป็นจุดพักระหว่างวันในโซนจัตุรัสประชาชนที่ร้านนั่งสบายหายาก","เช็กรอบการแสดงโรงละครใหญ่ด้วย ถ้ามีโชว์ที่สนใจจองต่อได้เลย","บ่ายวันธรรมดาเงียบกำลังดี"],
+  hours:"~10:00-20:00",price:"~35-55 หยวน (~160-255 บาท)",transit:"MRT สาย 1/2/8 สถานี People's Square",timeNeeded:"~45 นาที",
+  mapQuery:"Shanghai Grand Theatre cafe People's Square"
+},
+
+/* ---------- ร้านอาหาร & ของกิน ---------- */
+{
+  cat:"food",th:"หนานเสียง เสี่ยวหลงเปา",en:"Nanxiang Mantou Dian",keys:["nanxiang","หนานเสียง","หนานเซียง","เสี่ยวหลงเปา"],
+  name:"หนานเสียงหมั่นโถวเตี้ยน (Nanxiang) — ต้นตำรับเสี่ยวหลงเปา",
+  verdict:"ร้านที่ได้ชื่อว่าให้กำเนิดเสี่ยวหลงเปา — มาอวี้หยวนต้องแวะ",
+  summary:"ร้านอายุกว่าร้อยปีข้างสะพานเก้าโค้งในอวี้หยวน ที่ประวัติศาสตร์ยกให้เป็นผู้คิดค้นเสี่ยวหลงเปา และยังได้การรับรองจากมิชลินว่าไม่ใช่แค่ร้านนักท่องเที่ยว เคล็ดลับที่รีวิวบอกต่อกันคือร้านมี 3 ชั้น: ชั้นล่างซื้อกลับ (คิวยาวแต่ถูก) ชั้นสองนั่งกินสบาย ๆ ชั้นสามพรีเมียมไม่ต้องรอคิว",
+  highlights:["เสี่ยวหลงเปาไส้หมู+น้ำซุปสูตรดั้งเดิมร้อยปี","เสี่ยวหลงเปายักษ์เสียบหลอดดูดน้ำซุป เมนูสนุกประจำร้าน","ทำเลติดสะพานเก้าโค้ง กินเสร็จเที่ยวอวี้หยวนต่อได้เลย"],
+  octoberTips:["ตุลาคม-พฤศจิกายนคือฤดูปูขน เมนูเสี่ยวหลงเปาไส้มันปู (crab roe) อร่อยสุดของปีพอดี อย่าพลาด","Golden Week คิวชั้นล่างยาวมาก ขึ้นชั้นสามจ่ายเพิ่มหน่อยแต่ไม่เสียเวลาเที่ยว","ระวังน้ำซุปร้อนลวกปาก เจาะแป้งจิบน้ำซุปก่อนค่อยกิน"],
+  hours:"~10:00-21:00",price:"เข่งละ ~30-80 หยวน (~140-370 บาท) แล้วแต่ไส้/ชั้น",transit:"MRT สาย 10 สถานี Yuyuan Garden",timeNeeded:"~1 ชม. (รวมคิว)",
+  mapQuery:"Nanxiang Steamed Bun Restaurant Yu Garden Shanghai"
+},
+{
+  cat:"food",th:"เจียเจียทังเปา",en:"Jia Jia Tang Bao",keys:["jiajia","เจียเจีย","tangbao"],
+  name:"เจียเจียทังเปา (Jia Jia Tang Bao)",
+  verdict:"เสี่ยวหลงเปาฉบับคนท้องถิ่น — คุ้มค่าสุดในลิสต์",
+  summary:"ร้านห้องแถวธรรมดา ๆ ย่านถนนหวงเหอใกล้จัตุรัสประชาชน ที่คนเซี่ยงไฮ้ต่อคิวกินกันเอง แป้งบางเฉียบ น้ำซุปใสหวานธรรมชาติ ปั้นสดหน้าร้านตลอดวัน ตำนานคู่ที่รีวิวชอบเล่าคือคนมักกินที่นี่แล้วเดินข้ามไปกินเซิงเจียนเปาที่หยางส์ต่อเป็นคอมโบ บรรยากาศร้านต้องแชร์โต๊ะและลุ้นคิวหน่อย แต่นั่นคือเสน่ห์",
+  highlights:["เสี่ยวหลงเปาไส้มันปูระดับตำนานในราคาไม่แรง","ปั้นสดต่อหน้า เห็นกระบวนการตลอด","ประสบการณ์กินแบบโลคัลแท้ ๆ แชร์โต๊ะกับคนเซี่ยงไฮ้"],
+  octoberTips:["ฤดูปูขนตุลาคม สั่งไส้มันปู (蟹粉) ให้ได้ นี่คือช่วงที่อร่อยสุดของปี","ร้านมักขายหมดก่อนเวลาปิดจริง ไปก่อนบ่ายแก่ ๆ ชัวร์กว่า","เมนูมีรูปชี้สั่งได้ ไม่ต้องกลัวภาษา"],
+  hours:"~เช้า-บ่ายแก่ (หมดแล้วหมดเลย)",price:"เข่งละ ~25-60 หยวน (~115-275 บาท)",transit:"MRT สาย 1/2/8 สถานี People's Square เดิน ~8 นาที",timeNeeded:"~45 นาที",
+  mapQuery:"Jia Jia Tang Bao Huanghe Road Shanghai"
+},
+{
+  cat:"food",th:"ติ่นไท่ฟง",en:"Din Tai Fung",keys:["dintaifung","ติ่นไท","din tai"],
+  name:"ติ่นไท่ฟง (Din Tai Fung) สาขาซินเทียนตี้",
+  verdict:"ตัวเลือกปลอดภัยที่สุด — สะอาด นิ่ง สั่งง่าย",
+  summary:"เชนไต้หวันระดับโลกที่สาขาเซี่ยงไฮ้ติดอันดับต้น ๆ ของเมืองเสมอ จุดขายคือความเป๊ะ: เสี่ยวหลงเปาแต่ละลูกน้ำหนัก 21 กรัม จีบ 18 จีบเท่ากันหมด ครัวกระจกดูเชฟปั้นได้เพลิน ๆ เหมาะมากสำหรับมื้อแรกในเซี่ยงไฮ้หรือมากับครอบครัวที่อยากได้ความสบายใจเรื่องความสะอาดและเมนูภาษาอังกฤษ",
+  highlights:["เสี่ยวหลงเปามาตรฐานเป๊ะทุกลูก + รุ่นไส้ทรัฟเฟิลเด็ดเฉพาะจีน","ครัวกระจกโชว์การปั้นสด ๆ","บริการและเมนูอังกฤษครบ เหมาะครอบครัว"],
+  octoberTips:["สาขาซินเทียนตี้จับคู่กับเดินย่านตอนค่ำได้พอดี จองคิวผ่านหน้าร้านก่อนแล้วเดินเล่นรอ","ช่วง Golden Week คิวมื้อเย็นยาว มากินมื้อบ่ายช่วง 14:00-16:30 สบายกว่า","อย่าลืมสั่งข้าวผัดไข่หมูสับ เมนูที่รีวิวลับบอกว่าดีไม่แพ้เสี่ยวหลงเปา"],
+  hours:"~11:00-21:30",price:"~100-200 หยวน/คน (~460-920 บาท)",transit:"MRT สาย 10/13 สถานี Xintiandi",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Din Tai Fung Xintiandi Shanghai"
+},
+{
+  cat:"food",th:"หยางส์ เซิงเจียนเปา",en:"Yang's Fry-Dumpling",keys:["yang","หยาง","เซิงเจียน","shengjian"],
+  name:"หยางส์ (Yang's Fry-Dumpling) — เจ้าพ่อเซิงเจียนเปา",
+  verdict:"ของกินเล่นที่ห้ามพลาดพอ ๆ กับเสี่ยวหลงเปา",
+  summary:"ร้านที่ทำให้เซิงเจียนเปา — ซาลาเปาน้ำซุปทอดก้นกรอบโรยงาต้นหอม — ดังไปทั่วโลก สาขาต้นตำรับอยู่ถนนอู๋เจียง ราคาถูกจนตกใจ (ราว 8 หยวนได้ 4 ลูก) เสิร์ฟไว กินร้อน ๆ จากกระทะคือที่สุด รีวิวย้ำว่าต้องกินทันทีเพราะพอเย็นความกรอบและน้ำซุปจะดรอปเร็วมาก",
+  highlights:["ก้นกรอบ แป้งนุ่ม น้ำซุปพุ่ง สามสัมผัสในลูกเดียว","ราคาสตรีทฟู้ดแท้ ๆ อิ่มได้ในหลักสิบหยวน","หลายสาขาอยู่ติดสถานีรถไฟฟ้า แวะง่ายมาก"],
+  octoberTips:["คอมโบยอดนิยม: เสี่ยวหลงเปาที่เจียเจีย → เดินย่อย → เซิงเจียนเปาที่หยางส์ ครบจบใน 1 บ่าย","อากาศเย็นตุลาคมทำให้ของทอดร้อน ๆ แบบนี้อร่อยขึ้นอีกขั้น","กัดมุมเล็ก ๆ ระบายไอน้ำก่อน น้ำซุปข้างในร้อนจัดจริง ๆ"],
+  hours:"~10:00-21:00 แล้วแต่สาขา",price:"~8-20 หยวน (~37-92 บาท)",transit:"สาขาต้นตำรับ: ถนน Wujiang — MRT สาย 2/12/13 West Nanjing Road",timeNeeded:"~30 นาที",
+  mapQuery:"Yang's Fried Dumpling Wujiang Road Shanghai"
+},
+{
+  cat:"food",th:"เจสซี่ อาหารเซี่ยงไฮ้แท้",en:"Jesse Restaurant (Lao Ji Shi)",keys:["jesse","เจสซี","จี้ซื่อ","laojishi","หมูแดง"],
+  name:"เจสซี่ / เหล่าจี้ซื่อ (Jesse Restaurant) — อาหารเซี่ยงไฮ้ดั้งเดิม",
+  verdict:"อยากรู้ว่า 'อาหารเซี่ยงไฮ้จริง ๆ' รสยังไง มาที่นี่",
+  summary:"ร้านอาหารเซี่ยงไฮ้แบบเปิ่นปัง (benbang) เก่าแก่ในย่านเฟรนช์คอนเซสชั่น ที่ทั้งคนท้องถิ่นและไกด์อาหารระดับนานาชาติแนะนำตรงกัน เมนูเด็ดคือหมูสามชั้นตุ๋นซีอิ๊วหวาน (หงเซาโร่ว) รสเข้มหวานเค็มกลมกล่อมสไตล์เซี่ยงไฮ้แท้ ร้านเล็กบรรยากาศบ้านเก่า ควรจองล่วงหน้าเพราะโต๊ะน้อยและคิวแน่นแทบทุกคืน",
+  highlights:["หงเซาโร่ว หมูตุ๋นซีอิ๊วตำรับเซี่ยงไฮ้ ระดับที่คนตั้งใจบินมากิน","เมนูตามฤดูกาลแบบเจียงหนานหมุนเวียนตลอดปี","บรรยากาศบ้านเก่าย่านถนนสงบ ได้ฟีลกินข้าวบ้านคนเซี่ยงไฮ้"],
+  octoberTips:["ตุลาคมเข้าฤดูปูขนพอดี ร้านนี้ทำเมนูปูตามฤดูได้ขึ้นชื่อมาก ถามเมนูปูประจำวันได้เลย","จองล่วงหน้า 1-3 วันผ่านโรงแรมหรือให้คนจีนช่วยโทร โต๊ะเดินเข้าแทบไม่มี","สั่งข้าวสวยคู่หงเซาโร่ว อย่าให้น้ำซอสเหลือ"],
+  hours:"~11:00-14:00 / 17:00-21:30",price:"~150-300 หยวน/คน (~690-1,380 บาท)",transit:"ถนน Tianping — MRT สาย 10/11 Jiaotong University",timeNeeded:"~1.5 ชม.",
+  mapQuery:"Jesse Restaurant Tianping Road Shanghai"
+},
+{
+  cat:"food",th:"Lost Heaven ริมบันด์",en:"อาหารยูนนานบรรยากาศดี",keys:["lost heaven","ลอสเฮฟ","ยูนนาน","yunnan"],
+  name:"Lost Heaven on the Bund",
+  verdict:"มื้อค่ำบรรยากาศดีสุดสำหรับปิดคืนที่บันด์",
+  summary:"ร้านอาหารยูนนาน-ไทลื้อชื่อดังที่ตกแต่งมืดขลังสวยจัดจ้านสไตล์ 'ภูเขาทางใต้ของจีน' อยู่ห่างจากบันด์แค่เดินไม่กี่นาที รสชาติออกเครื่องเทศสมุนไพรใกล้เคียงอาหารเหนือของไทยหลายจาน คนไทยกินง่ายมาก เป็นร้านที่นักท่องเที่ยวต่างชาติรีวิวดีต่อเนื่องยาวนานทั้งเรื่องอาหารและบรรยากาศ",
+  highlights:["รสยูนนานคล้ายอาหารเหนือไทย คนไทยถูกปากแทบทุกจาน","การตกแต่งจัดเต็ม เหมาะมื้อพิเศษหรือมากันหลายคน","เดินต่อไปชมไฟบันด์หลังมื้อค่ำได้เลย"],
+  octoberTips:["จองโต๊ะรอบ ~18:30 กินเสร็จออกไปถึงบันด์ตอนไฟสวยพอดีก่อน 22:00","Golden Week ร้านแน่นมาก จองล่วงหน้าหลายวัน","สั่งสลัดหมูสับสมุนไพรกับข้าวอบสับปะรด สองจานที่รีวิวเชียร์ตลอด"],
+  hours:"~11:30-14:00 / 17:30-22:30",price:"~150-250 หยวน/คน (~690-1,150 บาท)",transit:"MRT สาย 2/10 East Nanjing Road เดิน ~10 นาที",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Lost Heaven on the Bund Shanghai"
+},
+{
+  cat:"food",th:"ไห่ตี่เลา หม้อไฟ",en:"Haidilao Hot Pot",keys:["haidilao","ไห่ตี่","หม้อไฟ","hotpot","ชาบู"],
+  name:"ไห่ตี่เลา (Haidilao) หม้อไฟบริการระดับตำนาน",
+  verdict:"ประสบการณ์มากกว่ามื้ออาหาร — เปิดดึก เหมาะมื้อหลังเที่ยวเหนื่อย",
+  summary:"เชนหม้อไฟที่โด่งดังที่สุดของจีนจากบริการเหนือความคาดหมาย ตั้งแต่ทำเล็บ/นวดมือฟรีระหว่างรอคิว โชว์ดึงเส้นบะหมี่ข้างโต๊ะ ไปจนถึงของกินเล่นไม่อั้นในโซนรอ น้ำซุปเลือกแยกช่องได้ทั้งเผ็ดหม่าล่าและซุปใส คนไทยส่วนใหญ่ติดใจกลับมากินซ้ำ หลายสาขาเปิดถึงดึกหรือ 24 ชม.",
+  highlights:["บริการระหว่างรอคิวที่กลายเป็นไอคอนของแบรนด์","น้ำจิ้มบาร์ผสมเองได้ตามใจ สายจิ้มแซ่บจัดเต็ม","โชว์เส้นเต้นระบำสั่งได้ สนุกทั้งโต๊ะ"],
+  octoberTips:["อากาศเย็นตุลาคม + หม้อไฟร้อน ๆ = คอมโบที่ลงตัวสุดของทริป","มื้อดึกหลังดูไฟบันด์/ดิสนีย์เลิก คือช่วงที่คิวสั้นกว่ามื้อเย็นปกติ","โหลดแอป Haidilao หรือให้โรงแรมช่วยจองคิวล่วงหน้าได้ ลดเวลารอเยอะ"],
+  hours:"หลายสาขาเปิดถึงดึก/24 ชม.",price:"~120-200 หยวน/คน (~550-920 บาท)",transit:"มีสาขาใกล้ย่านท่องเที่ยวหลักแทบทุกย่าน",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Haidilao Hot Pot Nanjing Road Shanghai"
+},
+{
+  cat:"food",th:"หวังเป่าเหอ ปูขน",en:"Wang Bao He — ฤดูปูตุลาคม!",keys:["wangbaohe","หวังเป่า","ปูขน","hairy crab","ปู"],
+  name:"หวังเป่าเหอ (Wang Bao He) — ตำนานปูขนตั้งแต่ปี 1744",
+  verdict:"ไปตุลาคมทั้งที ต้องกินปูขนสักมื้อ — นี่คือร้านตำนานของมัน",
+  summary:"ภัตตาคารเก่าแก่กว่า 280 ปีที่ได้ฉายา 'ราชาปูขน' ของเซี่ยงไฮ้ เสิร์ฟสารพัดเมนูปูขนจากทะเลสาบหยางเฉิง ตั้งแต่ปูนึ่งทั้งตัวไปจนคอร์สปูล้วนทุกจาน ชาวเซี่ยงไฮ้ถือว่าฤดูใบไม้ร่วงคือช่วงพีคของอาหารประจำปีเพราะปูขนมันเต็มกระดองพอดี ราคาสูงกว่าร้านทั่วไปแต่เป็นประสบการณ์เฉพาะฤดูที่ตรงกับทริปตุลาคมของคุณเป๊ะ",
+  highlights:["ปูขนหยางเฉิงนึ่งทั้งตัว จิ้มน้ำส้มดำขิง แบบฉบับดั้งเดิม","คอร์สปูครบทุกจาน ตั้งแต่เสี่ยวหลงเปามันปูถึงบะหมี่มันปู","ประวัติร้านเกือบสามศตวรรษ เป็นส่วนหนึ่งของวัฒนธรรมอาหารเมือง"],
+  octoberTips:["ตัวเมียมันเต็มช่วงตุลาคม (ตามธรรมเนียม 'เดือน 9 จีนกินตัวเมีย') ให้พนักงานแนะนำได้เลย","มื้อปูเต็มคอร์สราคาสูง ถ้างบจำกัดสั่งเมนูมันปูเดี่ยว ๆ อย่างบะหมี่หรือเสี่ยวหลงเปามันปูก็ได้ฟีลฤดูกาลแล้ว","จองล่วงหน้าช่วงฤดูปู โต๊ะเต็มไวมากโดยเฉพาะเสาร์-อาทิตย์"],
+  hours:"~11:00-14:00 / 17:00-21:00",price:"เมนูปู ~200-600+ หยวน/คน (~920-2,760+ บาท)",transit:"ถนน Fuzhou ใกล้จัตุรัสประชาชน — MRT สาย 1/2/8 People's Square",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Wang Bao He Restaurant Fuzhou Road Shanghai"
+},
+
+/* ---------- ช้อปปิง ---------- */
+{
+  cat:"food",th:"ต้าหูชุน เซิงเจียนใกล้บันด์",en:"Da Hu Chun",keys:["dahuchun","ต้าหู","dahu"],
+  name:"ต้าหูชุน (Da Hu Chun) — เซิงเจียนเปาสายเก๋าใกล้บันด์",
+  verdict:"คู่แข่งตลอดกาลของหยางส์ — สายกินจริงจังควรลองเทียบทั้งคู่",
+  summary:"ร้านเซิงเจียนเปาเก่าแก่ตั้งแต่ยุค 1930s ที่คนเซี่ยงไฮ้หลายคนยกให้เหนือกว่าหยางส์ด้วยซ้ำ สไตล์ต่างกันชัด: ต้าหูชุนใช้แป้งฟูหนานุ่มกว่าและทอดแบบคว่ำหน้า ไส้หมูล้วนรสเข้มแบบดั้งเดิม สาขาถนนเสฉวนกลางอยู่ห่างบันด์แค่เดินไม่กี่นาที ติดอันดับร้านยอดนิยมของเมืองต่อเนื่อง เหมาะแวะเป็นมื้อเช้า/เที่ยงก่อนเดินบันด์",
+  highlights:["เซิงเจียนสูตรโบราณแป้งนุ่มฟู คนละแนวกับหยางส์ ลองเทียบสนุกดี","ทำเลใกล้บันด์มาก แทรกในแผนเที่ยวง่าย","ราคาท้องถิ่นแท้ ๆ อิ่มได้ในหลักสิบหยวน"],
+  octoberTips:["เหมาะเป็นมื้อเช้าก่อนเดินบันด์ตอนคนยังน้อยช่วง ~8-9 โมง","สั่งคู่ซุปเลือดเป็ด/ซุปหวังตัน แบบที่คนท้องถิ่นกิน อุ่นท้องรับอากาศเย็น","ช่วงสาย ๆ วันหยุดเริ่มมีคิว มาก่อนสิบโมงสบายสุด"],
+  hours:"~เช้า-บ่าย/เย็นแล้วแต่สาขา",price:"~15-30 หยวน (~70-140 บาท)",transit:"สาขาใกล้บันด์: ถนน Sichuan Middle — MRT สาย 2/10 East Nanjing Road",timeNeeded:"~30-45 นาที",
+  mapQuery:"Da Hu Chun Sichuan Middle Road Shanghai"
+},
+{
+  cat:"food",th:"บะหมี่น้ำมันต้นหอม",en:"Scallion Oil Noodles 葱油拌面",keys:["บะหมี่","ต้นหอม","noodles","congyou","เส้น"],
+  name:"บะหมี่น้ำมันต้นหอม (葱油拌面) — จานประจำเมืองที่ต้องลอง",
+  verdict:"อาหารจานเดียวที่บอกความเป็นเซี่ยงไฮ้ได้ดีที่สุดในราคาถูกที่สุด",
+  summary:"เส้นบะหมี่คลุกน้ำมันต้นหอมเจียวหอม ๆ กับซีอิ๊วสูตรหวานเค็ม หน้าตาเรียบง่ายแต่คือจานที่คนเซี่ยงไฮ้ผูกพันที่สุด ร้านบะหมี่ห้องแถวทั่วเมืองทำกันแทบทุกร้านในราคาหลักสิบหยวน ไกด์อาหารท้องถิ่นถึงกับทำลิสต์ร้านบะหมี่แยกหลายภาคเพราะแข่งกันเข้มข้น สั่งคู่หมูทอดชิ้นใหญ่ (จ๋าไผ) คือคอมโบคลาสสิก",
+  highlights:["จานเดียวรสเซี่ยงไฮ้แท้ หวานเค็มหอมต้นหอมเจียว","หาง่ายทุกย่าน ราคา ~10-25 หยวน อิ่มจริง","คอมโบบะหมี่+หมูทอดจ๋าไผ สูตรที่คนท้องถิ่นสั่งกัน"],
+  octoberTips:["เหมาะเป็นมื้อเร็ว ๆ ระหว่างวันเที่ยว ร้านห้องแถวเสิร์ฟใน 5 นาที","ชี้รูปหรือพิมพ์ 葱油拌面 ให้ร้านดูได้เลย ทุกร้านรู้จัก","อากาศเย็นสั่งแบบน้ำ (湯麵) แทนแบบแห้งก็อุ่นท้องดี"],
+  hours:"ร้านบะหมี่ทั่วไป ~7:00-20:00",price:"~10-25 หยวน (~46-115 บาท)",transit:"มีร้านแทบทุกย่าน โดยเฉพาะย่านเมืองเก่า/เฟรนช์คอนเซสชั่น",timeNeeded:"~20-30 นาที",
+  mapQuery:"scallion oil noodles restaurant Huangpu Shanghai"
+},
+{
+  cat:"food",th:"ฟู่ชุน เสี่ยวหลง",en:"Fu Chun",keys:["fuchun","ฟู่ชุน"],
+  name:"ฟู่ชุน (Fu Chun) — เสี่ยวหลงเปาสายโลคัลอีกตำนาน",
+  verdict:"อีกชื่อที่ติดโผเสี่ยวหลงเปาดีสุดของเมืองเสมอ",
+  summary:"ร้านเก่าแก่สไตล์กินเร็วแบบคนท้องถิ่นที่ลิสต์จัดอันดับเสี่ยวหลงเปาของเมืองมักใส่ชื่อไว้เคียงหนานเสียงและเจียเจียตลอด จุดแข็งคือรสดั้งเดิมไม่ปรุงโชว์ ราคาย่อมเยา และมีเมนูติ่มซำ/เส้นแบบเซี่ยงไฮ้อื่น ๆ ให้สั่งเสริมครบ บรรยากาศร้านเรียบง่ายแบบโรงอาหาร ไม่ต้องคาดหวังบริการหรูแต่ได้ของแท้",
+  highlights:["เสี่ยวหลงเปารสโลคัลแท้ ราคาน่ารัก","มีเมนูเซี่ยงไฮ้อื่นให้ลองครบในร้านเดียว","คนท้องถิ่นกินจริง ไม่ใช่ร้านนักท่องเที่ยว"],
+  octoberTips:["ฤดูปูขน ลองเทียบไส้มันปูของที่นี่กับเจ้าดัง ๆ ดู ราคาต่ำกว่าแต่รสสูสี","มื้อสายวันธรรมดาแทบไม่ต้องรอ","สั่งผิดสั่งถูกไม่ต้องกลัว จานไหนก็หลักสิบหยวน"],
+  hours:"~เช้า-ค่ำ แล้วแต่สาขา",price:"~20-50 หยวน (~92-230 บาท)",transit:"เช็กสาขาใกล้ในแผนที่ (สาขาดั้งเดิมย่าน Yuyuan Road)",timeNeeded:"~45 นาที",
+  mapQuery:"Fu Chun Xiaolong restaurant Shanghai"
+},
+{
+  cat:"food",th:"เสิ่นต้าเฉิง ขนมโบราณ",en:"Shen Da Cheng ร้อยปี",keys:["shendacheng","เสิ่นต้า","ชิงถวน","ขนมจีน"],
+  name:"เสิ่นต้าเฉิง (Shen Da Cheng) — ขนมจีนโบราณบนถนนนานกิง",
+  verdict:"ของหวาน/ของฝากสายดั้งเดิม ต้องร้านร้อยปีนี้",
+  summary:"ร้านขนมเก่าแก่กว่าศตวรรษบนถนนนานกิงที่คนเซี่ยงไฮ้ซื้อกินกันมาหลายชั่วอายุ เด่นเรื่องขนมแป้งข้าวเหนียวอย่างชิงถวน (ลูกกลมสีเขียวไส้ถั่วแดง) โมจิงาดำ และเค้กข้าวสารพัดแบบ ซื้อเป็นชิ้นเดินกินได้เลยหรือจัดกล่องเป็นของฝากติดเครื่องกลับไทยก็เก๋ ราคาหลักหน่วยถึงหลักสิบหยวนต่อชิ้น",
+  highlights:["ชิงถวนและโมจิงาดำสูตรร้อยปี ซื้อชิ้นเดียวก็ขายให้","อยู่กลางถนนนานกิง แวะระหว่างเดินช้อปได้พอดี","จัดกล่องของฝากสวย ๆ ถูกกว่าซื้อขนมที่สนามบินมาก"],
+  octoberTips:["ช่วงใบไม้ร่วงมักมีขนมไส้ตามฤดู เช่น เกาลัดหรือหอมหมื่นลี้ ถามหน้าร้านได้","ขนมแป้งข้าวเหนียวควรกินภายใน 1-2 วัน ถ้าซื้อฝากให้ซื้อวันท้าย ๆ ของทริป","ต่อแถวช่องขายหน้าร้านแบบคนท้องถิ่น เร็วกว่าเข้านั่งในร้าน"],
+  hours:"~9:00-21:00",price:"ชิ้นละ ~5-15 หยวน (~23-70 บาท)",transit:"MRT สาย 2/10 East Nanjing Road",timeNeeded:"~20-30 นาที",
+  mapQuery:"Shen Da Cheng Nanjing Road Shanghai"
+},
+{
+  cat:"food",th:"กงเต๋อหลิน เจ/มังสวิรัติ",en:"Godly (est.1922)",keys:["godly","กงเต๋อ","มังสวิรัติ","เจ","vegetarian"],
+  name:"กงเต๋อหลิน (Godly) — ตำนานอาหารเจตั้งแต่ปี 1922",
+  verdict:"สายมังสวิรัติ/กินเจ หรืออยากลองของแปลก ที่นี่คือตำนาน",
+  summary:"ภัตตาคารอาหารเจแบบพุทธที่เก่าแก่ที่สุดแห่งหนึ่งของจีน ขึ้นชื่อเรื่องอาหารเจเลียนแบบเนื้อสัตว์ฝีมือระดับศิลปะ ทั้งเป็ดเจ ปลาเจ หมูแดงเจ ที่หน้าตาและสัมผัสเหมือนจนงง เหมาะทั้งคนกินเจจริงจังและคนอยากเปิดประสบการณ์ เมนูภาพให้ชี้สั่งได้ บรรยากาศร้านเรียบร้อยพาผู้ใหญ่ไปได้สบาย",
+  highlights:["อาหารเจเลียนแบบเนื้อระดับตำนานร้อยปี","ตัวเลือกหายากสำหรับคนไม่กินเนื้อในทริปจีน","พาผู้ใหญ่/คุณพ่อคุณแม่ไปได้ บรรยากาศสุภาพ"],
+  octoberTips:["ถ้าทริปคาบเกี่ยวเทศกาลกินเจของไทย (ตุลาคมพอดี) ที่นี่ตอบโจทย์เป๊ะ","ร้านอยู่ใกล้จัตุรัสประชาชน เสียบเข้าโปรแกรมโซนนั้นง่าย","เมนูเซ็ตสำหรับ 2-4 คนคุ้มกว่าสั่งเดี่ยว"],
+  hours:"~11:00-14:00 / 17:00-21:00",price:"~80-150 หยวน/คน (~370-690 บาท)",transit:"ถนนนานกิงตะวันตก — MRT สาย 1/2/8 People's Square",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Godly vegetarian restaurant Nanjing Road Shanghai"
+},
+{
+  cat:"food",th:"อาหารเช้าจีน 4 อย่าง",en:"Breakfast 'Four Kings' 四大金刚",keys:["อาหารเช้า","breakfast","โจ๊ก","ปาท่องโก๋","น้ำเต้าหู้","jianbing"],
+  name:"อาหารเช้าเซี่ยงไฮ้ '4 จตุรเทพ' (四大金刚)",
+  verdict:"ตื่นเช้าสักวัน ไปกินมื้อเช้าแบบคนเซี่ยงไฮ้จริง ๆ",
+  summary:"คนเซี่ยงไฮ้เรียกอาหารเช้าประจำเมือง 4 อย่างว่า 'สี่จตุรเทพ': ปาท่องโก๋ (โหยวเถียว), น้ำเต้าหู้ (โต้วเจียง มีทั้งหวานและเค็มใส่เครื่อง), แป้งจี่ไข่ (ต้าปิ่ง/เจียนปิ่ง) และข้าวเหนียวห่อปาท่องโก๋ (ฉือฟั่นถวน) หาได้ตามร้านห้องแถวและรถเข็นช่วงเช้าทั่วเมืองในราคาหลักหน่วยหยวน เป็นประสบการณ์ท้องถิ่นที่นักรีวิวอาหารยกให้ห้ามพลาดพอ ๆ กับร้านดัง",
+  highlights:["ครบเซ็ต 4 อย่างจ่ายไม่ถึง 20 หยวน อิ่มถึงเที่ยง","ฉือฟั่นถวน (ข้าวเหนียวห่อปาท่องโก๋+หัวไชโป๊) คือตัวที่คนไทยติดใจสุด","ได้เห็นวิถีเช้าของคนเมืองแบบไม่มีฉากหน้า"],
+  octoberTips:["อากาศเย็น ๆ กับน้ำเต้าหู้ร้อนเค็ม (เสียนโต้วเจียง) เข้ากันสุด ๆ","ร้านเช้าขายหมดไว ออกก่อน 8 โมงครึ่งของยังครบ","ย่านเมืองเก่า/ซอยรอบเฟรนช์คอนเซสชั่นมีร้านแบบนี้เยอะสุด"],
+  hours:"~6:00-10:00",price:"~10-20 หยวน (~46-92 บาท)",transit:"ร้านห้องแถวทั่วเมือง โดยเฉพาะย่านที่พักอาศัย",timeNeeded:"~30 นาที",
+  mapQuery:"Chinese breakfast youtiao soy milk Huangpu Shanghai"
+},
+{
+  cat:"food",th:"ฉาส์ ชาชานเต็งฮ่องกง",en:"Cha's Restaurant 查餐厅",keys:["chas","ฉาส์","ฮ่องกง","ชาชาน"],
+  name:"Cha's Restaurant — ร้านสไตล์ฮ่องกงยุค 60 ในตำนาน",
+  verdict:"คิดถึงข้าวหมูแดง/ชานมฮ่องกงเมื่อไหร่ มานี่",
+  summary:"ร้านอาหารกวางตุ้งสไตล์ชาชานเต็งที่จำลองบรรยากาศฮ่องกงยุค 60 มาทั้งร้าน ตั้งแต่กระเบื้อง โคมไฟ ยันเมนูปกหนังเก่า ๆ เป็นร้านฮิตติดลมบนของย่านซินันโรดมายาวนาน ข้าวหมูแดง ขนมปังสังขยาชุบไข่ และชานมสูตรฮ่องกงคือสามสิ่งที่รีวิวเชียร์ตลอด คิวหน้าร้านช่วงมื้อหลักคือเรื่องปกติ",
+  highlights:["บรรยากาศฮ่องกงเก่าจัดเต็มทุกตารางนิ้ว ถ่ายรูปสนุก","ข้าวหมูแดง+ไข่ดาว และเฟรนช์โทสต์ฮ่องกงรสต้นตำรับ","ราคาย่อมเยาเทียบกับความดัง"],
+  octoberTips:["คิวมื้อเที่ยง/เย็นยาว มาช่วงบ่ายเบรก ~14:30-16:30 แทบไม่ต้องรอ","อยู่ใกล้ซินเทียนตี้และสวนฝูซิง เสียบเข้าโปรแกรมย่านนั้นได้ง่าย","ชานมเย็นของร้านเข้มจริง ใครไม่ชอบขมสั่งหวานเพิ่มได้"],
+  hours:"~11:00-22:00",price:"~60-100 หยวน/คน (~275-460 บาท)",transit:"ถนน Sinan — MRT สาย 10/13 Xintiandi เดิน ~8 นาที",timeNeeded:"~1 ชม.",
+  mapQuery:"Cha's Restaurant Sinan Road Shanghai"
+},
+{
+  cat:"food",th:"เยียร์ชารี อาหารซินเจียง",en:"Yershari 耶里夏丽",keys:["yershari","ซินเจียง","เนื้อแพะ","xinjiang"],
+  name:"เยียร์ชารี (Yershari) — อาหารซินเจียงเสียบไม้เนื้อแกะ",
+  verdict:"สายเนื้อย่าง/รสเครื่องเทศต้องลอง — อาหารจีนอีกจักรวาลหนึ่ง",
+  summary:"เชนอาหารอุยกูร์ซินเจียงที่ดังที่สุดในเซี่ยงไฮ้ เด่นเรื่องเนื้อแกะเสียบไม้ย่างเครื่องเทศยี่หร่า ข้าวอบแกะ (โพโล) และหมี่ดึงมือผัดมะเขือเทศ รสจัดหอมเครื่องเทศคนไทยกินง่ายมาก บรรยากาศร้านตกแต่งสไตล์เอเชียกลางมีดนตรีสด (บางสาขา) จานใหญ่เหมาะมากันหลายคนแชร์กัน",
+  highlights:["เนื้อแกะเสียบไม้ย่างยี่หร่า หอมฟุ้งไม่มีกลิ่นสาบ","ข้าวอบเนื้อแกะ + หมี่ดึงมือ คาร์บอร่อยทั้งคู่","จานใหญ่ราคาดี มากลุ่ม 3-4 คนคุ้มสุด"],
+  octoberTips:["อากาศเย็นกับของย่างร้อน ๆ และชานมอุ่นสไตล์ซินเจียงเข้ากันมาก","สาขาในห้างหาคิวง่ายกว่าสาขาสแตนด์อโลนช่วงวันหยุด","สั่งน้ำโยเกิร์ตซินเจียงตัดเลี่ยน อร่อยแปลกดี"],
+  hours:"~11:00-21:30",price:"~80-130 หยวน/คน (~370-600 บาท)",transit:"มีหลายสาขาในห้างใจกลางเมือง เช็กสาขาใกล้ในแผนที่",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Yershari Xinjiang restaurant Shanghai"
+},
+{
+  cat:"food",th:"ซินต้าลู่ เป็ดย่างเบอร์หนึ่ง",en:"Xindalu — China Kitchen",keys:["xindalu","เป็ดปักกิ่ง","เป็ดย่าง","duck"],
+  name:"ซินต้าลู่ (Xindalu) — เป็ดปักกิ่งที่ดีที่สุดของเซี่ยงไฮ้",
+  verdict:"อยากกินเป็ดปักกิ่งระดับพิธีกรรม จองที่นี่",
+  summary:"ห้องอาหารจีนของโรงแรม Hyatt on the Bund ที่นักวิจารณ์อาหารยกให้เป็นเป็ดปักกิ่งอันดับต้นของเมืองมายาวนาน เป็ดย่างเตาฟืนไม้ผลไม้ทั้งตัว หนังกรอบเงาเป็นกระจก แล่ให้ดูข้างโต๊ะพร้อมเครื่องเคียงครบพิธี เป็ดมีจำนวนจำกัดต่อวันจึงต้องจองล่วงหน้าพร้อมสั่งเป็ดไว้เลย เหมาะเป็นมื้อพิเศษสุดของทริป",
+  highlights:["เป็ดย่างเตาฟืนหนังกรอบระดับตำนาน แล่โชว์ข้างโต๊ะ","เครื่องเคียง/แป้งห่อทำสดครบแบบแผนดั้งเดิม","อยู่โซน North Bund วิวแม่น้ำ กินเสร็จเดินย่อยริมน้ำได้"],
+  octoberTips:["จองโต๊ะ + จองเป็ดล่วงหน้าอย่างน้อย 1-2 วัน เป็ดหมดจริงทุกวัน","จัดเป็นมื้อฉลองกลางทริป แต่งตัวสุภาพนิดนึงเข้าบรรยากาศ","ต่อด้วยวิวไฟ North Bund หลังมื้อ เดินไม่กี่นาทีถึงริมน้ำ"],
+  hours:"~11:30-14:00 / 17:30-21:30",price:"เป็ดทั้งตัว ~400+ หยวน / รวม ~250-400 หยวน/คน",transit:"Hyatt on the Bund — MRT สาย 12 International Cruise Terminal",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Xindalu China Kitchen Hyatt on the Bund Shanghai"
+},
+{
+  cat:"food",th:"เว่ยเซียงไจ บะหมี่งาดำ",en:"Wei Xiang Zhai 味香斋",keys:["weixiang","เว่ยเซียง","บะหมี่งา","งาดำ"],
+  name:"เว่ยเซียงไจ (Wei Xiang Zhai) — บะหมี่ซอสงาตั้งแต่ยุค 1930s",
+  verdict:"ชามเดียวหลักสิบหยวนที่คนต่อคิวมาเกือบร้อยปี",
+  summary:"ร้านบะหมี่ห้องแถวจิ๋วบนถนนเหยียนตังที่ขายบะหมี่คลุกซอสงา (หมาเจี้ยงเมี่ยน) มาตั้งแต่ทศวรรษ 1930 ซอสงาข้นหอมมันผสมความเผ็ดอ่อน ๆ ของน้ำมันพริก เส้นเหนียวนุ่มคลุกแล้วเข้ากันสุด ๆ สั่งคู่ซุปเลือดเป็ดใสตามสูตรที่คนท้องถิ่นกิน โต๊ะน้อยต้องแชร์กับคนแปลกหน้า นั่นแหละเสน่ห์",
+  highlights:["บะหมี่ซอสงาสูตรเดียวยืนหนึ่งเกือบศตวรรษ","ราคาท้องถิ่นแท้ อิ่มได้ใน ~20 หยวน","อยู่ย่านหวยไห่ เดินช้อปแล้วแวะได้พอดี"],
+  octoberTips:["คิวสั้นสุดช่วงบ่ายหลังมื้อเที่ยง ~13:30-15:00","เส้นเสิร์ฟร้อนคลุกซอสทันทีถึงจะอร่อยสุด อย่ามัวถ่ายรูปนาน","จับคู่เดิน iapm/ถนนหวยไห่ ก่อนหรือหลังกินได้ทั้งคู่"],
+  hours:"~7:00-20:00",price:"~15-25 หยวน (~70-115 บาท)",transit:"ถนน Yandang ใกล้หวยไห่ — MRT สาย 1/10/12 South Shaanxi Road",timeNeeded:"~30 นาที",
+  mapQuery:"Wei Xiang Zhai Yandang Road Shanghai"
+},
+{
+  cat:"food",th:"เซี่ยงไฮ้เหล่าฟั่นเตี้ยน",en:"Shanghai Lao Fandian",keys:["laofandian","เหล่าฟั่น","ร้านเก่าเซี่ยงไฮ้"],
+  name:"เซี่ยงไฮ้เหล่าฟั่นเตี้ยน — ภัตตาคารเก่าแก่คู่เมืองที่อวี้หยวน",
+  verdict:"อาหารเซี่ยงไฮ้ตำรับดั้งเดิมในบรรยากาศภัตตาคารจีนคลาสสิก",
+  summary:"ภัตตาคารอายุกว่า 150 ปีในย่านอวี้หยวน ที่ถือเป็นเสาหลักของอาหารเปิ่นปังเซี่ยงไฮ้มาหลายชั่วคน เมนูขึ้นชื่อคือหมูสามชั้นตุ๋นซีอิ๊ว ปลาน้ำจืดนึ่ง และเป็ดแปดสมบัติ รสหวานเค็มเข้มแบบฉบับเมืองนี้ เหมาะพาครอบครัวหรือผู้ใหญ่มามื้อจริงจังหลังเที่ยวสวนอวี้หยวนเสร็จ",
+  highlights:["ตำรับเปิ่นปังดั้งเดิมที่สืบทอดกันมาศตวรรษครึ่ง","เมนูปลาและเป็ดแปดสมบัติหากินยากในร้านทั่วไป","ทำเลติดอวี้หยวน จัดโปรแกรมสวน+ตลาด+มื้อใหญ่จบในย่านเดียว"],
+  octoberTips:["ฤดูปูขน ร้านเก่าแบบนี้ทำเมนูปูตามประเพณีได้แม่นมาก ถามเมนูพิเศษประจำฤดูได้เลย","จองล่วงหน้าถ้าไปมื้อเย็นวันหยุด คนท้องถิ่นพาครอบครัวมากันเยอะ","สั่งข้าวขาวเยอะ ๆ น้ำซอสหมูตุ๋นคือพระเอก"],
+  hours:"~11:00-14:00 / 17:00-21:00",price:"~120-250 หยวน/คน (~550-1,150 บาท)",transit:"MRT สาย 10 สถานี Yuyuan Garden",timeNeeded:"~1.5 ชม.",
+  mapQuery:"Shanghai Lao Fandian Yu Garden"
+},
+{
+  cat:"food",th:"ชาจีนยุคใหม่",en:"Chagee & HeyTea 霸王茶姬",keys:["chagee","heytea","ชานม","ชาจีน","ป้าหวัง"],
+  name:"ชานม-ชาจีนยุคใหม่ (Chagee / HeyTea)",
+  verdict:"วัฒนธรรมชาจีนโฉมใหม่ที่กำลังครองเมือง — แก้วละไม่กี่สิบหยวน",
+  summary:"สองเชนชาที่นิยามคำว่า 'ชาจีนสมัยใหม่': Chagee (ป้าหวังฉาจี) ชูชานมอู่หลง/ผูเอ่อร์รสชาชัดหวานน้อยในแพ็กเกจจิงสวยจนเป็นของฝาก ส่วน HeyTea คือเจ้าตำรับชาชีสโฟมและเมนูผลไม้ครีเอทีฟ ทั้งคู่มีสาขาแทบทุกห้าง สั่งง่าย มีเมนูภาพ และราคาถูกกว่าที่ขายในไทยพอสมควร",
+  highlights:["Chagee: ชานมอู่หลงหอมชาจริง เลือกระดับหวานได้ละเอียด","HeyTea: ชาชีสต้นตำรับ + เมนูผลไม้ตามฤดู","แก้ว/ถุงดีไซน์สวย ซื้อเป็นของฝากสายชาได้"],
+  octoberTips:["เมนูฤดูใบไม้ร่วงมักมีหอมหมื่นลี้และลูกพลับ ของดีเฉพาะช่วงตุลาคมพอดี","สั่งหน้าเคาน์เตอร์ชี้เมนูภาพได้ หรือให้พนักงานช่วยกดมินิโปรแกรมให้","ถือแก้วเดินช้อปในห้างได้ทุกที่ ไม่มีใครว่า"],
+  hours:"~10:00-22:00 ตามห้าง",price:"~15-35 หยวน (~70-160 บาท)",transit:"มีแทบทุกห้างและย่านท่องเที่ยว",timeNeeded:"~10-15 นาที",
+  mapQuery:"Chagee tea Nanjing Road Shanghai"
+},
+{
+  cat:"food",th:"ไท่เอ้อ ปลาผักดอง",en:"Tai Er 太二酸菜鱼",keys:["taier","ไท่เอ้อ","ปลาผักดอง","suancaiyu"],
+  name:"ไท่เอ้อ (Tai Er) — ปลาต้มผักกาดดองสุดฮิต",
+  verdict:"เมนูเดียวจบแต่แซ่บจนคนจีนต่อคิวทั้งประเทศ",
+  summary:"เชนดังที่ขายจานเดียวเป็นพระเอก: ปลากะพงต้มในน้ำซุปผักกาดดองเปรี้ยว ๆ เผ็ดพริกไทยดำ เสิร์ฟหม้อใหญ่กินกับข้าวสวยร้อน ๆ รสเปรี้ยวเผ็ดถูกลิ้นคนไทยมาก คอนเซปต์ร้านกวน ๆ (โต๊ะรับสูงสุด 4 คน ไม่รับเกิน) การตกแต่งการ์ตูนขาวดำจำง่าย มีสาขาในห้างทั่วเมือง",
+  highlights:["ซุปปลาผักดองเปรี้ยวเผ็ด รสจัดโดนใจคนไทย","ปลาแล่บาง ๆ ลวกในซุปกำลังสุก นุ่มไม่คาว","ระบบสั่งรูปภาพ+เผ็ดเลือกระดับได้ สั่งง่ายสุด ๆ"],
+  octoberTips:["ซุปร้อน ๆ เปรี้ยว ๆ กับอากาศเย็นตุลาคมคือคู่ที่ใช่","ช่วงมื้อเย็นวันหยุดคิวยาว กดรับคิวผ่านเครื่องหน้าร้านแล้วเดินห้างรอได้","ข้าวสวยเติมได้ อย่าเกรงใจ ซุปนี้เกิดมาคู่ข้าว"],
+  hours:"~11:00-21:30 ตามห้าง",price:"~90-130 หยวน/คน (~415-600 บาท)",transit:"มีหลายสาขาในห้างใหญ่ เช็กสาขาใกล้ในแผนที่",timeNeeded:"~1 ชม.",
+  mapQuery:"Tai Er suancaiyu restaurant Shanghai"
+},
+{
+  cat:"food",th:"ไว่ผัวเจีย ร้านคุณยาย",en:"Grandma's Home 外婆家",keys:["grandma","ไว่ผัว","คุณยาย","หางโจว"],
+  name:"ไว่ผัวเจีย (Grandma's Home) — อาหารจีนบ้าน ๆ ราคาน่าตกใจ",
+  verdict:"อร่อย หลากหลาย และถูกจนสงสัยว่าเขาอยู่ได้ยังไง",
+  summary:"เชนอาหารสไตล์หางโจว/บ้านคุณยายที่โด่งดังเรื่องราคาถูกเหลือเชื่อทั้งที่ร้านตกแต่งสวยระดับนั่งสบาย เมนูเป็นร้อยตั้งแต่ไก่เหล้าแดง หมูตุ๋น เต้าหู้ ผัดผัก จานละไม่กี่สิบหยวน เหมาะมื้อที่อยากสั่งหลาย ๆ อย่างแบบไม่คิดมาก คิวหน้าร้านช่วงมื้อหลักยาวเป็นธรรมเนียม กดบัตรคิวแล้วเดินห้างรอ",
+  highlights:["จานอร่อยเริ่มต้นหลักหน่วยถึงหลักสิบหยวน ถูกจริงไม่จกตา","เมนูหลากหลายมาก สั่งเผื่อผิดได้สบายใจ","บรรยากาศดีเกินราคาหลายขั้น"],
+  octoberTips:["หลบคิวด้วยการกินมื้อเที่ยงเร็ว (ก่อน 11:30) หรือมื้อเย็นเร็ว (ก่อน 17:30)","เหมาะเป็นมื้อพักงบหลังวันที่จ่ายหนักกับร้านดัง","ไก่ต้มเหล้า (醉鸡) และหมูตุ๋นของร้านคือตัวท็อปที่รีวิวสั่งกันทุกโต๊ะ"],
+  hours:"~11:00-21:00 ตามห้าง",price:"~50-80 หยวน/คน (~230-370 บาท)",transit:"มีหลายสาขาในห้างใหญ่ เช็กสาขาใกล้ในแผนที่",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Grandma's Home restaurant Shanghai"
+},
+{
+  cat:"food",th:"หม่าล่าทั่ง & เสียบไม้",en:"Malatang 麻辣烫",keys:["malatang","หม่าล่า","เสียบไม้","หมาล่า"],
+  name:"หม่าล่าทั่ง (Malatang) — เลือกไม้จุ่มซุปหม่าล่าสไตล์จีนแท้",
+  verdict:"ของโปรดคนไทยเวอร์ชันต้นตำรับ ถูกกว่าที่ไทยครึ่งต่อครึ่ง",
+  summary:"ร้านหม่าล่าทั่งในจีนคือระบบเลือกวัตถุดิบเองจากตู้แช่เป็นสิบ ๆ อย่าง ชั่งน้ำหนักคิดเงิน แล้วร้านต้มในซุปหม่าล่า (เลือกระดับเผ็ด/ซุปกระดูกไม่เผ็ดได้) หาได้ทุกย่านทุกซอย ราคาชามละ ~20-40 หยวนอิ่มจุก เชนดังที่เจอบ่อยคือจางเลี่ยงและหยางกั๋วฝู แต่ร้านห้องแถวไม่มีชื่อก็อร่อยไม่แพ้กัน",
+  highlights:["เลือกเองทุกไม้ทุกอย่าง ผัก เห็ด เส้น ลูกชิ้น เต้าหู้ นับสิบชนิด","ระดับเผ็ดเลือกได้ตั้งแต่ไม่เผ็ดถึงหม่าจัดชาลิ้น","ถูกกว่าหม่าล่าในไทยชัดเจน และสดกว่าเพราะหมุนเวียนไว"],
+  octoberTips:["ซุปหม่าล่าร้อน ๆ ในอากาศเย็นคือความสุขเรียบง่ายที่สุดของทริป","ชี้เลือกวัตถุดิบได้เลยไม่ต้องพูด จ่าย Alipay จบ","มื้อดึกหลังเที่ยวเหนื่อย ร้านพวกนี้เปิดยันดึกแทบทุกย่าน"],
+  hours:"~10:00-ดึก",price:"~20-40 หยวน (~92-185 บาท)",transit:"มีทุกย่าน โดยเฉพาะใกล้สถานีรถไฟฟ้า",timeNeeded:"~30-45 นาที",
+  mapQuery:"malatang restaurant Huangpu Shanghai"
+},
+{
+  cat:"food",th:"เกี๊ยวหวังตันเซี่ยงไฮ้",en:"Shanghai Wonton 馄饨",keys:["wonton","หวังตัน","เกี๊ยว","huntun"],
+  name:"หวังตัน (Wonton) — เกี๊ยวน้ำสไตล์เซี่ยงไฮ้",
+  verdict:"อาหารใจของคนเซี่ยงไฮ้ อุ่นท้องที่สุดในเช้าอากาศเย็น",
+  summary:"เกี๊ยวเซี่ยงไฮ้มีสองสาย: หวังตันใหญ่ไส้หมูผักเขียวลูกอวบเต็มคำในน้ำซุปใส กับหวังตันเล็กแป้งบางเฉียบลอยในซุปที่เน้นความละมุน ร้านห้องแถวทั่วเมืองทำกันมาหลายชั่วอายุ ชามละหลักสิบหยวน เป็นเมนูที่คนเซี่ยงไฮ้กินตั้งแต่เช้ายันดึกและผูกพันแบบเดียวกับที่คนไทยผูกพันก๋วยเตี๋ยว",
+  highlights:["หวังตันใหญ่ไส้ผักเขียว เอกลักษณ์ที่กินได้ที่เซี่ยงไฮ้ถึงจะแท้","น้ำซุปใสโรยไข่เจียวฝอย/สาหร่าย เรียบง่ายแต่ลึก","หาง่าย ถูก อิ่มเร็ว เหมาะทุกช่วงเวลาของวัน"],
+  octoberTips:["เช้าอากาศเย็นตุลาคมกับหวังตันร้อน ๆ คือการเริ่มวันแบบคนท้องถิ่นแท้","พิมพ์ 馄饨 ให้ร้านดูได้เลย ทุกร้านเข้าใจ","ร้านย่านเมืองเก่า/ซอยเล็กมักอร่อยกว่าร้านติดถนนใหญ่"],
+  hours:"~เช้า-ดึก แล้วแต่ร้าน",price:"~10-25 หยวน (~46-115 บาท)",transit:"ร้านห้องแถวทั่วเมือง",timeNeeded:"~30 นาที",
+  mapQuery:"wonton restaurant old town Shanghai"
+},
+
+/* ---------- ช้อปปิงจริง ---------- */
+{
+  cat:"shop",th:"TX Huaihai",en:"ห้างสายสตรีท/อาร์ตของวัยรุ่นจีน",keys:["tx","huaihai","เทเอ็กซ์","ทีเอ็กซ์"],
+  name:"TX Huaihai — Youth Energy Center",
+  verdict:"อยากเห็นเทรนด์วัยรุ่นจีนตอนนี้ มาที่เดียวจบ",
+  summary:"ห้างคอนเซปต์ 'พลังงานวัยรุ่น' บนถนนหวยไห่ที่รวมสตรีทแฟชั่นจีน แบรนด์ดีไซเนอร์ท้องถิ่น อาร์ตทอย และงานศิลปะจัดวางไว้ในที่เดียว บรรยากาศเหมือนแกลเลอรีมากกว่าห้าง มีอีเวนต์ป๊อปอัพหมุนเวียนแทบทุกสัปดาห์ รีวิวชอบตรงที่ได้เห็นแบรนด์จีนรุ่นใหม่ที่ยังไม่มีขายนอกประเทศ",
+  highlights:["แบรนด์สตรีท/ดีไซเนอร์จีนที่หาซื้อนอกจีนยาก","ป๊อปอัพและงานอาร์ตหมุนเวียนตลอด ไปกี่ครั้งก็ไม่ซ้ำ","อยู่บนถนนหวยไห่ เดินต่อ iapm และซินเทียนตี้ได้"],
+  octoberTips:["จัดเป็นครึ่งวันช้อปสายหวยไห่: TX → iapm → ซินเทียนตี้ เดินถึงกันหมด","ช่วง Golden Week มักมีอีเวนต์พิเศษแต่คนก็แน่นตาม ไปวันธรรมดาเดินสบายกว่า","ชั้นบนมีร้านกินดื่มเก๋ ๆ นั่งพักขาได้"],
+  hours:"~10:00-22:00",price:"ฟรี (สินค้าราคากลาง-สูง)",transit:"MRT สาย 1/10/12 สถานี South Shaanxi Road",timeNeeded:"~1-2 ชม.",
+  mapQuery:"TX Huaihai Shanghai"
+},
+{
+  cat:"shop",th:"iapm & ถนนหวยไห่",en:"ห้างหรู + ถนนช้อปสายคลาสสิก",keys:["iapm","หวยไห่","huaihai road","ห้างหรู"],
+  name:"iapm Mall & ถนนหวยไห่ (Huaihai Road)",
+  verdict:"สายแบรนด์เนมและห้างสวย ๆ ต้องสายนี้",
+  summary:"ถนนช้อปปิงสายหรูของเซี่ยงไฮ้ที่มีตั้งแต่แฟลกชิปแบรนด์เนมระดับโลกไปจนห้าง iapm ที่รีวิวยกให้เป็นแลนด์มาร์กของย่าน ผสมแบรนด์หรูกับแบรนด์กลางแบบเดินสนุก ชั้นอาหารแข็งแรงมาก (มีร้านอาหารไทยรีวิวดีด้วย) และขึ้นชื่อเรื่องการจัดตกแต่งตามเทศกาลที่อลังการจนคนมาถ่ายรูปโดยเฉพาะ",
+  highlights:["ห้างเปิดยาวถึง ~22:00 เดินช้อปหลังมื้อค่ำได้","งานตกแต่งเทศกาล/ป๊อปอัพใน atrium สวยระดับต้องแวะถ่าย","บรรยากาศถนนหวยไห่ร่มรื่น เดินจากย่านเฟรนช์คอนเซสชั่นต่อมาได้"],
+  octoberTips:["ตุลาคมเริ่มมีของตกแต่งช่วงปลายปี ถ่ายรูปสวยโดยไม่ต้องรอคริสต์มาส","นักท่องเที่ยวต่างชาติซื้อครบตามเงื่อนไขสามารถทำเรื่องคืนภาษี (departure tax refund) ได้ เก็บใบเสร็จไว้","วันฝนตกเปลี่ยนแผนมาเดินห้างแถบนี้ได้ทั้งวัน"],
+  hours:"~10:00-22:00",price:"ฟรี (สินค้าหลากระดับ)",transit:"MRT สาย 1/10/12 สถานี South Shaanxi Road เชื่อมตัวห้าง",timeNeeded:"~1.5-3 ชม.",
+  mapQuery:"iapm Mall Huaihai Road Shanghai"
+},
+{
+  cat:"shop",th:"Pop Mart แฟลกชิป",en:"อาณาจักร Labubu & อาร์ตทอย",keys:["popmart","ป๊อปมาร์ท","labubu","ลาบูบู้","อาร์ตทอย"],
+  name:"Pop Mart Global Flagship (ถนนนานกิงตะวันออก)",
+  verdict:"สาวก Labubu / อาร์ตทอยห้ามพลาด — ที่นี่คือบ้านเกิดแบรนด์",
+  summary:"แฟลกชิปสโตร์ใหญ่ 2 ชั้นธีมอวกาศบนถนนนานกิงตะวันออก ที่รีวิวบอกว่าเดินเพลินเหมือนพิพิธภัณฑ์ของเล่นแม้ไม่ได้ซื้อ รวมทุก IP ดังทั้ง Labubu, Skullpanda, Molly, Dimoo และมีของ exclusive เฉพาะเซี่ยงไฮ้/limited edition ที่นักสะสมตามล่า ราคาในจีนมักถูกกว่าที่ไทยและมีโอกาสเจอตัวที่ไทยขายหมด",
+  highlights:["ของ exclusive เฉพาะเซี่ยงไฮ้ + limited drop ที่ไทยไม่มี","ตู้กาชาปองลุ้นตัวลับ สนุกแบบไม่ต้องจ่ายหนัก","เปิดถึง ~22:00 แวะหลังเดินนานกิง/บันด์ได้พอดี"],
+  octoberTips:["ล็อตคอลเลกชันใหม่มักปล่อยช่วงเทศกาล เช็กตัวช่วง Golden Week อาจเจอของพิเศษ","ตัวฮิตอย่าง Labubu หมดไวมาก เห็นแล้วอย่าลังเล","มีอีกสาขาธีม Hirono ที่ Central Plaza ถนนหวยไห่ สายสะสมจัดต่อได้"],
+  hours:"~10:00-22:00",price:"บลายด์บ็อกซ์เริ่ม ~69-99 หยวน (~320-460 บาท)",transit:"MRT สาย 2/10 สถานี East Nanjing Road",timeNeeded:"~45 นาที-1 ชม.",
+  mapQuery:"Pop Mart Global Flagship Store Nanjing East Road Shanghai"
+},
+{
+  cat:"shop",th:"ตลาด AP Xinyang",en:"ตลาดต่อราคาสายประหยัด",keys:["xinyang","ซินหยาง","ap","ตลาดก๊อป","ต่อราคา"],
+  name:"AP Xinyang Fashion & Gifts Market",
+  verdict:"สายต่อราคาและล่าของถูก สนุกแน่ แต่ต้องมีสกิลต่อรอง",
+  summary:"ตลาดใต้ดินขนาดใหญ่หลายชั้นย่านผู่ตงที่สืบทอดมาจากตลาดหัวถิงลู่ในตำนาน รวมร้านเสื้อผ้า กระเป๋า รองเท้า อุปกรณ์อิเล็กทรอนิกส์ และของฝากนับร้อยร้าน จุดเด่นคือราคาต่อรองได้หนักมาก รีวิวแนะนำให้เริ่มต่อจากราว 20-30% ของราคาเปิด และเดินออกถ้าไม่ได้ราคา (ส่วนใหญ่จะถูกเรียกกลับ)",
+  highlights:["สินค้าหลากหลายราคาย่อมเยา เหมาะซื้อของฝากจำนวนเยอะ","อยู่ติดสถานีรถไฟฟ้า เดินทางง่าย","ประสบการณ์ต่อราคาแบบจีนแท้ ๆ สนุกเหมือนเล่นเกม"],
+  octoberTips:["ซื้อเสื้อกันหนาวบาง ๆ ที่นี่ได้เลยถ้าเจออากาศเย็นกว่าที่เตรียมมา ราคาถูกกว่าห้างมาก","พูดเลขผ่านเครื่องคิดเลข/มือถือได้ ไม่ต้องกังวลภาษา","ตรวจสภาพสินค้าก่อนจ่ายทุกครั้ง และจ่ายผ่าน Alipay ได้แทบทุกร้าน"],
+  hours:"~10:00-20:00",price:"แล้วแต่ฝีมือต่อรอง",transit:"MRT สาย 2 สถานี Science & Technology Museum เชื่อมตัวตลาด",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"AP Xinyang Fashion and Gifts Market Shanghai"
+},
+{
+  cat:"shop",th:"ตลาดผ้าเซาท์บันด์",en:"ตัดสูท/ชุดสั่งตัดราคาน่ารัก",keys:["fabric","ตลาดผ้า","ตัดสูท","south bund","สั่งตัด"],
+  name:"South Bund Fabric Market — ตลาดผ้าและตัดเสื้อ",
+  verdict:"ของดีที่นักท่องเที่ยวสายรู้ลึกชอบมาก — สูทสั่งตัดในไม่กี่วัน",
+  summary:"ตึกสามชั้นที่อัดแน่นด้วยร้านผ้าและช่างตัดเสื้อหลายสิบเจ้า สั่งตัดสูท เชิ้ต เดรส หรือเสื้อโค้ตแบบวัดตัวได้ในราคาที่ต่ำกว่าเมืองไทยหรือประเทศตะวันตกมาก งานเสร็จเร็วสุดใน 24-72 ชม. และหลายร้านส่งถึงโรงแรมให้ รีวิวแนะนำให้เทียบราคา 2-3 ร้าน ต่อรองพอประมาณ และเผื่อเวลากลับมาฟิตติงหนึ่งรอบ",
+  highlights:["สูทวัดตัวเริ่มหลักพันบาท เชิ้ตหลักร้อย คุณภาพเกินราคา","เลือกผ้าเองได้เป็นร้อยแบบ รวมแคชเมียร์และวูลสำหรับเมืองหนาว","สั่งวันแรกของทริป รับก่อนกลับพอดี"],
+  octoberTips:["โอกาสดีในการตัดเสื้อโค้ต/แจ็กเก็ตวูลไว้ใส่เที่ยวเมืองหนาวทริปหน้า ราคาดีกว่าซื้อสำเร็จ","มาช่วงต้นทริปเลย จะได้มีเวลาฟิตติงแก้ทรงสัก 1 รอบ งานจะเนี้ยบกว่ารีบ","บอกงบก่อนเริ่มคุย ช่างจะแนะนำผ้าในงบให้ ไม่เสียเวลา"],
+  hours:"~8:30-18:00",price:"เชิ้ต ~150-300 หยวน / สูท ~600-1,500 หยวน",transit:"MRT สาย 4 สถานี Nanpu Bridge เดิน ~10 นาที",timeNeeded:"~1-1.5 ชม./รอบ",
+  mapQuery:"South Bund Fabric Market Shanghai"
+},
+{
+  cat:"shop",th:"K11 Art Mall",en:"ห้าง+พิพิธภัณฑ์ศิลปะ",keys:["k11","เคสิบเอ็ด"],
+  name:"K11 Art Mall — ห้างศิลปะบนถนนหวยไห่",
+  verdict:"ช้อปไปดูงานอาร์ตไป คอนเซปต์ที่ทำให้ห้างนี้ไม่เหมือนใคร",
+  summary:"ห้างคอนเซปต์ 'ศิลปะ x การค้า' ที่วางงานศิลปะจริงกระจายทุกชั้นและมีพื้นที่นิทรรศการหมุนเวียนชั้นใต้ดิน แบรนด์ในห้างเน้นดีไซเนอร์และไลฟ์สไตล์มากกว่าหรูจ๋า มีร้าน Pop Mart และร้านสินค้าศิลปินให้ล่าของด้วย ทำเลติดสถานีรถไฟฟ้าย่านซินเทียนตี้ เดินเชื่อมโปรแกรมย่านนั้นได้ทันที",
+  highlights:["งานศิลปะจัดแสดงจริงปนพื้นที่ช้อป เดินเพลินแบบสองอารมณ์","นิทรรศการหมุนเวียนชั้น B3 มักได้ศิลปินดัง","ติดสถานีรถไฟฟ้า ฝนตกก็เดินสบาย"],
+  octoberTips:["เช็กนิทรรศการที่จัดช่วงตุลาคมก่อนไป บางงานต้องจองรอบ","จับคู่ซินเทียนตี้: ช้อป K11 บ่าย → ดินเนอร์ซินเทียนตี้เย็น","ชั้นอาหารมีตัวเลือกเยอะ ใช้เป็นจุดมื้อเที่ยงของโซนนี้ได้"],
+  hours:"~10:00-22:00",price:"ฟรี (นิทรรศการบางงานเก็บค่าเข้า)",transit:"MRT สาย 1 สถานี South Huangpi Road",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"K11 Art Mall Huaihai Road Shanghai"
+},
+{
+  cat:"shop",th:"จางหยวน",en:"Zhang Yuan ย่านชิกู่เหมินหรู",keys:["zhangyuan","จางหยวน","จางเยวี่ยน"],
+  name:"จางหยวน (Zhang Yuan) — บ้านหินเก่าย่านหรูโฉมใหม่",
+  verdict:"ซินเทียนตี้เวอร์ชันใหม่กว่า เนี้ยบกว่า คนน้อยกว่า",
+  summary:"หมู่บ้านชิกู่เหมินอายุร้อยกว่าปีย่านนานกิงตะวันตกที่บูรณะใหม่ทั้งผืนเป็นย่านช้อปเปิดโล่ง รวมแฟลกชิปแบรนด์หรูระดับโลกและร้านคอนเซปต์ที่เข้ามาอยู่ในบ้านหินโบราณอย่างกลมกลืน แม้ไม่ซื้ออะไรก็เดินถ่ายรูปสถาปัตยกรรมเพลิน เป็นย่านที่คนเซี่ยงไฮ้เองก็ยกให้เป็นการบูรณะที่ทำได้สวยสุดยุคหลัง",
+  highlights:["สถาปัตยกรรมชิกู่เหมินบูรณะละเอียดยิบ เดินถ่ายรูปฟรีทั้งย่าน","แฟลกชิป/ป๊อปอัพแบรนด์ดังที่จัดร้านในบ้านโบราณ ไม่เหมือนสาขาไหนในโลก","คนบางกว่าซินเทียนตี้ชัดเจน เดินสบาย"],
+  octoberTips:["แสงเย็น ๆ ตกกระทบตึกอิฐเก่าช่วง ~16:00-17:30 ถ่ายรูปสวยสุด","อยู่ห่างวัดจิ้งอันไม่ไกล จัดสายเดียวกันได้: วัด → จางหยวน → นานกิงตะวันตก","ป๊อปอัพเปลี่ยนบ่อย เดินเช็กรอบนอกก่อนค่อยเลือกเข้าร้าน"],
+  hours:"ย่านเปิดตลอด ร้าน ~10:00-22:00",price:"ฟรี (สินค้าระดับหรู)",transit:"MRT สาย 2/12/13 สถานี West Nanjing Road",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"Zhang Yuan Nanjing West Road Shanghai"
+},
+{
+  cat:"shop",th:"ร้านหนังสือบนฟ้า Duoyun",en:"Duoyun Books ชั้น 52",keys:["duoyun","ตัวหยุน","ร้านหนังสือ","books"],
+  name:"Duoyun Books — ร้านหนังสือสูงสุดในเมือง ชั้น 52 เซี่ยงไฮ้ทาวเวอร์",
+  verdict:"จุดชมวิวแอบเนียน — เข้าฟรี วิวเกือบเท่าจุดชมวิวจริง",
+  summary:"ร้านหนังสือ+คาเฟ่บนชั้น 52 ของตึกเซี่ยงไฮ้ทาวเวอร์ ที่นักท่องเที่ยวสายประหยัดบอกต่อกันว่าเป็นทางลัดชมวิวเมืองจากความสูงกว่า 200 เมตรโดยไม่ต้องจ่ายค่าจุดชมวิว แค่เข้าไปเดินดูหนังสือหรือนั่งกาแฟสักแก้ว ตัวร้านออกแบบสวยเป็นคลื่นสีขาวรับกับวิวกระจกรอบด้าน มุมหนังสือศิลปะ/ดีไซน์แข็งแรง มีของที่ระลึกให้ซื้อด้วย",
+  highlights:["วิวพาโนรามาชั้น 52 แลกกับแค่ค่ากาแฟหนึ่งแก้ว","ดีไซน์ร้านสวยติดอันดับร้านหนังสือที่ต้องไปเยือนของจีน","ของที่ระลึก/โปสต์การ์ดธีมเซี่ยงไฮ้ ซื้อฝากเก๋กว่าของตลาด"],
+  octoberTips:["ฟ้าใสตุลาคมทำให้วิวจากชั้น 52 คมมาก ไปช่วงบ่ายแดดไม่ย้อน","เสียบโปรแกรมนี้แทนจุดชมวิวได้เลยถ้างบจำกัด หรือไปเสริมกันก็ได้","ที่นั่งริมกระจกมีจำกัด ไปวันธรรมดาหรือรอสักหน่อยคุ้มอยู่"],
+  hours:"~10:00-21:00",price:"เข้าฟรี (กาแฟ ~40-60 หยวน)",transit:"MRT สาย 2 สถานี Lujiazui — เข้าทางล็อบบี้เซี่ยงไฮ้ทาวเวอร์",timeNeeded:"~1 ชม.",
+  mapQuery:"Duoyun Books Shanghai Tower 52F"
+},
+
+/* ---------- บาร์ & รูฟท็อป ---------- */
+{
+  cat:"bar",th:"FLAIR รูฟท็อป",en:"วิวหอไข่มุกใกล้สุด สูงสุดในเมือง",keys:["flair","แฟลร์","ritz","รูฟท็อป"],
+  name:"FLAIR Rooftop (ชั้น 58 Ritz-Carlton ผู่ตง)",
+  verdict:"รูฟท็อปที่รีวิวปี 2026 ยกให้เบอร์หนึ่งของเซี่ยงไฮ้",
+  summary:"บาร์ดาดฟ้าชั้น 58 ของโรงแรม Ritz-Carlton ฝั่งผู่ตง หนึ่งในรูฟท็อปที่สูงที่สุดในโลก จุดขายที่ไม่มีใครเลียนแบบได้คือระเบียงที่มองเห็นหอไข่มุก Oriental Pearl ใกล้แบบเอื้อมถึง พร้อมวิวโค้งแม่น้ำและบันด์ทั้งเส้น รีวิวหลังรีโนเวตชมทั้งดีไซน์และบริการ เหมาะสุดกับค่ำคืนพิเศษของทริป",
+  highlights:["วิวหอไข่มุกระยะประชิด + บันด์ฝั่งตรงข้าม มุมที่หาจากที่อื่นไม่ได้","ค็อกเทลซิกเนเจอร์และอาหารแพนเอเชียกินเป็นมื้อค่ำได้เลย","บรรยากาศหรูเหมาะฉลองโอกาสพิเศษ"],
+  octoberTips:["อากาศเย็นสบายของตุลาคมคือช่วงที่นั่งเทอร์เรซเปิดสบายสุดของปี จองโซนเอาต์ดอร์ให้ได้","จองล่วงหน้าหลายวันโดยเฉพาะช่วง Golden Week และระบุขอที่นั่งริมขอบวิว","มีเดรสโค้ดสมาร์ตแคชวล เตรียมชุดไปหน่อยนะครับ"],
+  hours:"~17:00-ดึก (เช็กรอบจอง)",price:"ค็อกเทล ~120-180 หยวน (~550-830 บาท)",transit:"MRT สาย 2 สถานี Lujiazui",timeNeeded:"~2 ชม.",
+  mapQuery:"Flair Rooftop Ritz-Carlton Shanghai Pudong"
+},
+{
+  cat:"bar",th:"Speak Low",en:"สปีกอีซี่ระดับตำนานเอเชีย",keys:["speaklow","สปีกโลว์","speakeasy","สปีกอีซี"],
+  name:"Speak Low — บาร์ลับหลังตู้หนังสือ",
+  verdict:"บาร์ลับที่ดังที่สุดของเซี่ยงไฮ้ — หาทางเข้าให้เจอก่อน!",
+  summary:"สปีกอีซี่ของชิงโกะ โกกัน บาร์เทนเดอร์ระดับโลก ซ่อนอยู่หลังชั้นหนังสือในร้านขายอุปกรณ์บาร์ 'OCHO' บนถนนฟู่ซิง ข้างในซ้อนกันหลายชั้นหลายบรรยากาศ ยิ่งขึ้นสูงยิ่งลับ เคยติดอันดับ Asia's 50 Best Bars ต่อเนื่องหลายปีจนเป็นหมุดหมายของนักดื่มทั่วเอเชีย ค็อกเทลผสมกลิ่นอายญี่ปุ่น-เซี่ยงไฮ้อย่างประณีต",
+  highlights:["ประสบการณ์หาประตูลับหลังตู้หนังสือ สนุกตั้งแต่ยังไม่ได้ดื่ม","ค็อกเทลคราฟต์ระดับรางวัล สูตรที่หาที่อื่นไม่ได้","หลายชั้นหลายมู้ด นั่งได้ตั้งแต่ชิลถึงจริงจัง"],
+  octoberTips:["ร้านเล็กและดัง คิววันศุกร์-เสาร์ยาว ไปวันธรรมดาหรือรอบหัวค่ำ ~18:00-19:00 ชัวร์กว่า","อยู่ย่านเฟรนช์คอนเซสชั่น ต่อจากมื้อค่ำแถวซินเทียนตี้/เทียนจื่อฝางได้พอดี","บอกบาร์เทนเดอร์ว่าชอบรสแนวไหน เขาปรุงนอกเมนูให้ได้"],
+  hours:"~18:00-ดึก",price:"ค็อกเทล ~90-130 หยวน (~415-600 บาท)",transit:"ถนน Fuxing Middle — MRT สาย 10/13 Xintiandi เดิน ~10 นาที",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"Speak Low bar Fuxing Road Shanghai"
+},
+{
+  cat:"bar",th:"The Captain รูฟท็อป",en:"ดาดฟ้าวิวบันด์แบบสบายกระเป๋า",keys:["captain","กัปตัน","แคปตัน"],
+  name:"The Captain — รูฟท็อปธีมกะลาสีใกล้บันด์",
+  verdict:"อยากได้วิวผู่ตงแบบไม่ต้องแต่งตัว/ไม่ต้องจ่ายหนัก มานี่",
+  summary:"บาร์ดาดฟ้าธีมเดินเรือบนตึกเก่าใกล้บันด์ ที่ไกด์รูฟท็อปเรียกว่า hidden gem เพราะได้วิวตึกระฟ้าผู่ตงเกือบเท่าบาร์หรูในราคาเบากว่ามากและบรรยากาศสบาย ๆ ไม่มีเดรสโค้ดเข้มงวด เหมาะกับสายชิลที่อยากนั่งเบียร์/ค็อกเทลง่าย ๆ รับลมแม่น้ำหลังเดินบันด์เสร็จ",
+  highlights:["วิวแม่น้ำ+ผู่ตงคุ้มเกินราคาเครื่องดื่ม","บรรยากาศแคชวล ใส่ชุดเดินเที่ยวขึ้นได้เลย","อยู่ในโฮสเทลเก่าแก่มีเรื่องราว ฟีลคลาสสิก"],
+  octoberTips:["เหมาะเป็น 'จุดพักดื่ม' ระหว่างเดินบันด์ตอนเย็นก่อนไฟเปิด","ลมริมน้ำเดือนตุลาคมแรงและเย็น พกเสื้อคลุมขึ้นดาดฟ้าด้วย","ที่นั่งริมขอบมีจำกัด ไปก่อน ~17:30 มีลุ้นได้โต๊ะวิวสวย"],
+  hours:"~17:00-ดึก",price:"เครื่องดื่ม ~50-90 หยวน (~230-415 บาท)",transit:"MRT สาย 2/10 East Nanjing Road เดิน ~8 นาที",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"The Captain rooftop bar Fuzhou Road Shanghai"
+},
+{
+  cat:"bar",th:"Sober Company",en:"บาร์+ร้านอาหารซ้อนชั้นสุดครีเอทีฟ",keys:["sober","โซเบอร์"],
+  name:"Sober Company",
+  verdict:"สายค็อกเทลครีเอทีฟและคอนเซปต์แปลกใหม่จะรักที่นี่",
+  summary:"อีกผลงานของทีมชิงโกะ โกกันที่ติดลิสต์บาร์ยอดนิยมของเมืองตลอด คอนเซปต์คือตึกเดียวซ้อนหลายประสบการณ์: ชั้นล่างเป็นคาเฟ่ ขยับขึ้นเป็นร้านอาหาร ขึ้นอีกเป็นบาร์ค็อกเทล และมีห้องลับสุดที่ต้อง 'ได้รับเชิญ' ตามธรรมเนียมของร้าน เครื่องดื่มขึ้นชื่อเรื่องความเนี้ยบและเล่นกับวัตถุดิบเอเชีย",
+  highlights:["คอนเซปต์ไต่ระดับชั้นต่อชั้น เหมือนเล่นเกมปลดล็อก","ค็อกเทลใช้วัตถุดิบจีน/เอเชียอย่างสร้างสรรค์","กินมื้อค่ำต่อดื่มจบในตึกเดียว"],
+  octoberTips:["เมนูซีซันนัลช่วงใบไม้ร่วงมักหยิบหอมหมื่นลี้และลูกพลับมาเล่น ถามเมนูประจำฤดูได้เลย","จองมื้อค่ำล่วงหน้าถ้าอยากกินก่อนดื่ม ร้านแน่นเกือบทุกคืน","อยู่ไม่ไกล Speak Low สายฮาร์ดคอร์จัดบาร์ฮอปคืนเดียวสองตำนานได้"],
+  hours:"~18:00-ดึก (คาเฟ่เปิดบ่าย)",price:"ค็อกเทล ~100-150 หยวน (~460-690 บาท)",transit:"ย่านเฟรนช์คอนเซสชั่น — MRT สาย 10/13 Xintiandi",timeNeeded:"~2 ชม.",
+  mapQuery:"Sober Company Shanghai"
+},
+{
+  cat:"bar",th:"EPIC",en:"ค็อกเทลบาร์คุณภาพราคาเข้าถึงได้",keys:["epic","เอปิก","อีปิก"],
+  name:"EPIC Bar",
+  verdict:"บาร์คุณภาพที่งบเฉลี่ยเบาสุดในลิสต์ — เริ่มต้นสายค็อกเทลได้ดี",
+  summary:"ค็อกเทลบาร์ย่านเฟรนช์คอนเซสชั่นที่ติดลิสต์บาร์ยอดนิยมของเมืองด้วยงบเฉลี่ยต่อหัวเบากว่าบาร์ดัง ๆ อย่างเห็นได้ชัด บรรยากาศเป็นกันเอง บาร์เทนเดอร์คุยสนุก เหมาะทั้งเริ่มต้นทำความรู้จักซีนค็อกเทลเซี่ยงไฮ้และเป็นจุดแวะระหว่างบาร์ฮอปโดยไม่ทำร้ายกระเป๋า",
+  highlights:["คุณภาพเครื่องดื่มดีเกินราคาเฉลี่ย","บรรยากาศผ่อนคลาย ไม่ต้องพิธีรีตอง","ทำเลดีต่อการเดินต่อหลายบาร์ในย่านเดียว"],
+  octoberTips:["ใช้เป็นจุดเริ่มบาร์ฮอปย่านเฟรนช์ฯ ก่อนไปต่อร้านที่จองไว้","คืนวันธรรมดาคนไม่แน่น ได้คุยกับบาร์เทนเดอร์เต็มที่","ถ้าเพิ่งเคยลองค็อกเทลจีนสมัยใหม่ ให้เริ่มจากตัวที่ใช้ชาหรือเครื่องเทศจีน เป็นเอกลักษณ์ของซีนที่นี่"],
+  hours:"~19:00-ดึก",price:"เฉลี่ย ~80-120 หยวน/คน (~370-550 บาท)",transit:"ย่านเฟรนช์คอนเซสชั่น เช็กพิกัดในแผนที่",timeNeeded:"~1-1.5 ชม.",
+  mapQuery:"EPIC bar Shanghai"
+},
+{
+  cat:"bar",th:"The Roof ที่ EDITION",en:"สวนลอยฟ้าวิวบันด์",keys:["roof","edition","เอดิชั่น","รูฟ"],
+  name:"The Roof — Shanghai EDITION",
+  verdict:"ท็อป 3 รูฟท็อปปี 2026 — สวนลอยฟ้ากลางเมืองวิวสองฝั่ง",
+  summary:"ดาดฟ้าโรงแรม EDITION บนถนนนานกิงที่จัดเป็นสวนแขวนเขียว ๆ มองได้ทั้งวิวตึกเก่าฝั่งบันด์และตึกระฟ้าผู่ตงพร้อมกันเพราะทำเลอยู่กึ่งกลางพอดี ไกด์รูฟท็อปปี 2026 จัดให้อยู่ท็อป 3 ของเมืองคู่กับ FLAIR บรรยากาศชิลกว่าและเขียวกว่าบาร์วิวทั่วไป เหมาะนั่งยาวตั้งแต่โพล้เพล้ถึงค่ำ",
+  highlights:["สวนลอยฟ้าจริง ๆ ต้นไม้เต็มดาดฟ้า ฟีลต่างจากรูฟท็อปกระจกเหล็ก","เห็นทั้งบันด์และผู่ตงจากจุดเดียว","ต่อจากเดินถนนนานกิงได้เลย ทำเลกลางสุด"],
+  octoberTips:["จองรอบพระอาทิตย์ตก ~17:00-17:30 ได้ครบทั้งแสงเย็นและไฟค่ำ","ตุลาคมนั่งเอาต์ดอร์สบายไม่ต้องพึ่งฮีตเตอร์ ช่วงดีสุดของปี","วันเสาร์คนแน่น จองล่วงหน้าและยืนยันโซนเอาต์ดอร์"],
+  hours:"~17:00-ดึก",price:"ค็อกเทล ~100-160 หยวน (~460-740 บาท)",transit:"MRT สาย 2/10 East Nanjing Road",timeNeeded:"~1.5-2 ชม.",
+  mapQuery:"The Roof Shanghai EDITION hotel"
+},
+{
+  cat:"bar",th:"Highline",en:"เทอร์เรซวิวดาวน์ทาวน์",keys:["highline","ไฮไลน์"],
+  name:"Highline — เทอร์เรซบาร์วิวใจกลางเมือง",
+  verdict:"อีกหนึ่งท็อป 3 — สายอยากได้วิวเมืองมุมดาวน์ทาวน์แทนวิวแม่น้ำ",
+  summary:"บาร์และร้านอาหารพร้อมเทอร์เรซใหญ่ย่านจัตุรัสประชาชน ที่ติดท็อป 3 รูฟท็อปของเมืองในไกด์ปี 2026 จุดต่างคือได้วิวป่าตึกใจกลางเมืองแบบโอบรอบตัวแทนวิวริมแม่น้ำ อาหารสไตล์โมเดิร์นอเมริกันได้มาตรฐานพอจัดเป็นดินเนอร์จริงจังได้ บรรยากาศคึกคักมีดีเจช่วงดึกวันศุกร์-เสาร์",
+  highlights:["วิวดาวน์ทาวน์มุมสูงที่ต่างจากบาร์ริมน้ำทุกเจ้า","อาหารดีระดับมากินข้าวได้ ไม่ใช่แค่บาร์","เทอร์เรซกว้าง ที่นั่งเอาต์ดอร์เยอะกว่ารูฟท็อปทั่วไป"],
+  octoberTips:["เหมาะเป็นดินเนอร์+ดริงก์คืนที่เที่ยวโซนจัตุรัสประชาชน/นานกิง","อากาศตุลาคมทำให้เทอร์เรซเปิดเต็มพื้นที่ จองโซนนอกได้เลย","ศุกร์-เสาร์หลัง 4 ทุ่มโหมดปาร์ตี้ ถ้าอยากนั่งชิลไปหัวค่ำ"],
+  hours:"~17:00-ดึก",price:"~120-200 หยวน/คน (~550-920 บาท)",transit:"MRT สาย 1/2/8 People's Square",timeNeeded:"~2 ชม.",
+  mapQuery:"Highline bar Shanghai"
+},
+{
+  cat:"bar",th:"COA เม็ซคาลบาร์",en:"สาขาบาร์อันดับหนึ่งเอเชีย",keys:["coa","โคอา","mezcal","อากาเว่"],
+  name:"COA Shanghai — บาร์อากาเว่สายพันธุ์แชมป์",
+  verdict:"สายค็อกเทลตัวจริงต้องรู้จัก — สาขาของบาร์ที่เคยครองแชมป์เอเชีย",
+  summary:"สาขาเซี่ยงไฮ้ของ COA บาร์อากาเว่จากฮ่องกงที่เคยครองอันดับหนึ่ง Asia's 50 Best Bars หลายปีซ้อน เชี่ยวชาญเตกิลาและเม็ซคาลระดับลึกสุดในเอเชีย ค็อกเทลซิกเนเจอร์เล่นกับสมุนไพรและพริกเม็กซิกันอย่างกล้า ๆ ติดลิสต์บาร์ยอดนิยมของเซี่ยงไฮ้ตั้งแต่เปิด เหมาะคนอยากลองอะไรที่ไม่ใช่วิสกี้/จินตามสูตร",
+  highlights:["คลังเม็ซคาล/เตกิลาลึกระดับหาที่เทียบยากในจีน","ซิกเนเจอร์ค็อกเทลรสจัดจ้านเป็นเอกลักษณ์","ดีเอ็นเอจากบาร์แชมป์เอเชีย มาตรฐานสูงทุกแก้ว"],
+  octoberTips:["ร้านฮอตในหมู่คอบาร์ คืนศุกร์-เสาร์ควรไปหัวค่ำหรือจอง","บอกระดับความเผ็ด/สโมกกี้ที่รับได้ บาร์เทนเดอร์จะเลือกให้แม่น","จัดเป็นจุดปิดท้ายบาร์ฮอปได้ดี เพราะรสเข้มควรกินท้ายสุด"],
+  hours:"~19:00-ดึก",price:"ค็อกเทล ~100-140 หยวน (~460-645 บาท)",transit:"ย่านใจกลางเมือง เช็กพิกัดในแผนที่",timeNeeded:"~1.5 ชม.",
+  mapQuery:"COA bar Shanghai"
+}
+];
+
+const $=id=>document.getElementById(id);
+
+/* ===== metadata หมวด: ป้าย, สีไล่เฉด, อิโมจิเป็นภาพการ์ด ===== */
+const CATS=[
+  {id:'overview',   ico:'🍂', label:'ภาพรวมตุลาคม', badge:'ภาพรวม',       g:['#C9822B','#8a5a1c']},
+  {id:'attraction', ico:'🌆', label:'ที่เที่ยว',     badge:'แลนด์มาร์ก',   g:['#2b6cb0','#1e3a5f']},
+  {id:'cafe',       ico:'☕', label:'คาเฟ่',        badge:'คาเฟ่ฮิปๆ',    g:['#9061c2','#5b3a80']},
+  {id:'food',       ico:'🥟', label:'ของกินเด็ด',   badge:'ของกินเด็ด',   g:['#c0392b','#7d2016']},
+  {id:'shop',       ico:'🛍️', label:'ช้อปปิง',      badge:'ช้อปปิง',      g:['#0e7c86','#08474d']},
+  {id:'bar',        ico:'🍸', label:'บาร์ & รูฟท็อป',badge:'บาร์',        g:['#c0397e','#7d1f4f']}
+];
+const META=Object.fromEntries(CATS.map(c=>[c.id,c]));
+function catOf(p){return p.wide?'overview':(p.cat||'attraction')}
+
+/* filter chips: ทั้งหมด + ทุกหมวด */
+const FILTERS=[{id:'all',label:'ทั้งหมด'},...CATS.map(c=>({id:c.id,label:c.label}))];
+let activeTab='all';
+
+function renderTabs(){
+  const t=$('tabs');t.innerHTML='';
+  FILTERS.forEach(f=>{
+    const b=document.createElement('button');
+    b.className='filter-btn'+(activeTab===f.id?' active':'');
+    b.textContent=f.label;
+    b.addEventListener('click',()=>{
+      activeTab=f.id; renderTabs(); renderGrid();
+    });
+    t.appendChild(b);
+  });
+}
+
+/* ===== สร้างการ์ดรูปภาพจากข้อมูลจริง ===== */
+/* สร้าง URL รูปจากชื่อสถานที่ (ดึงรูปเด่นจากเน็ตแบบไม่ต้องใช้ key) */
+function photoURL(p){
+  const q=(p.mapQuery||((p.en||p.th)+' Shanghai'))+' travel photo';
+  return 'https://tse2.mm.bing.net/th?q='+encodeURIComponent(q)+'&w=640&h=800&c=7&rs=1&p=0';
+}
+
+function makeCard(p,i){
+  const c=META[catOf(p)];
+  const card=document.createElement('div');
+  card.className='place-card';
+  card.style.background='linear-gradient(135deg,'+c.g[0]+','+c.g[1]+')';
+  card.innerHTML=
+    '<span class="card-emoji">'+c.ico+'</span>'+
+    '<span class="card-badge">'+c.badge+'</span>'+
+    '<div class="card-info">'+
+      '<h3 class="card-title"></h3>'+
+      '<div class="card-sub"></div>'+
+    '</div>'+
+    '<div class="card-go-arrow">→</div>';
+  // ใส่รูปเต็มการ์ด: โหลดสำเร็จ = โชว์รูป, พลาด = คงพื้นไล่เฉดเดิมไว้
+  const img=document.createElement('img');
+  img.className='card-photo';
+  img.loading='lazy';
+  img.alt='';
+  img.addEventListener('load',()=>{if(img.naturalWidth>50)card.classList.add('has-photo');else img.remove()});
+  img.addEventListener('error',()=>img.remove());
+  img.src=photoURL(p);
+  card.prepend(img);
+  card.querySelector('.card-title').textContent=p.name||p.th;
+  card.querySelector('.card-sub').textContent=p.en||'เซี่ยงไฮ้';
+  card.addEventListener('click',()=>showPlace(i));
+  return card;
+}
+
+function renderGrid(){
+  const grid=$('cats');grid.innerHTML='';
+  const items=PLACES.map((p,i)=>({p,i}))
+    .filter(x=>activeTab==='all'||catOf(x.p)===activeTab);
+  items.sort((a,b)=>(a.p.wide?-1:0)-(b.p.wide?-1:0));
+  items.forEach(({p,i})=>grid.appendChild(makeCard(p,i)));
+  $('resultCount').textContent=items.length+' แห่ง';
+  grid.scrollLeft=0;
+  buildDots(items.length);
+  $('swipeHint').style.display=items.length>1?'':'none';
+}
+
+/* จุดบอกตำแหน่ง + ซิงก์กับการปัด */
+let dotSyncBound=false;
+function buildDots(n){
+  const dots=$('dots');dots.innerHTML='';
+  if(n<=1){return}
+  // ถ้าการ์ดเยอะเกินไป จุดจะรกจอ — โชว์ตัวนับตำแหน่งแทน
+  if(n>12){
+    dots.style.display='none';
+    $('swipeHint').textContent='← ปัดเพื่อดูทั้ง '+n+' แห่ง →';
+    if(!dotSyncBound){bindScrollSync()}
+    return;
+  }
+  dots.style.display='';
+  $('swipeHint').textContent='← ปัดเพื่อดูเพิ่มเติม →';
+  for(let k=0;k<n;k++){
+    const d=document.createElement('span');
+    d.className='d'+(k===0?' active':'');
+    d.addEventListener('click',()=>scrollToCard(k));
+    dots.appendChild(d);
+  }
+  if(!dotSyncBound){bindScrollSync()}
+}
+function bindScrollSync(){
+  const grid=$('cats');
+  let raf;
+  grid.addEventListener('scroll',()=>{
+    if(raf)cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(updateActiveDot);
+  });
+  dotSyncBound=true;
+}
+function currentIndex(){
+  const grid=$('cats');
+  const cards=grid.querySelectorAll('.place-card');
+  if(!cards.length)return 0;
+  const center=grid.scrollLeft+grid.clientWidth/2;
+  let best=0,bestDist=Infinity;
+  cards.forEach((c,k)=>{
+    const cardCenter=c.offsetLeft+c.offsetWidth/2;
+    const dist=Math.abs(cardCenter-center);
+    if(dist<bestDist){bestDist=dist;best=k}
+  });
+  return best;
+}
+function updateActiveDot(){
+  const dots=$('dots');
+  if(dots.style.display==='none')return;
+  const idx=currentIndex();
+  dots.querySelectorAll('.d').forEach((d,k)=>d.classList.toggle('active',k===idx));
+}
+function scrollToCard(k){
+  const grid=$('cats');
+  const card=grid.querySelectorAll('.place-card')[k];
+  if(card)grid.scrollTo({left:card.offsetLeft-(grid.clientWidth-card.offsetWidth)/2,behavior:'smooth'});
+}
+
+function showPlace(i){
+  const p=PLACES[i];
+  $('rName').textContent=p.name;
+  $('rVerdict').textContent=p.verdict;
+  $('rSummary').textContent=p.summary;
+  fillList($('rHighlights'),p.highlights);
+  fillList($('rTips'),p.octoberTips);
+  $('factsCard').style.display=p.noFacts?'none':'';
+  $('fHours').textContent=p.hours;$('fPrice').textContent=p.price;
+  $('fTransit').textContent=p.transit;$('fTime').textContent=p.timeNeeded;
+  if(p.mapQuery){
+    $('mapCard').style.display='';
+    $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(p.mapQuery)+'&z=15&output=embed';
+  }else{$('mapCard').style.display='none'}
+  $('home').style.display='none';
+  $('result').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goHome(){
+  $('result').classList.remove('on');
+  $('home').style.display='';
+  $('error').classList.remove('on');
+}
+function fillList(el,items){
+  el.innerHTML='';
+  (items||[]).forEach(t=>{const li=document.createElement('li');li.textContent=t;el.appendChild(li)});
+}
+
+/* ===== ค้นหา ===== */
+function normalize(s){return s.toLowerCase().replace(/\s+/g,'')}
+function findLocal(q){
+  const n=normalize(q);
+  let idx=PLACES.findIndex(p=>!p.wide&&[p.th,p.en,...(p.keys||[])].map(normalize).some(h=>h.includes(n)));
+  if(idx>=0)return idx;
+  return PLACES.findIndex(p=>!p.wide&&[p.th,p.en,...(p.keys||[])].map(normalize).some(h=>h.length>=3&&n.includes(h)));
+}
+function doSearch(){
+  const q=($('q').value||$('searchInput').value||'').trim();
+  $('noMatch').classList.remove('on');
+  $('error').classList.remove('on');
+  if(!q){goHome();return}
+  const idx=findLocal(q);
+  if(idx>=0){showPlace(idx);return}
+  const key=$('apiKey').value.trim();
+  if(key){liveSearch(q,key);return}
+  goHome();
+  const nm=$('noMatch');nm.innerHTML='';
+  const t=document.createElement('div');
+  t.textContent='ไม่พบ "'+q+'" ในรายการที่เตรียมไว้ ลองดูทางเลือก:';
+  const l1=document.createElement('div');
+  const a=document.createElement('a');
+  a.href='https://www.google.com/maps/search/'+encodeURIComponent(q+' Shanghai');
+  a.target='_blank';a.rel='noopener';a.textContent='เปิดค้น "'+q+'" ใน Google Maps →';
+  l1.appendChild(a);
+  const l2=document.createElement('div');
+  l2.textContent='หรือใส่ API key ในโหมดค้นสดด้านล่าง เพื่อให้ AI ค้นข้อมูลสดให้';
+  nm.append(t,l1,l2);nm.classList.add('on');
+}
+
+/* ===== โหมดค้นสด (ต้องมี API key) ===== */
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function callAPI(prompt,useSearch,key){
+  const body={model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]};
+  if(useSearch)body.tools=[{type:'web_search_20250305',name:'web_search'}];
+  let lastErr;
+  for(let i=0;i<3;i++){
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify(body)
+      });
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      const data=await res.json();
+      return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text||'').join('');
+    }catch(e){
+      lastErr=e;
+      const retryable=(e.message||'').includes('Failed to fetch')||(e.message||'').includes('429')||(e.message||'').includes('HTTP 5');
+      if(retryable&&i<2){await sleep(1500*(i+1));continue}
+      throw e;
+    }
+  }
+  throw lastErr;
+}
+function extractJSON(text){
+  let t=text.replace(/```json|```/g,'').trim();
+  const start=t.indexOf('{');if(start===-1)throw new Error('no-json');
+  t=t.slice(start);const end=t.lastIndexOf('}');
+  if(end!==-1){try{return JSON.parse(t.slice(0,end+1))}catch(e){}}
+  let s=t,inStr=false;
+  for(let i=0;i<s.length;i++){if(s[i]==='"'&&s[i-1]!=='\\')inStr=!inStr}
+  if(inStr)s+='"';s=s.replace(/[,:]\s*$/,'');
+  let closers='';inStr=false;const stack=[];
+  for(let i=0;i<s.length;i++){const c=s[i];if(c==='"'&&s[i-1]!=='\\')inStr=!inStr;if(inStr)continue;if(c==='{'||c==='[')stack.push(c);if(c==='}'||c===']')stack.pop();}
+  while(stack.length){closers+=(stack.pop()==='{'?'}':']')}
+  return JSON.parse(s.replace(/,\s*$/,'')+closers);
+}
+async function liveSearch(name,key){
+  $('home').style.display='none';$('result').classList.remove('on');$('loading').classList.add('on');
+  try{
+    $('loadStep').textContent='กำลังค้นข้อมูลสดจากอินเทอร์เน็ต…';
+    const notes=await callAPI('ค้นเว็บหาข้อมูลล่าสุดเกี่ยวกับสถานที่ท่องเที่ยวนี้ในเซี่ยงไฮ้: "'+name+'"\n สรุปสั้น ๆ เป็นภาษาไทย: ชื่อเต็ม (ไทย+อังกฤษ), รีวิว, ไฮไลต์ 3 อย่าง, ทิปเดือนตุลาคม (Golden Week 1-7 ต.ค./อากาศ), เวลาเปิด, ค่าเข้า, สถานีรถไฟฟ้า, เวลาที่ควรเผื่อ ไม่เกิน 250 คำ',true,key);
+    if(!notes.trim())throw new Error('empty-research');
+    $('loadStep').textContent='กำลังจัดข้อมูลให้อ่านง่าย…';
+    const text=await callAPI('แปลงบันทึกนี้เป็น JSON:\n---\n'+notes+'\n---\nตอบเป็น JSON object เพียงอย่างเดียว ทุกค่าภาษาไทย กระชับ: {"name":"","verdict":"","summary":"","highlights":["3 ข้อ"],"octoberTips":["3 ข้อ"],"hours":"","price":"","transit":"","timeNeeded":"","mapQuery":"ชื่ออังกฤษสำหรับ Google Maps"}',false,key);
+    const info=extractJSON(text);
+    $('rName').textContent=info.name||name;$('rVerdict').textContent=info.verdict||'';$('rSummary').textContent=info.summary||'';
+    fillList($('rHighlights'),info.highlights);fillList($('rTips'),info.octoberTips);
+    $('factsCard').style.display='';
+    $('fHours').textContent=info.hours||'—';$('fPrice').textContent=info.price||'—';$('fTransit').textContent=info.transit||'—';$('fTime').textContent=info.timeNeeded||'—';
+    $('mapCard').style.display='';
+    $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(info.mapQuery||name+' Shanghai')+'&z=15&output=embed';
+    $('result').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
+  }catch(e){
+    goHome();const msg=(e&&e.message)||'ไม่ทราบ';let advice='';
+    if(msg.includes('401'))advice=' — API key ไม่ถูกต้อง';
+    else if(msg.includes('Failed to fetch'))advice=' — เชื่อมต่อไม่ได้ เช็กเน็ต';
+    const er=$('error');er.textContent='ค้นสดไม่สำเร็จ ('+msg+')'+advice;er.classList.add('on');
+  }finally{$('loading').classList.remove('on')}
+}
+
+/* ===== events ===== */
+function bindSearch(el){if(el){el.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})}}
+bindSearch($('q'));bindSearch($('searchInput'));
+document.querySelectorAll('.search-btn,#go').forEach(b=>b.addEventListener('click',doSearch));
+$('back').addEventListener('click',goHome);
+renderTabs();renderGrid();
+
+</script>
+</body>
+</html>
