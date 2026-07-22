@@ -91,6 +91,26 @@
   .search-btn:active{background:rgba(0,0,0,.75)}
   .search-btn:focus-visible,.filter-btn:focus-visible,.place-card:focus-visible{outline:2px solid var(--osmanthus);outline-offset:2px}
 
+  /* ---------- แผงเรียลไทม์ ---------- */
+  .rt-panel{
+    margin:14px 18px 0;background:var(--paper);border:1px solid var(--line);
+    border-radius:16px;padding:14px 16px;
+  }
+  .rt-row{display:flex;gap:10px;justify-content:space-between}
+  .rt-item{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+  .rt-ico{font-size:22px;flex:0 0 auto}
+  .rt-v{font-size:15.5px;font-weight:700;color:var(--pine);white-space:nowrap}
+  .rt-k{font-size:11.5px;color:var(--pine-soft);margin-top:1px}
+  .rt-forecast{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+  .rt-forecast:empty{display:none}
+  .rt-day{
+    flex:1;text-align:center;background:var(--mist);border-radius:10px;padding:8px 4px;
+  }
+  .rt-day .d-name{font-size:11px;color:var(--pine-soft)}
+  .rt-day .d-ico{font-size:19px;margin:3px 0}
+  .rt-day .d-temp{font-size:12px;font-weight:600;color:var(--pine)}
+  .rt-day .d-rain{font-size:10.5px;color:#4a7fb5;margin-top:1px}
+
   /* ---------- MAIN ---------- */
   .main-container{padding:22px 18px 0}
   .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
@@ -382,6 +402,16 @@
         <button class="search-btn">ค้นหา</button>
       </div>
     </div>
+  </div>
+
+  <!-- แผงเรียลไทม์ -->
+  <div class="rt-panel" id="rtPanel" style="display:none">
+    <div class="rt-row">
+      <div class="rt-item"><span class="rt-ico">🕐</span><div><div class="rt-v" id="rtClock">--:--</div><div class="rt-k">เวลาเซี่ยงไฮ้</div></div></div>
+      <div class="rt-item" id="rtWeatherBox" style="display:none"><span class="rt-ico" id="rtWIcon">🌤️</span><div><div class="rt-v" id="rtTemp">--°</div><div class="rt-k" id="rtWDesc">อากาศตอนนี้</div></div></div>
+      <div class="rt-item" id="rtRateBox" style="display:none"><span class="rt-ico">💱</span><div><div class="rt-v" id="rtRate">1¥ ≈ -.-฿</div><div class="rt-k">เรตสดวันนี้</div></div></div>
+    </div>
+    <div class="rt-forecast" id="rtForecast"></div>
   </div>
 
   <!-- HOME -->
@@ -2253,6 +2283,77 @@ $('pcFile').addEventListener('change',handleUpload);
 $('pcSave').addEventListener('click',savePostcard);
 $('pcClose').addEventListener('click',()=>$('pcModal').classList.remove('on'));
 $('pcModal').addEventListener('click',e=>{if(e.target===$('pcModal'))$('pcModal').classList.remove('on')});
+
+/* ================= แผงเรียลไทม์ (นาฬิกา/อากาศ/เรตเงิน) ================= */
+const WMO_TH={0:['☀️','แจ่มใส'],1:['🌤️','แดดเป็นส่วนใหญ่'],2:['⛅','เมฆบางส่วน'],3:['☁️','เมฆมาก'],45:['🌫️','หมอก'],48:['🌫️','หมอกจัด'],51:['🌦️','ฝนปรอยเบา'],53:['🌦️','ฝนปรอย'],55:['🌧️','ฝนปรอยหนัก'],61:['🌧️','ฝนเบา'],63:['🌧️','ฝนปานกลาง'],65:['⛈️','ฝนหนัก'],71:['🌨️','หิมะเบา'],80:['🌦️','ฝนซู่เบา'],81:['🌧️','ฝนซู่'],82:['⛈️','ฝนซู่หนัก'],95:['⛈️','พายุฝน'],96:['⛈️','พายุลูกเห็บ'],99:['⛈️','พายุรุนแรง']};
+function wmoTH(code){return WMO_TH[code]||['🌤️','อากาศทั่วไป']}
+
+function startClock(){
+  const upd=()=>{
+    // เวลาเซี่ยงไฮ้ = UTC+8 คำนวณเองไม่พึ่ง locale
+    const now=new Date();
+    const sh=new Date(now.getTime()+(now.getTimezoneOffset()+8*60)*60000);
+    const hh=String(sh.getHours()).padStart(2,'0');
+    const mm=String(sh.getMinutes()).padStart(2,'0');
+    $('rtClock').textContent=hh+':'+mm;
+  };
+  upd();setInterval(upd,15000);
+  $('rtPanel').style.display='';
+}
+
+async function loadWeather(){
+  try{
+    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=31.23&longitude=121.47&current=temperature_2m,apparent_temperature,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FShanghai&forecast_days=3');
+    if(!res.ok)return;
+    const d=await res.json();
+    if(d&&d.current&&typeof d.current.temperature_2m==='number'){
+      const [ico,desc]=wmoTH(d.current.weather_code);
+      $('rtWIcon').textContent=ico;
+      $('rtTemp').textContent=Math.round(d.current.temperature_2m)+'°C';
+      $('rtWDesc').textContent=desc+(typeof d.current.apparent_temperature==='number'?' · รู้สึก '+Math.round(d.current.apparent_temperature)+'°':'');
+      $('rtWeatherBox').style.display='';
+    }
+    if(d&&d.daily&&Array.isArray(d.daily.time)){
+      const days=['อา','จ','อ','พ','พฤ','ศ','ส'];
+      const fc=$('rtForecast');fc.innerHTML='';
+      d.daily.time.forEach((t,i)=>{
+        const dt=new Date(t+'T00:00:00');
+        const [ico]=wmoTH(d.daily.weather_code[i]);
+        const el=document.createElement('div');
+        el.className='rt-day';
+        const label=i===0?'วันนี้':(i===1?'พรุ่งนี้':days[dt.getDay()]+'.');
+        el.innerHTML='<div class="d-name"></div><div class="d-ico"></div><div class="d-temp"></div><div class="d-rain"></div>';
+        el.querySelector('.d-name').textContent=label;
+        el.querySelector('.d-ico').textContent=ico;
+        el.querySelector('.d-temp').textContent=Math.round(d.daily.temperature_2m_min[i])+'-'+Math.round(d.daily.temperature_2m_max[i])+'°';
+        const rain=d.daily.precipitation_probability_max&&d.daily.precipitation_probability_max[i];
+        el.querySelector('.d-rain').textContent=(rain!=null?'☔'+rain+'%':'');
+        fc.appendChild(el);
+      });
+    }
+  }catch(e){/* ออฟไลน์/โดนบล็อก: เงียบไว้ */}
+}
+
+let liveRate=null;
+async function loadRate(){
+  try{
+    const res=await fetch('https://open.er-api.com/v6/latest/CNY');
+    if(!res.ok)return;
+    const d=await res.json();
+    if(d&&d.result==='success'&&d.rates&&typeof d.rates.THB==='number'){
+      liveRate=d.rates.THB;
+      $('rtRate').textContent='1¥ ≈ '+liveRate.toFixed(2)+'฿';
+      $('rtRateBox').style.display='';
+      // อัปเดตหมายเหตุเรตท้ายหน้า
+      const src=document.querySelector('.sources');
+      if(src)src.innerHTML=src.innerHTML.replace(/1 หยวน ≈ [0-9.]+ บาท/,'1 หยวน ≈ '+liveRate.toFixed(2)+' บาท (เรตสดวันนี้)');
+    }
+  }catch(e){/* เงียบไว้ */}
+}
+
+startClock();
+loadWeather();
+loadRate();
 
 /* ===== events ===== */
 function bindSearch(el){if(el){el.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})}}
