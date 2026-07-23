@@ -1944,9 +1944,47 @@ function renderTabs(){
 
 /* ===== สร้างการ์ดรูปภาพจากข้อมูลจริง ===== */
 /* สร้าง URL รูปจากชื่อสถานที่ (ดึงรูปเด่นจากเน็ตแบบไม่ต้องใช้ key) */
-function photoURL(p){
+/* รูปที่เลือกเอง (override) — ถ้าโหลดไม่ได้จะถอยไปใช้รูปอัตโนมัติ */
+const PHOTO_OVERRIDE={
+  "เดอะบันด์":"https://upload.wikimedia.org/wikipedia/commons/5/5a/The_Bund_2.jpg",
+  "สวนอวี้หยวน":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Shanghai_-_Yu_Garden_-_0035.jpg/1280px-Shanghai_-_Yu_Garden_-_0035.jpg",
+  "เทียนจื่อฝาง":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJRxqmdmVALvgEQQilH0jqAL_4HzMN94tAVgpsq5gLSw&s=10",
+  "ถนนอู่คัง":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5RV7x-0YVhAlqzINpnHW75dOIu0x8CaH5EmYCnbVryf0Fnzfy7l30a6M&s=10",
+  "ย่านอู่คังโรด":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5RV7x-0YVhAlqzINpnHW75dOIu0x8CaH5EmYCnbVryf0Fnzfy7l30a6M&s=10",
+  "ตึกเซี่ยงไฮ้ทาวเวอร์":"https://www.webuildvalue.com/wp-content/uploads/2023/01/Shanghai-tower.jpg",
+  "เซี่ยงไฮ้ทาวเวอร์":"https://www.webuildvalue.com/wp-content/uploads/2023/01/Shanghai-tower.jpg",
+  "เซี่ยงไฮ้ดิสนีย์แลนด์":"https://upload.wikimedia.org/wikipedia/commons/b/b9/%E4%B8%8A%E6%B5%B7%E8%BF%AA%E5%A3%AB%E5%B0%BC%E4%B9%90%E5%9B%AD%E5%A5%87%E5%B9%BB%E7%AB%A5%E8%AF%9D%E5%9F%8E%E5%A0%A1%E6%AD%A3%E9%9D%A2.jpg",
+  "จูเจียเจี่ยว":"https://images.chinahighlights.com/allpicture/2018/03/f19a04a29fef454cae993580_cut_600x550_241_1742221327.jpg",
+  "ถนนนานกิง":"https://ak-d.tripcdn.com/images/0101j12000hyamy2b741E_W_1440_810_Q80.webp?proc=source%2Ftrip&proc=source%2Ftrip",
+  "พิพิธภัณฑ์เซี่ยงไฮ้":"https://upload.wikimedia.org/wikipedia/commons/a/a8/Shanghai_Museum_East.jpg",
+  "วัดจิ้งอัน":"https://images.trvl-media.com/place/502782/4da8fe06-c9f6-43e0-94d5-ee7680807643.jpg",
+  "ล่องเรือแม่น้ำหวงผู่":"https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/15/39/b6/30.jpg",
+  "ซินเทียนตี้":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS76qHrTew_RzC2SjxENa2egMkLXKff5hx3dvPBFzKqYUDCsnLJnXZGeFeB&s=10"
+};
+
+function autoPhotoURL(p){
   const q=(p.mapQuery||((p.en||p.th)+' Shanghai'))+' travel photo';
   return 'https://tse2.mm.bing.net/th?q='+encodeURIComponent(q)+'&w=640&h=800&c=7&rs=1&p=0';
+}
+function photoURL(p){
+  return PHOTO_OVERRIDE[p.th]||autoPhotoURL(p);
+}
+/* โหลดรูปโดยไล่ลอง: รูปที่เลือกเอง -> รูปอัตโนมัติ -> ยอมแพ้ (ใช้พื้นไล่เฉด) */
+function loadPlacePhoto(p,onOk,onFail){
+  const urls=[];
+  if(PHOTO_OVERRIDE[p.th])urls.push(PHOTO_OVERRIDE[p.th]);
+  urls.push(autoPhotoURL(p));
+  let k=0;
+  const img=new Image();
+  img.referrerPolicy='no-referrer'; // ช่วยให้บางเว็บที่กันลิงก์ข้ามโดเมนโหลดผ่าน
+  const tryNext=()=>{
+    k++;
+    if(k<urls.length)img.src=urls[k];
+    else if(onFail)onFail();
+  };
+  img.onload=()=>{ if(img.naturalWidth>50)onOk(img.src); else tryNext(); };
+  img.onerror=tryNext;
+  img.src=urls[0];
 }
 
 /* สร้างป้ายคุณสมบัติอัตโนมัติจากข้อมูลที่มีอยู่ (เชิงแนะนำ ให้ผู้ใช้เห็นแล้วเลือกเอง) */
@@ -2004,10 +2042,12 @@ function makeCard(p,i){
   img.className='card-photo';
   img.loading='lazy';
   img.alt='';
-  img.addEventListener('load',()=>{if(img.naturalWidth>50)card.classList.add('has-photo');else img.remove()});
-  img.addEventListener('error',()=>img.remove());
-  img.src=photoURL(p);
+  img.referrerPolicy='no-referrer';
   card.prepend(img);
+  loadPlacePhoto(p,
+    src=>{img.src=src;card.classList.add('has-photo')},
+    ()=>img.remove()
+  );
   card.querySelector('.card-title').textContent=p.name||p.th;
   card.querySelector('.card-sub span').textContent=p.en||'เซี่ยงไฮ้';
   card.addEventListener('click',()=>showPlace(i));
@@ -2170,9 +2210,7 @@ function renderNearby(idx){
     b.innerHTML='<div class="nc-photo"></div><div class="nc-txt"><div class="nc-name"></div><div class="nc-why"></div></div>';
     const ph=b.querySelector('.nc-photo');
     ph.textContent=c.ico;
-    const img=new Image();
-    img.onload=()=>{if(img.naturalWidth>50){ph.style.backgroundImage="url('"+img.src+"')";ph.textContent=''}};
-    img.src=photoURL(q);
+    loadPlacePhoto(q,src=>{ph.style.backgroundImage="url('"+src+"')";ph.textContent=''});
     b.querySelector('.nc-name').textContent=q.name||q.th;
     b.querySelector('.nc-why').textContent=why;
     b.addEventListener('click',()=>showPlace(j));
@@ -2239,9 +2277,7 @@ function showPlace(i){
   // hero photo
   const hp=$('dvHeroPhoto');
   hp.style.backgroundImage='';
-  const himg=new Image();
-  himg.onload=()=>{if(himg.naturalWidth>50)hp.style.backgroundImage="url('"+himg.src+"')"};
-  himg.src=photoURL(p);
+  loadPlacePhoto(p,src=>{hp.style.backgroundImage="url('"+src+"')"});
   $('dvPhotoCount').textContent='📷 '+c.label;
 
   // --- QUICK INFO (เห็นครึ่งบน) ---
@@ -2902,9 +2938,7 @@ function initHeroCarousel(){
     const el=document.createElement('div');
     el.className='hc-slide'+(k===0?' on':'');
     slides.appendChild(el);
-    const img=new Image();
-    img.onload=()=>{if(img.naturalWidth>50)el.style.backgroundImage="url('"+img.src+"')"};
-    img.src=photoURL(PLACES[pi]);
+    loadPlacePhoto(PLACES[pi],src=>{el.style.backgroundImage="url('"+src+"')"});
 
     const d=document.createElement('button');
     d.className='hc-dot'+(k===0?' on':'');
@@ -3014,9 +3048,7 @@ function renderFeatured(){
     card.querySelector('.fc-desc').textContent=p.verdict||p.summary||'';
     // lazy load รูป
     const ph=card.querySelector('.fc-photo');
-    const img=new Image();
-    img.onload=()=>{if(img.naturalWidth>50)ph.style.backgroundImage="url('"+img.src+"')"};
-    img.src=photoURL(p);
+    loadPlacePhoto(p,src=>{ph.style.backgroundImage="url('"+src+"')"});
     card.addEventListener('click',()=>showPlace(i));
     row.appendChild(card);
   });
