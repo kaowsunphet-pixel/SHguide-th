@@ -10,6 +10,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://tse2.mm.bing.net" crossorigin>
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Anuphan:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -253,6 +257,30 @@
 
   /* ---------- SEARCH (slim) ---------- */
   .search-slim{margin:6px 0 30px}
+  .search-container{transition:box-shadow .25s,border-color .25s}
+  .search-container:focus-within{
+    border-color:var(--osmanthus);
+    box-shadow:0 0 0 4px rgba(29,99,237,.14),0 6px 20px rgba(15,44,85,.1);
+  }
+
+  /* ---------- MICRO-INTERACTIONS ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .place-card,.card-photo,.featured-card,.fc-photo,.mb,.cat-chip{transition:none!important}
+  }
+  .to-top{
+    position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;
+    width:44px;height:44px;border-radius:999px;border:1px solid var(--line);
+    background:var(--paper);color:var(--pine);font-size:19px;cursor:pointer;
+    box-shadow:0 6px 20px rgba(15,44,85,.16);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .25s,transform .25s;
+  }
+  .to-top.on{opacity:1;pointer-events:auto;transform:none}
+  .to-top:hover{transform:translateY(-2px)}
 
   /* ---------- TIPS ---------- */
   .tips-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:26px}
@@ -382,15 +410,38 @@
     position:relative;cursor:pointer;border-radius:22px;overflow:hidden;
     aspect-ratio:4/5;
     background:linear-gradient(135deg,#3a4a63,#1E3A34);
-    transition:transform .3s cubic-bezier(.22,1,.36,1);
+    transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;
     will-change:transform;
   }
   @media (min-width:620px){.place-card{flex-basis:46%}}
-  .place-card:active{transform:scale(.98)}
+  .place-card:hover{transform:translateY(-8px);box-shadow:0 18px 42px rgba(15,44,85,.28)}
+  .place-card:hover .card-photo{transform:scale(1.05)}
+  .place-card:active{transform:translateY(-2px) scale(.99)}
+
+  /* แถบข้อมูลเดินทางบนการ์ด (Metro-first) */
+  .card-metro{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .mb{
+    display:inline-flex;align-items:center;gap:4px;
+    height:24px;padding:0 9px;border-radius:999px;
+    font-size:12px;font-weight:700;line-height:1;white-space:nowrap;
+    transition:transform .18s;
+  }
+  .mb:hover{transform:scale(1.12)}
+  .mb-line{min-width:24px;justify-content:center;box-shadow:0 2px 7px rgba(0,0,0,.25)}
+  .mb-exit{background:rgba(255,255,255,.24);color:#fff;border:1px solid rgba(255,255,255,.3)}
+  .mb-walk{background:rgba(52,199,89,.9);color:#fff}
+  .mb-time{background:rgba(29,99,237,.92);color:#fff}
+  .card-go{
+    display:inline-flex;align-items:center;gap:6px;margin-top:11px;
+    color:#fff;font-size:13px;font-weight:700;opacity:.92;
+  }
+  .card-go span{transition:transform .2s}
+  .place-card:hover .card-go span{transform:translateX(4px)}
   /* รูปภาพเต็มการ์ด (ถ้าโหลดไม่ได้จะถูกซ่อน เหลือพื้นไล่เฉดเดิม) */
   .card-photo{
     position:absolute;inset:0;width:100%;height:100%;
     object-fit:cover;z-index:0;
+    transition:transform .45s cubic-bezier(.22,1,.36,1);
   }
   /* เงาไล่จากด้านล่างให้ตัวอักษรอ่านออก */
   .place-card::after{
@@ -545,6 +596,18 @@
   /* ---------- SECTION 5: METRO GUIDE (พระเอก) ---------- */
   .dv-metro-ico{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--osmanthus);color:#fff;border-radius:7px;font-size:15px;font-weight:800}
   .metro-cards{display:flex;flex-direction:column;gap:14px}
+
+  /* Metro Confidence — เดินง่ายแค่ไหน */
+  .metro-confidence{
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;
+    padding:13px 16px;border-radius:16px;font-size:14.5px;font-weight:700;line-height:1.45;
+  }
+  .metro-confidence:empty{display:none}
+  .mcf-ico{font-size:16px;flex:0 0 auto}
+  .metro-confidence.mc-easy{background:rgba(52,199,89,.12);color:#1B7A3D;border:1px solid rgba(52,199,89,.28)}
+  .metro-confidence.mc-ok{background:rgba(255,176,32,.14);color:#8A5A00;border:1px solid rgba(255,176,32,.32)}
+  .metro-confidence.mc-far{background:rgba(237,139,0,.14);color:#8A4B00;border:1px solid rgba(237,139,0,.32)}
+  .metro-confidence.mc-na{background:var(--mist);color:var(--pine-soft);border:1px solid var(--line)}
 
   /* การ์ด Metro แบบพรีเมียม */
   .metro-card{
@@ -823,14 +886,6 @@
       </div>
     </main>
 
-    <details class="live" id="liveBox">
-      <summary>โหมดค้นสดสถานที่อื่น ๆ (ขั้นสูง ต้องมี API key)</summary>
-      <div class="inner">
-        ถ้าอยากค้นสถานที่นอกเหนือจากในแอปแบบข้อมูลสดจากเน็ต ใส่ Anthropic API key ของคุณเอง (จาก console.anthropic.com มีค่าใช้จ่ายตามการใช้งาน) คีย์อยู่ในหน้านี้ชั่วคราวเท่านั้น ไม่ถูกบันทึกที่ไหน
-        <input id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
-        <div class="hint">เมื่อใส่คีย์แล้ว การค้นหาที่ไม่ตรงกับในเครื่องจะไปค้นสดจากอินเทอร์เน็ตให้อัตโนมัติ</div>
-      </div>
-    </details>
     <p class="sources">ข้อมูลรวบรวม ก.ค. 2026 จากเว็บรีวิวท่องเที่ยวหลายแหล่ง ราคา/เวลาอาจเปลี่ยนได้ ตรวจสอบอีกครั้งก่อนไปจริง<br>อัตราแลกเปลี่ยนโดยประมาณ 1 หยวน ≈ 4.6 บาท</p>
   </div>
 
@@ -885,6 +940,7 @@
       <!-- SECTION 5: METRO GUIDE (พระเอก) -->
       <section id="secMetro" class="dv-sec">
         <h2 class="dv-h2"><span class="dv-metro-ico">Ⓜ</span> วิธีไปด้วยรถไฟฟ้า</h2>
+        <div class="metro-confidence" id="metroConf"></div>
         <div class="metro-cards" id="metroCards"></div>
         <div class="metro-raw" id="metroRaw"></div>
       </section>
@@ -944,6 +1000,8 @@
   <div class="sc-th" id="scTh"></div>
   <div class="sc-hint">แตะที่ไหนก็ได้เพื่อปิด</div>
 </div>
+
+<button class="to-top" id="toTop" aria-label="กลับขึ้นบนสุด">↑</button>
 
 <div class="pc-modal" id="pcModal">
   <div class="pc-inner">
@@ -2079,6 +2137,21 @@ function autoPhotoURL(p){
 function photoURL(p){
   return PHOTO_OVERRIDE[p.th]||autoPhotoURL(p);
 }
+/* โหลดรูปเมื่อการ์ดใกล้เข้าจอ (ลดคำขอพร้อมกันตอนเปิดหน้า) */
+const photoIO=('IntersectionObserver' in window)?new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    photoIO.unobserve(e.target);
+    const fn=e.target._loadPhoto;
+    if(fn){e.target._loadPhoto=null;fn()}
+  });
+},{rootMargin:'400px 300px'}):null;
+
+function lazyPhoto(el,loadFn){
+  if(photoIO){el._loadPhoto=loadFn;photoIO.observe(el)}
+  else loadFn();
+}
+
 /* โหลดรูปโดยไล่ลอง: รูปที่เลือกเอง -> รูปอัตโนมัติ -> ยอมแพ้ (ใช้พื้นไล่เฉด) */
 function loadPlacePhoto(p,onOk,onFail){
   const urls=[];
@@ -2130,36 +2203,72 @@ function extraTags(p){
 }
 function allTagsOf(p){return deriveFlags(p).map(f=>f.t).concat(extraTags(p))}
 
+/* ===== Metro Confidence — บอกว่าเดินจากสถานีง่ายแค่ไหน ===== */
+function walkMinutes(walkStr){
+  if(!walkStr)return null;
+  const m=String(walkStr).match(/([\d.]+)\s*(นาที|กม\.?|ม\.?|เมตร|km|m)/);
+  if(!m)return null;
+  const n=parseFloat(m[1]),u=m[2];
+  if(/นาที/.test(u))return n;
+  if(/^(กม|km)/.test(u))return (n*1000)/80;   // เดินเฉลี่ย 80 ม./นาที
+  return n/80;                                 // เมตร
+}
+function metroConfidence(p){
+  const {cards}=parseMetro(p.transit||'');
+  if(!cards.length)return {lv:'na',ico:'🗺️',text:'เช็กเส้นทางในแผนที่ก่อนไป'};
+  const mins=cards.map(c=>walkMinutes(c.walk)).filter(v=>v!=null);
+  if(/ต่อรถ|ต่อแท็กซี่|เรียกรถ/.test(p.transit||''))
+    return {lv:'far',ico:'🟠',text:'ลงสถานีแล้วต้องต่อรถ — เรียก Didi สะดวกกว่า'};
+  if(!mins.length)return {lv:'easy',ico:'🟢',text:'อยู่ใกล้สถานี เดินถึงได้เลย'};
+  const w=Math.min(...mins);
+  if(w<=5)return {lv:'easy',ico:'🟢',text:'เดินง่ายมาก ~'+Math.round(w)+' นาทีจากสถานี'};
+  if(w<=10)return {lv:'ok',ico:'🟡',text:'เดินสบาย ~'+Math.round(w)+' นาทีจากสถานี'};
+  return {lv:'far',ico:'🟠',text:'เดินไกล ~'+Math.round(w)+' นาที — เรียก Didi สะดวกกว่า'};
+}
+
 function makeCard(p,i){
   const c=META[catOf(p)];
   const card=document.createElement('div');
   card.className='place-card';
   card.style.background='linear-gradient(135deg,'+c.g[0]+','+c.g[1]+')';
-  const flags=deriveFlags(p);
+  const flags=deriveFlags(p).slice(0,2);
   const flagHTML=flags.length?'<div class="card-flags">'+flags.map(x=>'<span class="flag '+x.c+'">'+x.t+'</span>').join('')+'</div>':'';
-  const rating=p.wide?null:(4.5+((i*7)%5)/10).toFixed(1);
+  const rating=(4.5+((i*7)%5)/10).toFixed(1);
+
+  // --- แถบข้อมูลเดินทาง (Metro-first) ---
+  const {cards:mcards}=parseMetro(p.transit||'');
+  const first=mcards[0];
+  let badges='';
+  if(first){
+    String(first.line).split('/').map(s=>s.trim()).filter(s=>s&&s!=='—').slice(0,2).forEach(n=>{
+      badges+='<span class="mb mb-line" style="background:'+lineColor(n)+';color:'+lineTextColor(n)+'">'+n+'</span>';
+    });
+    if(first.exit)badges+='<span class="mb mb-exit">🚪 '+first.exit+'</span>';
+    if(first.walk)badges+='<span class="mb mb-walk">🚶 '+first.walk+'</span>';
+  }
+  if(p.timeNeeded&&p.timeNeeded!=='—')badges+='<span class="mb mb-time">⏱ '+p.timeNeeded.replace(/^~/,'')+'</span>';
+
   card.innerHTML=
     '<span class="card-emoji">'+c.ico+'</span>'+
     '<span class="card-badge">'+c.badge+'</span>'+
     flagHTML+
     '<div class="card-info">'+
+      '<div class="card-rate">★ '+rating+'</div>'+
       '<h3 class="card-title"></h3>'+
-      (rating?'<div class="card-rate">⭐ '+rating+'</div>':'')+
-      '<div class="card-sub">📍 <span></span></div>'+
-    '</div>'+
-    '<div class="card-go-arrow">→</div>';
+      (badges?'<div class="card-metro">'+badges+'</div>':'')+
+      '<div class="card-go">ดูรายละเอียด <span>→</span></div>'+
+    '</div>';
   const img=document.createElement('img');
   img.className='card-photo';
   img.loading='lazy';
   img.alt='';
   img.referrerPolicy='no-referrer';
   card.prepend(img);
-  loadPlacePhoto(p,
+  lazyPhoto(card,()=>loadPlacePhoto(p,
     src=>{img.src=src;card.classList.add('has-photo')},
     ()=>img.remove()
-  );
+  ));
   card.querySelector('.card-title').textContent=p.name||p.th;
-  card.querySelector('.card-sub span').textContent=p.en||'เซี่ยงไฮ้';
   card.addEventListener('click',()=>showPlace(i));
   return card;
 }
@@ -2320,7 +2429,7 @@ function renderNearby(idx){
     b.innerHTML='<div class="nc-photo"></div><div class="nc-txt"><div class="nc-name"></div><div class="nc-why"></div></div>';
     const ph=b.querySelector('.nc-photo');
     ph.textContent=c.ico;
-    loadPlacePhoto(q,src=>{ph.style.backgroundImage="url('"+src+"')";ph.textContent=''});
+    lazyPhoto(b,()=>loadPlacePhoto(q,src=>{ph.style.backgroundImage="url('"+src+"')";ph.textContent=''}));
     b.querySelector('.nc-name').textContent=q.name||q.th;
     b.querySelector('.nc-why').textContent=why;
     b.addEventListener('click',()=>showPlace(j));
@@ -2486,6 +2595,12 @@ function showPlace(i){
   // --- METRO (พระเอก) ---
   const {cards}=parseMetro(p.transit);
   const mc=$('metroCards');mc.innerHTML='';
+  const conf=metroConfidence(p);
+  const cf=$('metroConf');
+  cf.className='metro-confidence mc-'+conf.lv;
+  cf.innerHTML='<span class="mcf-ico"></span><span class="mcf-txt"></span>';
+  cf.querySelector('.mcf-ico').textContent=conf.ico;
+  cf.querySelector('.mcf-txt').textContent=conf.text;
   cards.forEach(card=>mc.appendChild(buildMetroCard(card,p.name||p.th)));
   // ถ้า parse ไม่ได้ ใช้ข้อความดิบ (ไม่พลาดข้อมูล)
   const raw=$('metroRaw');
@@ -2559,8 +2674,6 @@ function doSearch(){
   if(!q){goHome();return}
   const idx=findLocal(q);
   if(idx>=0){showPlace(idx);return}
-  const key=$('apiKey').value.trim();
-  if(key){liveSearch(q,key);return}
   goHome();
   const nm=$('noMatch');nm.innerHTML='';
   const t=document.createElement('div');
@@ -2571,97 +2684,10 @@ function doSearch(){
   a.target='_blank';a.rel='noopener';a.textContent='เปิดค้น "'+q+'" ใน Google Maps →';
   l1.appendChild(a);
   const l2=document.createElement('div');
-  l2.textContent='หรือใส่ API key ในโหมดค้นสดด้านล่าง เพื่อให้ AI ค้นข้อมูลสดให้';
+  l2.textContent='หรือลองพิมพ์ชื่อสั้นลง เช่น "บันด์", "ปูขน", "คาเฟ่"';
   nm.append(t,l1,l2);nm.classList.add('on');
 }
 
-/* ===== โหมดค้นสด (ต้องมี API key) ===== */
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function callAPI(prompt,useSearch,key){
-  const body={model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]};
-  if(useSearch)body.tools=[{type:'web_search_20250305',name:'web_search'}];
-  let lastErr;
-  for(let i=0;i<3;i++){
-    try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify(body)
-      });
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const data=await res.json();
-      return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text||'').join('');
-    }catch(e){
-      lastErr=e;
-      const retryable=(e.message||'').includes('Failed to fetch')||(e.message||'').includes('429')||(e.message||'').includes('HTTP 5');
-      if(retryable&&i<2){await sleep(1500*(i+1));continue}
-      throw e;
-    }
-  }
-  throw lastErr;
-}
-function extractJSON(text){
-  let t=text.replace(/```json|```/g,'').trim();
-  const start=t.indexOf('{');if(start===-1)throw new Error('no-json');
-  t=t.slice(start);const end=t.lastIndexOf('}');
-  if(end!==-1){try{return JSON.parse(t.slice(0,end+1))}catch(e){}}
-  let s=t,inStr=false;
-  for(let i=0;i<s.length;i++){if(s[i]==='"'&&s[i-1]!=='\\')inStr=!inStr}
-  if(inStr)s+='"';s=s.replace(/[,:]\s*$/,'');
-  let closers='';inStr=false;const stack=[];
-  for(let i=0;i<s.length;i++){const c=s[i];if(c==='"'&&s[i-1]!=='\\')inStr=!inStr;if(inStr)continue;if(c==='{'||c==='[')stack.push(c);if(c==='}'||c===']')stack.pop();}
-  while(stack.length){closers+=(stack.pop()==='{'?'}':']')}
-  return JSON.parse(s.replace(/,\s*$/,'')+closers);
-}
-async function liveSearch(name,key){
-  $('home').style.display='none';$('result').classList.remove('on');$('loading').classList.add('on');
-  try{
-    $('loadStep').textContent='กำลังค้นข้อมูลสดจากอินเทอร์เน็ต…';
-    const notes=await callAPI('ค้นเว็บหาข้อมูลล่าสุดเกี่ยวกับสถานที่ท่องเที่ยวนี้ในเซี่ยงไฮ้: "'+name+'"\n สรุปสั้น ๆ เป็นภาษาไทย: ชื่อเต็ม (ไทย+อังกฤษ), รีวิว, ไฮไลต์ 3 อย่าง, ทิปเดือนตุลาคม (Golden Week 1-7 ต.ค./อากาศ), เวลาเปิด, ค่าเข้า, สถานีรถไฟฟ้า, เวลาที่ควรเผื่อ ไม่เกิน 250 คำ',true,key);
-    if(!notes.trim())throw new Error('empty-research');
-    $('loadStep').textContent='กำลังจัดข้อมูลให้อ่านง่าย…';
-    const text=await callAPI('แปลงบันทึกนี้เป็น JSON:\n---\n'+notes+'\n---\nตอบเป็น JSON object เพียงอย่างเดียว ทุกค่าภาษาไทย กระชับ: {"name":"","verdict":"","summary":"","highlights":["3 ข้อ"],"octoberTips":["3 ข้อ"],"hours":"","price":"","transit":"","timeNeeded":"","mapQuery":"ชื่ออังกฤษสำหรับ Google Maps"}',false,key);
-    const info=extractJSON(text);
-    // เติมข้อมูลลง layout ใหม่
-    $('dvCatBadge').textContent='ค้นสด';
-    $('rName').textContent=info.name||name;
-    $('dvZh').style.display='none';
-    $('dvStars').textContent='★★★★☆';$('dvRateNum').textContent='—';$('dvRateCount').textContent='(ข้อมูลสด)';
-    $('rVerdict').textContent=info.verdict||'';
-    $('dvHeroPhoto').style.backgroundImage='';
-    (function(){const im=new Image();im.onload=()=>{if(im.naturalWidth>50)$('dvHeroPhoto').style.backgroundImage="url('"+im.src+"')"};im.src='https://tse2.mm.bing.net/th?q='+encodeURIComponent((info.mapQuery||name)+' Shanghai travel')+'&w=640&h=800&c=7&rs=1&p=0';})();
-    $('dvPhotoCount').textContent='📷 ค้นสด';
-    // quick info
-    const quick=$('dvQuick');quick.innerHTML='';
-    [{ico:'⏱️',v:info.timeNeeded||'—',k:'เวลาเที่ยว'},{ico:'🕐',v:(info.hours||'—').slice(0,16),k:'เวลาเปิด'},{ico:'💰',v:(info.price||'—').slice(0,14),k:'ค่าเข้า'}].forEach(q=>{
-      const el=document.createElement('div');el.className='q';el.innerHTML='<div class="q-ico">'+q.ico+'</div><div class="q-v"></div><div class="q-k"></div>';
-      el.querySelector('.q-v').textContent=q.v;el.querySelector('.q-k').textContent=q.k;quick.appendChild(el);
-    });
-    $('rSummary').textContent=info.summary||'';
-    fillList($('rHighlights'),info.highlights);fillList($('rTips'),info.octoberTips);
-    // metro
-    const {cards}=parseMetro(info.transit);const mc=$('metroCards');mc.innerHTML='';
-    cards.forEach(card=>mc.appendChild(buildMetroCard(card,info.name||name)));
-    $('metroRaw').innerHTML=cards.length?'':(info.transit?'<b>การเดินทาง:</b> '+info.transit:'');
-    $('secMetro').style.display=(cards.length||info.transit)?'':'none';
-    // info cards
-    const ig=$('infoGrid');ig.innerHTML='';
-    [{ico:'⏱️',head:'เวลาที่ควรเผื่อ',v:info.timeNeeded||'—'},{ico:'💰',head:'ค่าเข้า',v:info.price||'—'},{ico:'🕐',head:'เวลาเปิด',v:info.hours||'—'},{ico:'🚇',head:'การเดินทาง',v:info.transit||'—'}].forEach(ic=>{const el=document.createElement('div');el.className='info-card';el.innerHTML='<div class="ic-head"><span class="ic-ico">'+ic.ico+'</span><span></span></div><div class="ic-v"></div>';el.querySelector('.ic-head span:last-child').textContent=ic.head;el.querySelector('.ic-v').textContent=ic.v;ig.appendChild(el);});
-    // map
-    $('secMap').style.display='';
-    $('secNearby').style.display='none';
-    $('dvMapBtn').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(info.mapQuery||name+' Shanghai');
-    $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(info.mapQuery||name+' Shanghai')+'&z=15&output=embed';
-    document.querySelectorAll('.dv-tab').forEach((t,k)=>t.classList.toggle('active',k===0));
-    if($('topBar'))$('topBar').style.display='none';
-    $('result').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
-  }catch(e){
-    goHome();const msg=(e&&e.message)||'ไม่ทราบ';let advice='';
-    if(msg.includes('401'))advice=' — API key ไม่ถูกต้อง';
-    else if(msg.includes('Failed to fetch'))advice=' — เชื่อมต่อไม่ได้ เช็กเน็ต';
-    const er=$('error');er.textContent='ค้นสดไม่สำเร็จ ('+msg+')'+advice;er.classList.add('on');
-  }finally{$('loading').classList.remove('on')}
-}
 
 /* ================= วลีจีนฉุกเฉิน + การ์ดชี้สั่ง ================= */
 const PHRASES=[
@@ -3130,7 +3156,10 @@ function initHeroCarousel(){
     const el=document.createElement('div');
     el.className='hc-slide'+(k===0?' on':'');
     slides.appendChild(el);
-    loadPlacePhoto(PLACES[pi],src=>{el.style.backgroundImage="url('"+src+"')"});
+    // สไลด์แรกโหลดทันที (เป็นภาพหลักที่ผู้ใช้เห็นก่อน) ที่เหลือหน่วงไว้ไม่ให้แย่งแบนด์วิดท์
+    const load=()=>loadPlacePhoto(PLACES[pi],src=>{el.style.backgroundImage="url('"+src+"')"});
+    if(k===0)load();
+    else setTimeout(load,1200+k*400);
 
     const d=document.createElement('button');
     d.className='hc-dot'+(k===0?' on':'');
@@ -3240,13 +3269,34 @@ function renderFeatured(){
     card.querySelector('.fc-desc').textContent=p.verdict||p.summary||'';
     // lazy load รูป
     const ph=card.querySelector('.fc-photo');
-    loadPlacePhoto(p,src=>{ph.style.backgroundImage="url('"+src+"')"});
+    lazyPhoto(card,()=>loadPlacePhoto(p,src=>{ph.style.backgroundImage="url('"+src+"')"}));
     card.addEventListener('click',()=>showPlace(i));
     row.appendChild(card);
   });
 }
 
 renderTabs();renderTagFilter();initFilterToggle();renderFeatured();renderGrid();renderTips();initHeroCarousel();
+
+/* ===== Micro-interactions: back-to-top + scroll reveal ===== */
+(function initMicro(){
+  // ปุ่มกลับขึ้นบน
+  const btn=$('toTop');
+  if(btn){
+    btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    let tick=false;
+    window.addEventListener('scroll',()=>{
+      if(tick)return;tick=true;
+      requestAnimationFrame(()=>{btn.classList.toggle('on',window.scrollY>600);tick=false});
+    },{passive:true});
+  }
+  // เผยเนื้อหาแบบ fade-up เมื่อเลื่อนถึง
+  if(!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.05});
+  document.querySelectorAll('.sec-title,.featured-row,.search-slim,.cards-grid,.tips-grid,.rt-panel')
+    .forEach(el=>{el.classList.add('reveal');io.observe(el)});
+})();
 
 </script>
 </body>
