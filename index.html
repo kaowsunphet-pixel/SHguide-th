@@ -418,7 +418,7 @@
   .result{display:none;padding:0}
   .result.on{display:block}
   .detail-topbar{
-    position:sticky;top:0;z-index:40;
+    position:sticky;top:0;z-index:50;
     background:rgba(237,242,249,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
     padding:12px 18px;border-bottom:1px solid var(--line);
   }
@@ -468,7 +468,7 @@
 
   /* ---------- SECTION 4: STICKY TABS ---------- */
   .dv-tabs{
-    position:sticky;top:49px;z-index:35;display:flex;gap:6px;overflow-x:auto;
+    position:sticky;top:45px;z-index:35;display:flex;gap:6px;overflow-x:auto;
     background:rgba(237,242,249,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
     padding:12px 18px;margin-top:20px;border-bottom:1px solid var(--line);scrollbar-width:none;
   }
@@ -1959,7 +1959,17 @@ const PHOTO_OVERRIDE={
   "พิพิธภัณฑ์เซี่ยงไฮ้":"https://upload.wikimedia.org/wikipedia/commons/a/a8/Shanghai_Museum_East.jpg",
   "วัดจิ้งอัน":"https://images.trvl-media.com/place/502782/4da8fe06-c9f6-43e0-94d5-ee7680807643.jpg",
   "ล่องเรือแม่น้ำหวงผู่":"https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/15/39/b6/30.jpg",
-  "ซินเทียนตี้":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS76qHrTew_RzC2SjxENa2egMkLXKff5hx3dvPBFzKqYUDCsnLJnXZGeFeB&s=10"
+  "ซินเทียนตี้":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS76qHrTew_RzC2SjxENa2egMkLXKff5hx3dvPBFzKqYUDCsnLJnXZGeFeB&s=10",
+  "หอไข่มุก":"https://www.ourchinastory.com/images/cover/thats-day/2022/11/square/Ourchinastory-Oriental-Pearl_x1.jpg",
+  "M50 อาร์ตดิสตริกต์":"https://www.tripstoshanghai.com/upload/ueditor/image/202004/6372135705468746389214163.jpg",
+  "เมืองเก่าชีเป่า":"https://upload.wikimedia.org/wikipedia/commons/c/c2/Qibao_Old_Town.jpg",
+  "พิพิธภัณฑ์ธรรมชาติวิทยา":"https://upload.wikimedia.org/wikipedia/commons/0/03/Shanghai_%28December_5%2C_2015%29_-_07.jpg",
+  "วัดหลงหัว":"https://ik.imagekit.io/tvlk/blog/2025/07/shutterstock_2541409255.jpg?tr=q-70,c-at_max,w-1000,h-600",
+  "วัดพระหยก":"https://upload.wikimedia.org/wikipedia/commons/b/bf/%282024%29_Mahavira_Hall%2C_Jade_Buddha_Temple%2C_Shanghai_-_img_04.jpg",
+  "สวนเซนจูรี":"https://images.trvl-media.com/place/6061791/2793d62a-0eb5-41e0-8b04-1992bc551602.jpg",
+  "สวนฝูซิง":"https://upload.wikimedia.org/wikipedia/commons/6/6c/Fuxing_Park%2C_Shanghai.JPG",
+  "1933 โรงฆ่าสัตว์เก่า":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/2024-Apr_Shanghai_1933_Old_Millfun_%28Old_Slaughterhouse%29_1933%E8%80%81%E5%9C%BA%E5%9D%8A_-_img_13.jpg/960px-2024-Apr_Shanghai_1933_Old_Millfun_%28Old_Slaughterhouse%29_1933%E8%80%81%E5%9C%BA%E5%9D%8A_-_img_13.jpg",
+  "พิพิธภัณฑ์ดาราศาสตร์":"https://govt.chinadaily.com.cn/images/202108/27/6128b8af498e6a12d106b236.jpeg"
 };
 
 function autoPhotoURL(p){
@@ -2356,12 +2366,14 @@ function showPlace(i){
   // reset tabs + scroll
   document.querySelectorAll('.dv-tab').forEach((t,k)=>t.classList.toggle('active',k===0));
   $('home').style.display='none';
+  if($('topBar'))$('topBar').style.display='none';
   $('result').classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function goHome(){
   $('result').classList.remove('on');
   $('home').style.display='';
+  if($('topBar'))$('topBar').style.display='';
   $('error').classList.remove('on');
 }
 function fillList(el,items){
@@ -2479,6 +2491,7 @@ async function liveSearch(name,key){
     $('dvMapBtn').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(info.mapQuery||name+' Shanghai');
     $('rMap').src='https://maps.google.com/maps?q='+encodeURIComponent(info.mapQuery||name+' Shanghai')+'&z=15&output=embed';
     document.querySelectorAll('.dv-tab').forEach((t,k)=>t.classList.toggle('active',k===0));
+    if($('topBar'))$('topBar').style.display='none';
     $('result').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
   }catch(e){
     goHome();const msg=(e&&e.message)||'ไม่ทราบ';let advice='';
