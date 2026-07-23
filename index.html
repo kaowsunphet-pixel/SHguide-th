@@ -140,9 +140,11 @@
   /* ---------- HERO CAROUSEL ---------- */
   .hero-carousel{
     position:relative;width:100%;
-    height:clamp(340px,60vw,600px);
+    height:400px;                 /* Mobile 360-420 */
     overflow:hidden;background:linear-gradient(135deg,#1a3a6b,#0F2C55);
   }
+  @media (min-width:640px){ .hero-carousel{height:480px} }   /* Tablet */
+  @media (min-width:1024px){ .hero-carousel{height:545px} }  /* Desktop 520-560 */
   .hc-slides{position:absolute;inset:0}
   .hc-slide{
     position:absolute;inset:0;background-size:cover;background-position:center;
@@ -150,26 +152,46 @@
     transform:scale(1.06);
   }
   .hc-slide.on{opacity:1;transform:scale(1)}
+  /* Overlay: ดำโปร่งหัว-ท้าย ตรงกลางใส (ไม่ทับภาพทั้งใบ) */
   .hc-overlay{
     position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(90deg,rgba(6,16,34,.72) 0%,rgba(6,16,34,.45) 45%,rgba(6,16,34,.12) 100%),
-               linear-gradient(180deg,rgba(6,16,34,0) 45%,rgba(6,16,34,.7) 100%);
+    background:linear-gradient(180deg,
+      rgba(0,0,0,.5) 0%,
+      rgba(0,0,0,.12) 28%,
+      rgba(0,0,0,0) 45%,
+      rgba(0,0,0,.55) 78%,
+      rgba(0,0,0,.82) 100%);
+  }
+  /* แบรนด์บนสุดของ Hero */
+  .hc-brand{position:absolute;top:0;left:0;right:0;z-index:2;padding:26px 22px 0;text-align:center}
+  .hb-city{
+    font-family:'Anuphan',sans-serif;font-weight:800;color:#fff;
+    font-size:clamp(26px,5.5vw,40px);letter-spacing:6px;line-height:1;
+    text-shadow:0 2px 16px rgba(0,0,0,.5);
+  }
+  .hb-sub{
+    color:rgba(255,255,255,.95);font-size:clamp(14px,2.4vw,20px);font-weight:500;
+    margin-top:6px;letter-spacing:1px;text-shadow:0 2px 12px rgba(0,0,0,.5);
+  }
+  .hb-tag{
+    color:rgba(255,255,255,.8);font-size:clamp(11.5px,1.8vw,15px);margin-top:7px;
+    text-shadow:0 1px 10px rgba(0,0,0,.55);
   }
   .hc-content{
     position:absolute;left:0;right:0;bottom:0;z-index:2;
     padding:0 22px calc(58px + env(safe-area-inset-bottom));
-    max-width:640px;
+    max-width:700px;
   }
   .hc-stars{color:#FFD24D;font-size:15px;letter-spacing:1px;margin-bottom:8px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
   .hc-name{
     font-family:'Anuphan',sans-serif;font-weight:800;color:#fff;
-    font-size:clamp(30px,7.5vw,52px);line-height:1.1;letter-spacing:-.6px;
-    text-shadow:0 3px 22px rgba(0,0,0,.5);
+    font-size:clamp(32px,6.4vw,60px);line-height:1.08;letter-spacing:-.8px;
+    text-shadow:0 3px 24px rgba(0,0,0,.55);
   }
   .hc-desc{
-    color:rgba(255,255,255,.9);font-size:15px;line-height:1.55;margin-top:9px;
-    text-shadow:0 2px 12px rgba(0,0,0,.55);
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    color:rgba(255,255,255,.92);font-size:clamp(14px,1.9vw,16px);line-height:1.55;margin-top:10px;
+    text-shadow:0 2px 12px rgba(0,0,0,.6);
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
   }
   .hc-cta{
     display:inline-flex;align-items:center;gap:8px;margin-top:18px;
@@ -217,6 +239,19 @@
 
   /* ---------- SEARCH (slim) ---------- */
   .search-slim{margin:6px 0 30px}
+
+  /* ---------- TIPS ---------- */
+  .tips-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:26px}
+  @media (min-width:700px){.tips-grid{grid-template-columns:1fr 1fr}}
+  .tip-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:18px;
+    padding:16px 18px 16px 50px;position:relative;
+    box-shadow:0 3px 12px rgba(15,44,85,.05);
+    font-size:14.5px;line-height:1.65;color:var(--pine);
+  }
+  .tip-card::before{
+    content:attr(data-ico);position:absolute;left:16px;top:15px;font-size:20px;line-height:1;
+  }
 
   /* ---------- FEATURED DESTINATIONS (Netflix-style) ---------- */
   .featured-head{margin-bottom:14px}
@@ -677,6 +712,11 @@
   <div class="hero-carousel" id="heroCarousel">
     <div class="hc-slides" id="hcSlides"></div>
     <div class="hc-overlay"></div>
+    <div class="hc-brand">
+      <div class="hb-city">SHANGHAI</div>
+      <div class="hb-sub">October Guide</div>
+      <div class="hb-tag">เที่ยวเซี่ยงไฮ้ด้วยตัวเอง · 100 ที่คัดมาแล้ว</div>
+    </div>
     <div class="hc-content">
       <div class="hc-stars" id="hcStars"></div>
       <h1 class="hc-name" id="hcName"></h1>
@@ -727,6 +767,13 @@
       <div class="dots" id="dots"></div>
       <div class="swipe-hint" id="swipeHint">← ปัดเพื่อดูเพิ่มเติม →</div>
       <div class="no-match" id="noMatch"></div>
+
+      <!-- TIPS ก่อนเที่ยว -->
+      <div class="sec-title" style="margin-top:34px">
+        <h2>🍂 รู้ก่อนไป เดือนตุลาคม</h2>
+        <span class="sec-sub" id="tipsSub"></span>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
 
       <!-- แผงพยากรณ์อากาศ (ย่อ อยู่ล่าง) -->
       <div class="rt-panel" id="rtPanel" style="display:none">
@@ -2939,6 +2986,23 @@ startClock();
 loadWeather();
 loadRate();
 
+/* ================= TIPS (ใช้ข้อมูล OCT_TIPS_GENERAL เดิม) ================= */
+function renderTips(){
+  const grid=$('tipsGrid');if(!grid)return;
+  const sub=$('tipsSub');
+  if(sub)sub.textContent=OCT_TIPS_GENERAL.verdict||'';
+  const icons=['🛂','🌡️','📱','🎫','🚶','🚇'];
+  const items=[].concat(OCT_TIPS_GENERAL.highlights||[],OCT_TIPS_GENERAL.octoberTips||[]);
+  grid.innerHTML='';
+  items.forEach((t,i)=>{
+    const el=document.createElement('div');
+    el.className='tip-card';
+    el.setAttribute('data-ico',icons[i%icons.length]);
+    el.textContent=t;
+    grid.appendChild(el);
+  });
+}
+
 /* ================= HERO CAROUSEL ================= */
 let hcIdx=0, hcTimer=null, hcPlaces=[];
 function initHeroCarousel(){
@@ -3078,7 +3142,7 @@ function renderFeatured(){
   });
 }
 
-renderTabs();renderTagFilter();initFilterToggle();renderFeatured();renderGrid();initHeroCarousel();
+renderTabs();renderTagFilter();initFilterToggle();renderFeatured();renderGrid();renderTips();initHeroCarousel();
 
 </script>
 </body>
