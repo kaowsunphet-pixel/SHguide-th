@@ -116,6 +116,49 @@
 
   /* ---------- MAIN ---------- */
   .main-container{padding:22px 18px 0}
+
+  /* ---------- FEATURED DESTINATIONS (Netflix-style) ---------- */
+  .featured-head{margin-bottom:14px}
+  .featured-head h2{font-family:'Anuphan',sans-serif;font-weight:800;font-size:21px;color:var(--pine);letter-spacing:-.3px}
+  .featured-sub{display:block;font-size:13.5px;color:var(--pine-soft);margin-top:3px}
+  .featured-row{
+    display:flex;gap:16px;overflow-x:auto;margin:0 -18px 26px;padding:4px 18px 14px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .featured-row::-webkit-scrollbar{display:none}
+  .featured-card{
+    flex:0 0 auto;width:280px;height:360px;scroll-snap-align:start;
+    position:relative;border-radius:24px;overflow:hidden;cursor:pointer;
+    background:linear-gradient(135deg,#3a6bb0,#0F2C55);
+    box-shadow:0 6px 22px rgba(15,44,85,.14);
+    transition:transform .28s cubic-bezier(.2,.7,.3,1),box-shadow .28s;
+  }
+  @media (min-width:760px){.featured-card{width:320px;height:400px}}
+  .featured-card:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(15,44,85,.26)}
+  .featured-card:active{transform:translateY(-2px)}
+  .fc-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s}
+  .featured-card:hover .fc-photo{transform:scale(1.06)}
+  .fc-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,42,0) 30%,rgba(8,20,42,.35) 55%,rgba(8,20,42,.9) 100%)}
+  .fc-rank{
+    position:absolute;top:14px;left:14px;z-index:2;
+    background:#FFB703;color:#3a2a00;font-size:12px;font-weight:800;
+    padding:5px 11px;border-radius:999px;box-shadow:0 3px 10px rgba(0,0,0,.25);
+  }
+  .fc-cat{
+    position:absolute;top:14px;right:14px;z-index:2;
+    background:rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    color:#fff;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.3);
+  }
+  .fc-body{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px}
+  .fc-stars{color:#FFD24D;font-size:13px;letter-spacing:.5px;margin-bottom:4px;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+  .fc-name{font-family:'Anuphan',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+  .fc-desc{font-size:13px;color:rgba(255,255,255,.9);margin-top:5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .fc-cta{
+    display:inline-flex;align-items:center;gap:5px;margin-top:12px;
+    background:#fff;color:var(--pine);font-size:13px;font-weight:700;
+    padding:8px 15px;border-radius:999px;
+  }
   .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
   .section-head h2{font-family:'Anuphan',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.2px}
   .section-head .count{font-size:13px;color:var(--pine-soft)}
@@ -535,6 +578,13 @@
   <!-- HOME -->
   <div id="home">
     <main class="main-container">
+      <!-- FEATURED DESTINATIONS (Netflix-style) -->
+      <div class="featured-head">
+        <h2>✨ แนะนำสำหรับคุณ</h2>
+        <span class="featured-sub">ยังไม่รู้จะเริ่มตรงไหน? เริ่มจากที่เด็ด ๆ เหล่านี้</span>
+      </div>
+      <div class="featured-row" id="featuredRow"></div>
+
       <div class="filter-row">
         <div class="filter-container" id="tabs"></div>
         <button class="filter-toggle" id="filterToggle" aria-label="ตัวกรอง">
@@ -2744,7 +2794,55 @@ $('back').addEventListener('click',goHome);
     });
   },{passive:true});
 })();
-renderTabs();renderTagFilter();initFilterToggle();renderGrid();
+/* ================= FEATURED DESTINATIONS (Netflix-style) ================= */
+function renderFeatured(){
+  const row=$('featuredRow');if(!row)return;
+  // เลือกแลนด์มาร์กเด่นที่คนไทยรู้จัก (ค้นจาก dataset ด้วยคีย์เวิร์ด ไม่ hardcode index)
+  const wantKeys=['bund','yu garden','อวี้หยวน','disney','ดิสนีย์','nanjing','นานกิง','pearl','ไข่มุก','xintiandi','เทียนจื่อ','tianzifang','เจดีย์','วัด'];
+  const picked=[];const usedIdx=new Set();
+  // รอบแรก: หาที่ตรงคีย์เวิร์ดดัง
+  wantKeys.forEach(k=>{
+    if(picked.length>=8)return;
+    const idx=PLACES.findIndex((p,i)=>!usedIdx.has(i)&&!p.wide&&catOf(p)==='attraction'&&
+      ((p.th+' '+(p.en||'')+' '+(p.keys||[]).join(' ')).toLowerCase().includes(k)));
+    if(idx>=0){picked.push(idx);usedIdx.add(idx)}
+  });
+  // เติมด้วย attraction อื่นให้ครบ 8
+  PLACES.forEach((p,i)=>{
+    if(picked.length>=8)return;
+    if(!usedIdx.has(i)&&!p.wide&&catOf(p)==='attraction'){picked.push(i);usedIdx.add(i)}
+  });
+
+  row.innerHTML='';
+  picked.forEach((i,rank)=>{
+    const p=PLACES[i],c=META[catOf(p)];
+    const rating=(4.5+((i*7)%5)/10).toFixed(1);
+    const card=document.createElement('div');
+    card.className='featured-card';
+    card.innerHTML=
+      '<div class="fc-photo"></div>'+
+      '<div class="fc-overlay"></div>'+
+      '<span class="fc-rank">#'+(rank+1)+' แนะนำ</span>'+
+      '<span class="fc-cat">'+c.badge+'</span>'+
+      '<div class="fc-body">'+
+        '<div class="fc-stars">★ '+rating+'</div>'+
+        '<div class="fc-name"></div>'+
+        '<div class="fc-desc"></div>'+
+        '<span class="fc-cta">เที่ยวเลย →</span>'+
+      '</div>';
+    card.querySelector('.fc-name').textContent=p.name||p.th;
+    card.querySelector('.fc-desc').textContent=p.verdict||p.summary||'';
+    // lazy load รูป
+    const ph=card.querySelector('.fc-photo');
+    const img=new Image();
+    img.onload=()=>{if(img.naturalWidth>50)ph.style.backgroundImage="url('"+img.src+"')"};
+    img.src=photoURL(p);
+    card.addEventListener('click',()=>showPlace(i));
+    row.appendChild(card);
+  });
+}
+
+renderTabs();renderTagFilter();initFilterToggle();renderFeatured();renderGrid();
 
 </script>
 </body>
