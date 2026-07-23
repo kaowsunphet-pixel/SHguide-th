@@ -18,7 +18,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%}
-  body{font-family:'Anuphan',sans-serif;background:var(--mist);color:var(--pine);min-height:100dvh}
+  body{font-family:'Anuphan',sans-serif;background:var(--mist);color:var(--pine);min-height:100dvh;overflow-x:hidden}
   .wrap{max-width:960px;margin:0 auto;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
 
   /* ---------- HERO ---------- */
@@ -210,6 +210,20 @@
     background:rgba(255,255,255,.45);transition:all .3s;
   }
   .hc-dot.on{background:#fff;width:26px}
+
+  /* ---------- ปรับ Hero สำหรับมือถือ (กันเนื้อหาทับกัน) ---------- */
+  @media (max-width:640px){
+    .hc-brand{padding:18px 18px 0}
+    .hb-city{font-size:24px;letter-spacing:4px}
+    .hb-sub{font-size:13px;margin-top:4px}
+    .hb-tag{font-size:11px;margin-top:5px}
+    .hc-content{padding:0 18px calc(46px + env(safe-area-inset-bottom))}
+    .hc-name{font-size:27px;line-height:1.15;letter-spacing:-.4px}
+    .hc-desc{-webkit-line-clamp:2;font-size:13.5px;margin-top:7px;line-height:1.5}
+    .hc-stars{font-size:13.5px;margin-bottom:6px}
+    .hc-cta{margin-top:14px;padding:11px 22px;font-size:14.5px}
+    .hc-dots{left:18px;bottom:calc(18px + env(safe-area-inset-bottom))}
+  }
 
   /* ---------- CATEGORY CHIPS (Netflix-style) ---------- */
   .cat-row{
