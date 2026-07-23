@@ -530,24 +530,52 @@
 
   /* ---------- SECTION 5: METRO GUIDE (พระเอก) ---------- */
   .dv-metro-ico{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--osmanthus);color:#fff;border-radius:7px;font-size:15px;font-weight:800}
-  .metro-cards{display:flex;flex-direction:column;gap:12px}
+  .metro-cards{display:flex;flex-direction:column;gap:14px}
+
+  /* การ์ด Metro แบบพรีเมียม */
   .metro-card{
-    background:linear-gradient(135deg,#F5F9FF,#EAF1FC);
-    border:1px solid #D3E1F5;border-radius:20px;padding:16px 18px;
-    display:flex;align-items:center;gap:14px;
+    --mc-accent:#5B6C86;
+    position:relative;background:var(--paper);
+    border:1px solid var(--line);border-radius:22px;
+    padding:18px 20px 14px 22px;overflow:hidden;
+    box-shadow:0 4px 18px rgba(15,44,85,.07);
   }
-  .metro-line-badge{
-    flex:0 0 auto;width:52px;height:52px;border-radius:14px;
-    background:var(--osmanthus);color:#fff;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;font-weight:800;line-height:1;
-    box-shadow:0 4px 12px rgba(29,99,237,.28);
+  .metro-card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--mc-accent);
   }
-  .metro-line-badge .ml-k{font-size:8.5px;font-weight:600;opacity:.85;letter-spacing:.5px}
-  .metro-line-badge .ml-n{font-size:20px;margin-top:1px}
-  .metro-card-body{flex:1;min-width:0}
-  .metro-station{font-size:16px;font-weight:800;color:var(--pine);line-height:1.3}
-  .metro-detail{font-size:13px;color:var(--pine-soft);margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 12px}
-  .metro-detail span{display:inline-flex;align-items:center;gap:4px}
+  .mc-head{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:4px}
+  .mc-lines{display:flex;gap:6px;flex:0 0 auto}
+  .line-pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:30px;height:30px;padding:0 8px;border-radius:999px;
+    font-size:14.5px;font-weight:800;color:#fff;line-height:1;
+    box-shadow:0 2px 8px rgba(0,0,0,.16);
+  }
+  .mc-station{
+    font-family:'Anuphan',sans-serif;font-weight:800;font-size:18px;
+    color:var(--pine);line-height:1.25;letter-spacing:-.2px;flex:1;min-width:0;
+  }
+
+  /* ไทม์ไลน์แบบ Google Maps */
+  .mc-timeline{margin-top:14px;padding-top:4px}
+  .tl-step{position:relative;display:flex;gap:13px;padding-bottom:18px}
+  .tl-step.last{padding-bottom:2px}
+  .tl-step::before{
+    content:"";position:absolute;left:13px;top:28px;bottom:0;width:2px;
+    background:repeating-linear-gradient(180deg,var(--line) 0 4px,transparent 4px 8px);
+  }
+  .tl-step.last::before{display:none}
+  .tl-dot{
+    flex:0 0 auto;width:28px;height:28px;border-radius:999px;
+    background:var(--paper);border:2.5px solid var(--line);
+    display:flex;align-items:center;justify-content:center;z-index:1;
+  }
+  .tl-dot.dest{background:var(--osmanthus);border-color:var(--osmanthus)}
+  .tl-ico{font-size:13px;line-height:1}
+  .tl-body{flex:1;min-width:0;padding-top:2px}
+  .tl-t{font-size:14.5px;font-weight:700;color:var(--pine);line-height:1.4}
+  .tl-s{font-size:12.5px;color:var(--pine-soft);margin-top:2px;line-height:1.4}
+
   .metro-raw{margin-top:12px;font-size:14px;line-height:1.7;color:var(--pine-soft);background:var(--mist);border-radius:14px;padding:13px 15px}
   .metro-raw:empty{display:none}
   .metro-raw b{color:var(--pine)}
@@ -2289,6 +2317,80 @@ function renderNearby(idx){
 let currentDetailIndex=-1;
 
 // แยกช่วงรถไฟฟ้าออกจากข้อความ transit เป็นการ์ด (ไม่ hardcode — อ่านจาก dataset)
+/* ===== สีสายรถไฟฟ้าเซี่ยงไฮ้ (ตามสีทางการบนแผนที่) ===== */
+const METRO_COLORS={
+  '1':'#E4002B','2':'#8CC63E','3':'#FFD100','4':'#5F259F','5':'#954B97',
+  '6':'#D9027D','7':'#ED8B00','8':'#0067B3','9':'#78C7EB','10':'#C6A2C6',
+  '11':'#871C2B','12':'#007B5F','13':'#EF97BF','14':'#827A04','15':'#BBA786',
+  '16':'#98D9E4','17':'#BB796E','18':'#C4996C'
+};
+function lineColor(n){return METRO_COLORS[String(n).trim()]||'#5B6C86'}
+/* สีอ่อน (เช่น สาย 3,9,10,13,16) ต้องใช้ตัวหนังสือสีเข้มถึงจะอ่านออก */
+function lineTextColor(n){
+  return ['3','9','10','13','16','15','18'].includes(String(n).trim())?'#1a2b45':'#fff';
+}
+
+/* สร้างการ์ด Metro + ไทม์ไลน์ (ใช้ซ้ำได้ทุกที่) */
+function buildMetroCard(card,destName){
+  const lines=String(card.line||'').split('/').map(s=>s.trim()).filter(Boolean);
+  const el=document.createElement('div');
+  el.className='metro-card';
+
+  // แถบสีด้านซ้ายใช้สีสายแรก
+  if(lines.length&&METRO_COLORS[lines[0]])el.style.setProperty('--mc-accent',lineColor(lines[0]));
+
+  // หัวการ์ด: ป้ายสาย + ชื่อสถานี
+  const head=document.createElement('div');head.className='mc-head';
+  const pills=document.createElement('div');pills.className='mc-lines';
+  if(lines.length){
+    lines.forEach(n=>{
+      const s=document.createElement('span');
+      s.className='line-pill';
+      s.style.background=lineColor(n);
+      s.style.color=lineTextColor(n);
+      s.textContent=n;
+      pills.appendChild(s);
+    });
+  }else{
+    const s=document.createElement('span');
+    s.className='line-pill';s.style.background='#5B6C86';s.textContent='M';
+    pills.appendChild(s);
+  }
+  const st=document.createElement('div');st.className='mc-station';st.textContent=card.station||'สถานีรถไฟฟ้า';
+  head.appendChild(pills);head.appendChild(st);
+  el.appendChild(head);
+
+  // ไทม์ไลน์แบบ Google Maps
+  const tl=document.createElement('div');tl.className='mc-timeline';
+  const steps=[];
+  steps.push({
+    dot:'metro',color:lines.length?lineColor(lines[0]):'#5B6C86',
+    title:'ลงที่สถานี '+(card.station||''),
+    sub:lines.length?lines.map(n=>'สาย '+n).join(' · '):'รถไฟฟ้าเซี่ยงไฮ้'
+  });
+  if(card.exit)steps.push({dot:'exit',title:'ออกทางออก '+card.exit,sub:'เดินตามป้ายในสถานี'});
+  if(card.walk)steps.push({dot:'walk',title:'เดินต่อ ~'+card.walk,sub:'ตามป้ายบอกทาง'});
+  steps.push({dot:'dest',title:'ถึง'+(destName?' '+destName:'จุดหมาย')});
+
+  steps.forEach((s,i)=>{
+    const row=document.createElement('div');
+    row.className='tl-step'+(i===steps.length-1?' last':'');
+    const ico={metro:'🚇',exit:'🚪',walk:'🚶',dest:'📍'}[s.dot]||'•';
+    row.innerHTML='<span class="tl-dot"><span class="tl-ico"></span></span>'+
+      '<div class="tl-body"><div class="tl-t"></div><div class="tl-s"></div></div>';
+    const dot=row.querySelector('.tl-dot');
+    if(s.color)dot.style.borderColor=s.color;
+    if(s.dot==='dest')dot.classList.add('dest');
+    row.querySelector('.tl-ico').textContent=ico;
+    row.querySelector('.tl-t').textContent=s.title;
+    const sub=row.querySelector('.tl-s');
+    if(s.sub)sub.textContent=s.sub; else sub.remove();
+    tl.appendChild(row);
+  });
+  el.appendChild(tl);
+  return el;
+}
+
 function parseMetro(transit){
   if(!transit||transit==='—')return {cards:[]};
   const cards=[];const seen=new Set();
@@ -2370,19 +2472,7 @@ function showPlace(i){
   // --- METRO (พระเอก) ---
   const {cards}=parseMetro(p.transit);
   const mc=$('metroCards');mc.innerHTML='';
-  cards.forEach(card=>{
-    const el=document.createElement('div');el.className='metro-card';
-    let detail='';
-    if(card.exit)detail+='<span>🚪 ทางออก '+card.exit+'</span>';
-    if(card.walk)detail+='<span>🚶 เดิน '+card.walk+'</span>';
-    if(!card.exit&&!card.walk)detail='<span>ลงสถานีนี้แล้วเดินต่อ</span>';
-    const badge=card.line==='—'
-      ? '<div class="metro-line-badge" style="font-size:22px">Ⓜ</div>'
-      : '<div class="metro-line-badge"><span class="ml-k">สาย</span><span class="ml-n">'+card.line+'</span></div>';
-    el.innerHTML=badge+'<div class="metro-card-body"><div class="metro-station"></div><div class="metro-detail">'+detail+'</div></div>';
-    el.querySelector('.metro-station').textContent=card.station;
-    mc.appendChild(el);
-  });
+  cards.forEach(card=>mc.appendChild(buildMetroCard(card,p.name||p.th)));
   // ถ้า parse ไม่ได้ ใช้ข้อความดิบ (ไม่พลาดข้อมูล)
   const raw=$('metroRaw');
   if(cards.length===0 && p.transit && p.transit!=='—'){
@@ -2537,7 +2627,7 @@ async function liveSearch(name,key){
     fillList($('rHighlights'),info.highlights);fillList($('rTips'),info.octoberTips);
     // metro
     const {cards}=parseMetro(info.transit);const mc=$('metroCards');mc.innerHTML='';
-    cards.forEach(card=>{const el=document.createElement('div');el.className='metro-card';let d='';if(card.exit)d+='<span>🚪 ทางออก '+card.exit+'</span>';if(card.walk)d+='<span>🚶 เดิน '+card.walk+'</span>';if(!d)d='<span>ลงสถานีนี้แล้วเดินต่อ</span>';el.innerHTML='<div class="metro-line-badge"><span class="ml-k">สาย</span><span class="ml-n"></span></div><div class="metro-card-body"><div class="metro-station"></div><div class="metro-detail">'+d+'</div></div>';el.querySelector('.ml-n').textContent=card.line;el.querySelector('.metro-station').textContent=card.station;mc.appendChild(el);});
+    cards.forEach(card=>mc.appendChild(buildMetroCard(card,info.name||name)));
     $('metroRaw').innerHTML=cards.length?'':(info.transit?'<b>การเดินทาง:</b> '+info.transit:'');
     $('secMetro').style.display=(cards.length||info.transit)?'':'none';
     // info cards
